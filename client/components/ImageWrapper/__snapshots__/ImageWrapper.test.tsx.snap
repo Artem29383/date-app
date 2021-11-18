@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test for ImageWrapper Render ImageWrapper component 1`] = `
+<styled.div>
+  <styled.img
+    src="Logo"
+  />
+</styled.div>
+`;

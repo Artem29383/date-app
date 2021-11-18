@@ -1,0 +1,72 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'CabinBold';
+  src: url(../public/fonts/Cabin/Cabin-Bold.woff) format('woff');
+  font-weight: 700;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'CabinMedium';
+  src: url(../public/fonts/Cabin/Cabin-Medium.woff) format('woff');
+  font-weight: 500;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'CabinRegular';
+  src: url(../public/fonts/Cabin/Cabin-Regular.woff) format('woff');
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'GeoramaLight';
+  src: url(../public/fonts/Georama/Georama-Light.woff) format('woff');
+  font-weight: 300;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'GeoramaRegular';
+  src: url(../public/fonts/Georama/Georama-Regular.woff) format('woff');
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'GeoramaMedium';
+  src: url(../public/fonts/Georama/Georama-Medium.woff) format('woff');
+  font-weight: 500;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'GeoramaBold';
+  src: url(../public/fonts/Georama/Georama-Bold.woff) format('woff');
+  font-weight: 700;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'GeoramaExtraBold';
+  src: url(../public/fonts/Georama/Georama-ExtraBold.woff) format('woff');
+  font-weight: 900;
+  font-display: block;
+}
