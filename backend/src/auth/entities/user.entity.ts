@@ -1,12 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Roles } from '../types';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Roles } from '../../types';
 
 @Entity()
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Column()
@@ -23,4 +28,7 @@ export class UserEntity {
 
   @Column({ default: Roles.customer })
   role: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 }

@@ -1,35 +1,27 @@
-import React from 'react';
-import { Colors } from "@types";
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import * as yup from 'yup';
+import React from "react";
+import { Colors, ROUTES } from "@types";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import * as yup from "yup";
 import { useTranslate } from "src/locales/library/useTranslate";
-import { icons } from 'styles/icons';
-import Logo from 'backgrounds/background-main-auth.jpeg';
+import { icons } from "styles/icons";
+import Logo from "backgrounds/background-main-auth.jpeg";
 
-import * as S from './register.styled';
 import H1 from "components/Text/H1";
 import Button from "components/Button";
 import Input from "components/Input";
 import CountrySelect from "components/CountrySelect";
 import ImageWrapper from "components/ImageWrapper";
 import Auth from "layouts/Auth";
-import type { NextPage } from "next";
+import { NextPage } from "next";
 import Tab from "components/Tabs/Tab";
+import * as S from "./register.styled";
+import { signUp } from "api/authApi";
+import { FormType } from "pages/register/model/types";
+import { registerAsync } from "pages/register/model/register";
+import { useUser } from "src/entities/user/selectors";
 
 const Unlocker = icons.unlocker;
-
-export interface IUser {
-  email: string;
-  password: string;
-  username: string;
-  countries: string;
-  avatarUrl?: string;
-  role: string;
-  uid: string;
-  words: string[];
-}
-
 
 const schema = yup.object().shape({
   email: yup
@@ -38,37 +30,38 @@ const schema = yup.object().shape({
     .email(),
   password: yup
     .string()
-    .min(6, 'Password less than 6 symbols')
+    .min(6, "Password less than 6 symbols")
     .required(),
   confirm: yup
     .string()
-    .required('Confirm Password is required')
-    .oneOf([yup.ref('password'), null], 'Passwords does not match'),
+    .required("Confirm Password is required")
+    .oneOf([yup.ref("password"), null], "Passwords does not match"),
   username: yup.string().required(),
-  countries: yup.string().required(),
+  countries: yup.string().required()
 });
 
 const Register: NextPage = () => {
-  const { t } = useTranslate('common');
+  const user = useUser();
+  const { t } = useTranslate("common");
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    setValue
   } = useForm({
     resolver: yupResolver(schema),
-    mode: 'onSubmit',
+    mode: "onSubmit"
   });
 
-  const onSubmit = (data: IUser) => {
-    console.info(data)
+  const onSubmit = async (data: FormType) => {
+    await registerAsync(data);
   };
 
   return (
     <Auth>
       <S.Root>
         <Tab
-          link='/sign-in'
+          link={ROUTES.LOGIN}
           width={75}
           height={75}
           Icon={icons.signUp}
@@ -81,7 +74,7 @@ const Register: NextPage = () => {
           svgW={35}
         />
         <Tab
-          link='/'
+          link={ROUTES.ROOT}
           width={75}
           height={75}
           Icon={icons.home}
@@ -97,42 +90,42 @@ const Register: NextPage = () => {
           <S.Title>
             <Unlocker fill={Colors.blue} width={100} height={100} />
             <S.Text>
-              <H1 color={Colors.black}>Welcome,</H1>
-              <H1 color={Colors.black}>please sign up here</H1>
+              <H1 color={Colors.black}>{t("welcome")}</H1>
+              <H1 color={Colors.black}>{t("signUp")}</H1>
             </S.Text>
           </S.Title>
           <S.RootForm autoComplete="false" onSubmit={handleSubmit(onSubmit)}>
             <Input
               isError={errors.email}
-              register={register('email')}
+              register={register("email")}
               label="Email"
               type="email"
               mb={5}
             />
             <Input
               isError={errors.password}
-              register={register('password')}
+              register={register("password")}
               label="Password"
               type="password"
               mb={5}
             />
             <Input
               isError={errors.confirm}
-              register={register('confirm')}
+              register={register("confirm")}
               label="Confirm"
               type="password"
               mb={5}
             />
             <Input
               isError={errors.username}
-              register={register('username')}
+              register={register("username")}
               label="Username"
               mb={5}
             />
             <CountrySelect
               onCallback={setValue as <T, R>(p1?: T, p2?: R) => void}
               isError={errors.countries}
-              register={register('countries')}
+              register={register("countries")}
               maxWidth={200}
             />
             <Button
@@ -143,7 +136,7 @@ const Register: NextPage = () => {
               marginTop={20}
               onClick={handleSubmit(onSubmit)}
             >
-              Sign Up
+              {t("registration")}
             </Button>
           </S.RootForm>
         </S.Form>

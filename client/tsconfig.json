@@ -20,7 +20,7 @@
       "@types": ["types"],
       "@config": ["config/index"],
       "@models": ["models/index"],
-      "models/*": ["models/*"],
+      "@entities": ["entities/index"],
       "utils/*": ["utils/*"],
       "api/*": ["api/*"],
       "routes/*": ["routes/*"],

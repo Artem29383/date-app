@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entities/user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -16,7 +16,6 @@ export class UsersRepository extends Repository<UserEntity> {
     await this.save({ ...user, password: hashedPassword });
 
     delete user.password;
-
     return {
       ...user,
     };

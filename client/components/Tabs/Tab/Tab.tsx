@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
 import Link from "next/link";
 
-import { HeightProps, PositionProps, WidthProps } from 'styled-system';
-import * as S from './Tab.styled';
+import { HeightProps, PositionProps, WidthProps } from "styled-system";
+import * as S from "./Tab.styled";
 
 type Props = {
   Icon: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
@@ -18,7 +18,7 @@ type Props = {
 const Tab = ({ Icon, color, svgF, svgH, svgW, link, ...rest }: Props) => {
   return (
     <Link href={link}>
-      <S.Root {...rest} color={color}>
+      <S.Root href={link} {...rest} color={color}>
         <Icon height={svgH} width={svgW} fill={svgF} />
       </S.Root>
     </Link>
