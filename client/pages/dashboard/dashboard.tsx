@@ -1,22 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { ROUTES } from "@types";
-import { useUser } from "src/entities/user/selectors";
-import { updateUser } from "src/entities/user/store";
-import { IUser } from "src/entities/user/types";
-import { useEvent } from "effector-react/ssr";
+import { useUser, useUserPending } from "src/entities/user/selectors";
 
-const Dashboard = ({ data }: { data: IUser }) => {
-  const updateUserFC = useEvent(updateUser);
+const Dashboard = () => {
   const user = useUser();
-
-  useEffect(() => {
-    updateUserFC(data);
-  }, [data, updateUserFC]);
+  const userPending = useUserPending();
 
   return (
     <div>
-      <div>USERNAME: {user.username}</div>
+      <div>USERNAME: {userPending ? "" : user.username}</div>
       <Link href={ROUTES.SETTINGS}>
         <a href={ROUTES.SETTINGS}>SETTINGS</a>
       </Link>

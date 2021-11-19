@@ -1,7 +1,7 @@
-import { createEvent } from "effector";
 import React from "react";
 import { IUser } from "src/entities/user/types";
 import { root } from "src/entities/root";
+import { currentAsync } from "pages/login/model/login";
 
 export const UserInitialState = {
   email: "",
@@ -14,11 +14,11 @@ export const UserInitialState = {
   username: ""
 };
 
-export const logout = createEvent<React.MouseEvent>();
+export const logout = root.createEvent<React.MouseEvent>();
 
-export const updateUser = createEvent<IUser | null>();
+export const updateUser = root.createEvent<IUser | null>();
 
 export const $user = root
   .createStore<IUser>(UserInitialState)
   .reset(logout)
-  .on(updateUser, (state, user) => ({ ...state, ...user }));
+  .on(currentAsync.doneData, (state, user) => ({ ...state, ...user }));

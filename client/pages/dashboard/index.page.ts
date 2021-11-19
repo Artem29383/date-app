@@ -1,7 +1,7 @@
 import { currentAsync } from "pages/login/model/login";
 import { ROUTES } from "@types";
 import { GetServerSidePropsContext } from "next";
-import { allSettled, fork } from "effector";
+import { allSettled, fork, serialize } from "effector";
 import { root } from "src/entities/root";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -20,10 +20,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       };
     }
 
-    console.info("SEND", user);
     return {
       props: {
-        data: user
+        store: serialize(scope)
       }
     };
   } catch (error) {
