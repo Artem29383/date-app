@@ -7,6 +7,16 @@
     "start": "next start -p 3333",
     "lint": "next lint"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.ts?(x)": [
+      "npm run lint:fix"
+    ]
+  },
   "dependencies": {
     "@hookform/resolvers": "^2.8.3",
     "@types/axios": "^0.14.0",
@@ -43,6 +53,7 @@
     "eslint-config-next": "12.0.4",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
     "prettier": "^1.19.1",
     "typescript": "4.4.4"
   }
