@@ -1,7 +1,6 @@
-import React from 'react';
+import React from "react";
 
-// import Sidebar from 'components/Sidebar';
-import * as S from './Application.styled';
+import * as S from "./Application.styled";
 
 type Props = {
   children: React.ReactNode;
@@ -11,7 +10,7 @@ type Props = {
 const Application = ({ children, role }: Props) => {
   return (
     <S.Root>
-      {/*<Sidebar role={role} />*/}
+      {/* <Sidebar role={role} /> */}
       <S.Wrapper>{children}</S.Wrapper>
     </S.Root>
   );

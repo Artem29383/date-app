@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { borderRadius, margin, maxWidth } from 'styled-system';
-import { ANIMATION_TIMING, Colors, FONTS } from '@types';
-import { motion } from 'framer-motion';
+import styled from "styled-components";
+import { borderRadius, margin, maxWidth } from "styled-system";
+import { ANIMATION_TIMING, Colors, FONTS } from "@types";
+import { motion } from "framer-motion";
 
 export const Root = styled(motion.div)`
   width: 100%;
@@ -21,7 +21,8 @@ export const LeftBorder = styled.div<{ animation: boolean; isError: boolean }>`
   position: absolute;
   left: 0;
   background-color: ${({ animation, isError }) =>
-    isError ? Colors.red : animation ? Colors.blue : 'transparent'};
+    // eslint-disable-next-line no-nested-ternary
+    isError ? Colors.red : animation ? Colors.blue : "transparent"};
   transition: background-color ${ANIMATION_TIMING.standard} linear;
 `;
 

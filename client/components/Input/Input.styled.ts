@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { borderRadius, margin, maxWidth } from 'styled-system';
-import { ANIMATION_TIMING, Colors, FONTS } from '@types';
+import styled from "styled-components";
+import { borderRadius, margin, maxWidth } from "styled-system";
+import { ANIMATION_TIMING, Colors, FONTS } from "@types";
 
 export const Root = styled.div`
   width: 100%;
@@ -19,7 +19,8 @@ export const LeftBorder = styled.div<{ animation: boolean; isError: boolean }>`
   position: absolute;
   left: 0;
   background-color: ${({ animation, isError }) =>
-    isError ? Colors.red : animation ? Colors.blue : 'transparent'};
+    // eslint-disable-next-line no-nested-ternary
+    isError ? Colors.red : animation ? Colors.blue : "transparent"};
   transition: background-color ${ANIMATION_TIMING.standard} linear;
 `;
 
@@ -38,11 +39,11 @@ export const Label = styled.label<{ animation: boolean }>`
   position: absolute;
   font-family: ${FONTS.GeoramaBold};
   font-weight: bold;
-  top: ${({ animation }) => (animation ? '40%' : '50%')};
-  font-size: ${({ animation }) => (animation ? '14px' : '21px')};
+  top: ${({ animation }) => (animation ? "40%" : "50%")};
+  font-size: ${({ animation }) => (animation ? "14px" : "21px")};
   left: 25px;
   transition: transform ${ANIMATION_TIMING.standard} linear,
     font-size ${ANIMATION_TIMING.standard} linear;
   transform: ${({ animation }) =>
-    animation ? 'translateY(-130%)' : 'translateY(-50%)'};
+    animation ? "translateY(-130%)" : "translateY(-50%)"};
 `;

@@ -1,7 +1,7 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from "react";
 
-import { BorderRadiusProps, MarginProps, MaxWidthProps } from 'styled-system';
-import * as S from './Input.styled';
+import { BorderRadiusProps, MarginProps, MaxWidthProps } from "styled-system";
+import * as S from "./Input.styled";
 
 type Props = {
   label: string;
@@ -19,7 +19,7 @@ type Props = {
 
 const Input = ({ label, register, isError, type, ...rest }: Props) => {
   const [focus, setFocus] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const handleChange = useCallback(
     (e: { target: { value: React.SetStateAction<string> } }) => {
       setValue(e.target.value);
@@ -53,7 +53,7 @@ const Input = ({ label, register, isError, type, ...rest }: Props) => {
       <S.Label animation={focus || Boolean(value)}>{label}</S.Label>
       <S.Input
         autoComplete="false"
-        type={type || 'text'}
+        type={type || "text"}
         ref={register && register.ref}
         name={register && register.name}
         onChange={handleChange}

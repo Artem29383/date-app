@@ -2,17 +2,17 @@
   "name": "service",
   "private": true,
   "scripts": {
-    "lint": "cd client && next lint",
+    "lint": "",
     "prepare": "cd .. && husky install client/.husky"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": ""
     }
   },
   "lint-staged": {
-    "*.ts?(x)": [
-      "--prefix /client npm run lint"
+    "**/*.ts?(x)": [
+      "npm run lint"
     ]
   },
   "devDependencies": {

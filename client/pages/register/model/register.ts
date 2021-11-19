@@ -15,10 +15,6 @@ export const registerAsync = createEffect<
     .then(response => response.data)
 );
 
-registerAsync.done.watch(payload => {
-  console.log("REDIRECT TO MAIN", payload);
-});
-
 $user.on(registerAsync.doneData, (_, payload) => ({
   ...UserInitialState,
   ...payload

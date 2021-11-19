@@ -8,7 +8,6 @@ import { Api } from "src/api";
 import Cookies from "js-cookie";
 import { GetServerSidePropsContext } from "next";
 import { root } from "src/entities/root";
-import { updateUser } from "src/entities/user/store";
 
 export const loginAsync = createEffect<
   FormTypeLogin,

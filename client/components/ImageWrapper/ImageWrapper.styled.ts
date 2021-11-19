@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { borderRadius, flexBasis, maxHeight, overflow } from 'styled-system';
-import { Colors } from '@types';
+import styled from "styled-components";
+import { borderRadius, flexBasis, maxHeight, overflow } from "styled-system";
+import { Colors } from "@types";
 
 export const WrapperImage = styled.div`
   width: 100%;

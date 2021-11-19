@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 const listenerCallbacks = new WeakMap();
 
@@ -21,8 +21,8 @@ function handleIntersections(entries: any[]) {
 function getIntersectionObserver() {
   if (observer === undefined) {
     observer = new IntersectionObserver(handleIntersections, {
-      rootMargin: '100px',
-      threshold: 0.15,
+      rootMargin: "100px",
+      threshold: 0.15
     });
   }
   return observer;

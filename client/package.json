@@ -13,8 +13,8 @@
     }
   },
   "lint-staged": {
-    "src/**/*.ts?(x)": [
-      "npm run lint:fix"
+    "**/*.ts?(x)": [
+      "npm run lint"
     ]
   },
   "dependencies": {

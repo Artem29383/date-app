@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
 
-import { ColorProps, MarginProps, PositionProps } from 'styled-system';
-import * as S from './H1.styled';
+import { ColorProps, MarginProps, PositionProps } from "styled-system";
+import * as S from "./H1.styled";
 
 type Props = {
   children: React.ReactNode;

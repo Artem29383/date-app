@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import { AppProps } from "next/app";
+import React from "react";
 import { ThemeProvider } from "styled-components";
 import theme from "styles/theme";
 import TranslateProvider from "src/locales/library/Provider";

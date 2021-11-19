@@ -1,7 +1,7 @@
-import React from 'react';
-import Asset from 'assets/backgrounds/background-main-auth.jpeg';
+import React from "react";
+import Asset from "assets/backgrounds/background-main-auth.jpeg";
 
-import * as S from './Auth.styled';
+import * as S from "./Auth.styled";
 
 type Props = {
   children: React.ReactNode;

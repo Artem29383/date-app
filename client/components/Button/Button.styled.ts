@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { borderRadius, height, margin, width } from 'styled-system';
-import { Colors, FONTS } from '@types';
+import styled from "styled-components";
+import { borderRadius, height, margin, width } from "styled-system";
+import { Colors, FONTS } from "@types";
 
 export const button = styled.button`
   ${height};
@@ -73,6 +73,6 @@ export const GoogleRoot = styled(button)<{ pick?: boolean }>`
   font-family: ${FONTS.CabinMedium};
 
   &:hover {
-    background-color: ${({ pick }) => (pick ? Colors.red : '#1765cc')};
+    background-color: ${({ pick }) => (pick ? Colors.red : "#1765cc")};
   }
 `;

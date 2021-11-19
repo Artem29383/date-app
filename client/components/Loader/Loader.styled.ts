@@ -1,5 +1,5 @@
-import styled, { keyframes } from 'styled-components';
-import { position } from 'styled-system';
+import styled, { keyframes } from "styled-components";
+import { position } from "styled-system";
 
 const pathTriangle = keyframes`
   33% {
@@ -10,7 +10,7 @@ const pathTriangle = keyframes`
   }
   100% {
     stroke-dashoffset: 221;
-  }
+  } 
 `;
 const dotTriangle = keyframes`
   33% {
@@ -32,11 +32,11 @@ export const Root = styled.div<{
   height: 34px;
   position: relative;
   transform: ${({ transform }) =>
-    transform ? `translate(${transform.x}, ${transform.y})` : 'initial'};
+    transform ? `translate(${transform.x}, ${transform.y})` : "initial"};
   ${position};
 
   &:before {
-    content: '';
+    content: "";
     width: 6px;
     height: 6px;
     border-radius: 50%;

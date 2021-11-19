@@ -1,1 +1,1 @@
-export { default } from './ImageWrapper';
+export { default } from "./ImageWrapper";

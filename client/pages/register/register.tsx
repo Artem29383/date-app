@@ -16,10 +16,8 @@ import Auth from "layouts/Auth";
 import { NextPage } from "next";
 import Tab from "components/Tabs/Tab";
 import * as S from "./register.styled";
-import { signUp } from "api/authApi";
 import { FormType } from "pages/register/model/types";
 import { registerAsync } from "pages/register/model/register";
-import { useUser } from "src/entities/user/selectors";
 
 const Unlocker = icons.unlocker;
 
@@ -41,7 +39,6 @@ const schema = yup.object().shape({
 });
 
 const Register: NextPage = () => {
-  const user = useUser();
   const { t } = useTranslate("common");
   const {
     register,

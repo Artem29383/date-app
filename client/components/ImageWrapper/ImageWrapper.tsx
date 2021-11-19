@@ -1,16 +1,16 @@
-import React, { memo, useRef, useState } from 'react';
-import classnames from 'classnames';
+import React, { memo, useRef, useState } from "react";
+import classnames from "classnames";
 
 import {
   BorderRadiusProps,
   FlexBasisProps,
   MaxHeightProps,
-  OverflowProps,
-} from 'styled-system';
+  OverflowProps
+} from "styled-system";
 
-import { handleImageError } from 'utils/imageError';
-import { useIntersection } from 'hooks/useIntersection';
-import * as S from './ImageWrapper.styled';
+import { handleImageError } from "utils/imageError";
+import { useIntersection } from "hooks/useIntersection";
+import * as S from "./ImageWrapper.styled";
 
 type Props = {
   source: string;
@@ -36,8 +36,8 @@ const ImageWrapper = ({ source, ...rest }: Props) => {
     <S.WrapperImage ref={imgRef} {...rest}>
       {isInView && (
         <S.Image
-          className={classnames('image', {
-            isLoaded: isLoaded,
+          className={classnames("image", {
+            isLoaded
           })}
           onLoad={handleOnLoad}
           src={source}

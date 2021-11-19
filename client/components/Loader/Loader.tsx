@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
-import { Colors } from '@types';
-import { PositionProps } from 'styled-system';
-import * as S from './Loader.styled';
+import React, { memo } from "react";
+import { Colors } from "@types";
+import { PositionProps } from "styled-system";
+import * as S from "./Loader.styled";
 
 type Props = {
   color?: string;

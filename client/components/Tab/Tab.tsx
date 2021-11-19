@@ -1,5 +1,5 @@
-import React, { memo, useLayoutEffect, useRef, useState } from 'react';
-import * as S from './Tab.styled';
+import React, { memo, useLayoutEffect, useRef, useState } from "react";
+import * as S from "./Tab.styled";
 
 type Props = {
   title: string;

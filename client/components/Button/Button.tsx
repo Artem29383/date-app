@@ -1,19 +1,19 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
 import Link from "next/link";
 
 import {
   BorderRadiusProps,
   HeightProps,
   MarginProps,
-  WidthProps,
-} from 'styled-system';
-import * as S from './Button.styled';
+  WidthProps
+} from "styled-system";
+import * as S from "./Button.styled";
 
 type Props = {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
-  typeButton?: 'classic' | 'ghost' | 'google';
+  typeButton?: "classic" | "ghost" | "google";
   link?: string;
   pick?: boolean;
 } & MarginProps &
@@ -47,13 +47,13 @@ const GoogleButton = ({ children, ...props }: Props) => (
 const buttons: { [key: string]: React.FC<Props> } = {
   classic: ClassicButton,
   ghost: GhostButton,
-  google: GoogleButton,
+  google: GoogleButton
 };
 
 const Button = ({
   children,
   disabled = false,
-  typeButton = 'classic',
+  typeButton = "classic",
   pick = false,
   ...rest
 }: Props) => {

@@ -4,8 +4,8 @@ import { ROUTES } from "@types";
 import { useUser, useUserPending } from "src/entities/user/selectors";
 
 const Dashboard = () => {
-  const user = useUser();
   const userPending = useUserPending();
+  const user = useUser();
 
   return (
     <div>

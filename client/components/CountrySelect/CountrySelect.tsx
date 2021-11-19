@@ -1,18 +1,18 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from "react";
 
-import { COUNTRIES } from 'components/CountrySelect/data';
-import { BorderRadiusProps, MarginProps, MaxWidthProps } from 'styled-system';
-import useClickAway from 'hooks/useClickAway';
-import * as S from './CountrySelect.styled';
+import { COUNTRIES } from "components/CountrySelect/data";
+import { BorderRadiusProps, MarginProps, MaxWidthProps } from "styled-system";
+import useClickAway from "hooks/useClickAway";
+import * as S from "./CountrySelect.styled";
 
 const variants = {
   open: { height: 150 },
-  closed: { height: 50, transition: { delay: 0.1 } },
+  closed: { height: 50, transition: { delay: 0.1 } }
 };
 
 const variantsList = {
   open: { opacity: 1, transition: { delay: 0.15 } },
-  closed: { opacity: 0 },
+  closed: { opacity: 0 }
 };
 
 type Props = {
@@ -30,7 +30,7 @@ type Props = {
   MarginProps;
 
 const CountrySelect = ({
-  initialValue = '',
+  initialValue = "",
   register,
   isError,
   onCallback,
@@ -38,7 +38,7 @@ const CountrySelect = ({
 }: Props) => {
   const { ref, active: focus, setActive: setFocus } = useClickAway();
   const [value, setValue] = useState(initialValue);
-  const [temp, setTemp] = useState('');
+  const [temp, setTemp] = useState("");
 
   const handleChange = useCallback(
     (e: { target: { value: React.SetStateAction<string> } }) => {
@@ -56,7 +56,7 @@ const CountrySelect = ({
   );
 
   const handleChooseCountry = useCallback(
-    country => {
+    (country: { flag: string; name: string }) => {
       setValue(`${country.flag} ${country.name}`);
       setTemp(`${country.flag} ${country.name}`);
       if (onCallback && register) {
@@ -69,7 +69,7 @@ const CountrySelect = ({
   const handleFocusOn = useCallback(() => {
     setFocus(true);
     if (register) {
-      setValue('');
+      setValue("");
     }
   }, [register, setFocus]);
 
@@ -89,20 +89,22 @@ const CountrySelect = ({
       ref={ref}
       onBlur={handleFocusOff}
       variants={variants}
-      animate={focus ? 'open' : 'closed'}
+      animate={focus ? "open" : "closed"}
     >
       <S.LeftBorder
         isError={isError || false}
         animation={focus || Boolean(value) || isError || false}
       />
-      {register && <S.Input
-        ref={register.ref}
-        placeholder="Enter your country"
-        onChange={handleChange}
-        value={value}
-        onFocus={handleFocusOn}
-      />}
-      <S.List variants={variantsList} animate={focus ? 'open' : 'closed'}>
+      {register && (
+        <S.Input
+          ref={register.ref}
+          placeholder="Enter your country"
+          onChange={handleChange}
+          value={value}
+          onFocus={handleFocusOn}
+        />
+      )}
+      <S.List variants={variantsList} animate={focus ? "open" : "closed"}>
         {filteredCountries.map(elem => (
           <S.Country
             onClick={() => {
