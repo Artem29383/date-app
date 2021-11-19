@@ -2,11 +2,18 @@
   "name": "service",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3333",
-    "build": "next build",
-    "start": "next start -p 3333",
-    "lint": "next lint",
+    "lint": "cd .. && next lint",
     "prepare": "cd .. && husky install client/.husky"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts?(x)": [
+      "npm run lint"
+    ]
   },
   "devDependencies": {
     "husky": "^7.0.4",
@@ -18,8 +25,5 @@
     "eslint-plugin-prettier": "^4.0.0",
     "lint-staged": ">=10",
     "prettier": "^1.19.1"
-  },
-  "lint-staged": {
-    "*.js": "eslint --cache --fix"
   }
 }
