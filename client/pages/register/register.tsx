@@ -10,7 +10,6 @@ import Logo from "backgrounds/background-main-auth.jpeg";
 import H1 from "components/Text/H1";
 import Button from "components/Button";
 import Input from "components/Input";
-import CountrySelect from "components/CountrySelect";
 import ImageWrapper from "components/ImageWrapper";
 import Auth from "layouts/Auth";
 import { NextPage } from "next";
@@ -18,6 +17,8 @@ import Tab from "components/Tabs/Tab";
 import * as S from "./register.styled";
 import { FormType } from "pages/register/model/types";
 import { registerAsync } from "pages/register/model/register";
+import { COUNTRIES } from "components/Select/data";
+import Select from "components/Select";
 
 const Unlocker = icons.unlocker;
 
@@ -30,10 +31,7 @@ const schema = yup.object().shape({
     .string()
     .min(6, "Password less than 6 symbols")
     .required(),
-  confirm: yup
-    .string()
-    .required("Confirm Password is required")
-    .oneOf([yup.ref("password"), null], "Passwords does not match"),
+  gender: yup.string().required(),
   username: yup.string().required(),
   countries: yup.string().required()
 });
@@ -107,24 +105,32 @@ const Register: NextPage = () => {
               mb={5}
             />
             <Input
-              isError={errors.confirm}
-              register={register("confirm")}
-              label="Confirm"
-              type="password"
-              mb={5}
-            />
-            <Input
               isError={errors.username}
               register={register("username")}
               label="Username"
               mb={5}
             />
-            <CountrySelect
-              onCallback={setValue as <T, R>(p1?: T, p2?: R) => void}
-              isError={errors.countries}
-              register={register("countries")}
-              maxWidth={200}
-            />
+            <S.FlexRow>
+              <Select
+                onCallback={setValue as <T, R>(p1?: T, p2?: R) => void}
+                isError={errors.gender}
+                register={register("gender")}
+                maxWidth={200}
+                placeholder="Enter your gender"
+                list={[
+                  { id: 1, name: "male" },
+                  { id: 2, name: "female" }
+                ]}
+              />
+              <Select
+                onCallback={setValue as <T, R>(p1?: T, p2?: R) => void}
+                isError={errors.countries}
+                placeholder="Enter your country"
+                register={register("countries")}
+                maxWidth={250}
+                list={COUNTRIES}
+              />
+            </S.FlexRow>
             <Button
               width={144}
               height={44}

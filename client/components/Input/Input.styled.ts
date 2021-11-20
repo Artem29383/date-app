@@ -4,7 +4,7 @@ import { ANIMATION_TIMING, Colors, FONTS } from "@types";
 
 export const Root = styled.div`
   width: 100%;
-  height: 75px;
+  height: 65px;
   position: relative;
   ${maxWidth};
   ${borderRadius};

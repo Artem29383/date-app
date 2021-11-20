@@ -2,6 +2,8 @@ import React from "react";
 import { IUser } from "src/entities/user/types";
 import { root } from "src/entities/root";
 import { currentAsync } from "pages/login/model/login";
+import { GENDER } from "@types";
+import { registerAsync } from "pages/register/model/register";
 
 export const UserInitialState = {
   email: "",
@@ -10,8 +12,10 @@ export const UserInitialState = {
   createdAt: "",
   id: "",
   password: "",
-  role: null,
-  username: ""
+  age: 0,
+  username: "",
+  description: "",
+  gender: GENDER.male
 };
 
 export const logout = root.createEvent<React.MouseEvent>();
@@ -21,4 +25,8 @@ export const updateUser = root.createEvent<IUser | null>();
 export const $user = root
   .createStore<IUser>(UserInitialState)
   .reset(logout)
-  .on(currentAsync.doneData, (state, user) => ({ ...state, ...user }));
+  .on(currentAsync.doneData, (state, user) => ({ ...state, ...user }))
+  .on(registerAsync.doneData, (state, payload) => ({
+    ...state,
+    ...payload
+  }));

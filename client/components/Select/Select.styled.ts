@@ -52,15 +52,11 @@ export const Country = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+  padding-left: 15px;
   transition: background-color 200ms linear;
 
   &:hover {
     background-color: ${Colors.gray};
   }
 `;
-
-export const Flag = styled.div`
-  margin: 0 10px;
-`;
-
 export const Name = styled.div``;

@@ -22,7 +22,7 @@ export const useTranslate = (level: string) => {
 
   const t = useCallback(
     (field: string) => {
-      return lang ? locales[level]?.[field]?.[lang] || "invalid" : "";
+      return lang ? locales[level]?.[field]?.en || "invalid" : "";
     },
     [lang, level, locales]
   );

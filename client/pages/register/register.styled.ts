@@ -37,3 +37,9 @@ export const Text = styled.div`
 `;
 
 export const RootForm = styled.form``;
+
+export const FlexRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;

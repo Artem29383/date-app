@@ -17,7 +17,10 @@ export enum Colors {
   cornFlowerBlue = "#638cff",
   melrose = "#9392ff",
   terracotta = "#e37364",
-  googleColorText = "#669df6"
+  googleColorText = "#669df6",
+  instaPlaceholder = "#8e8e8e",
+  instaCross = "#b6b3b3",
+  instaDefault = "#262626"
 }
 
 export enum FONTS {
@@ -43,11 +46,9 @@ export type ArgumentTypes<F extends Function> = F extends (
   ? A
   : never;
 
-export enum Roles {
-  customer = "customer",
-  admin = "admin",
-  superAdmin = "superAdmin",
-  premium = "premium"
+export enum GENDER {
+  male = "male",
+  female = "female"
 }
 
 export enum ROUTES {
@@ -55,5 +56,13 @@ export enum ROUTES {
   LOGIN = "/login",
   REGISTRATION = "/register",
   DASHBOARD = "/dashboard",
-  SETTINGS = "/settings"
+  SETTINGS = "/settings",
+  DIRECT = "/direct",
+  PUBLICATION = "/publication",
+  EXPLORE = "/explore",
+  LIKES = "/likes"
+}
+
+export enum ClientVariables {
+  HEADER_HEIGHT = 54
 }

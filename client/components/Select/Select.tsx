@@ -1,9 +1,15 @@
-import React, { memo, useCallback, useMemo, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 
-import { COUNTRIES } from "components/CountrySelect/data";
 import { BorderRadiusProps, MarginProps, MaxWidthProps } from "styled-system";
 import useClickAway from "hooks/useClickAway";
-import * as S from "./CountrySelect.styled";
+import * as S from "./Select.styled";
 
 const variants = {
   open: { height: 150 },
@@ -25,20 +31,35 @@ type Props = {
   };
   onCallback?: <T, R>(p1?: T, p2?: R) => void;
   isError?: boolean;
+  list: { name: string; id: string | number }[];
+  placeholder: string;
 } & MaxWidthProps &
   BorderRadiusProps &
   MarginProps;
 
-const CountrySelect = ({
+const Select = ({
+  list,
   initialValue = "",
   register,
   isError,
+  placeholder,
   onCallback,
   ...rest
 }: Props) => {
+  const $variants = useRef(variants);
   const { ref, active: focus, setActive: setFocus } = useClickAway();
   const [value, setValue] = useState(initialValue);
   const [temp, setTemp] = useState("");
+
+  useEffect(() => {
+    const heightList = list.length * 35 + 50;
+    $variants.current = {
+      ...variants,
+      open: {
+        height: heightList > 150 ? 150 : heightList
+      }
+    };
+  }, [list]);
 
   const handleChange = useCallback(
     (e: { target: { value: React.SetStateAction<string> } }) => {
@@ -49,18 +70,18 @@ const CountrySelect = ({
 
   const filteredCountries = useMemo(
     () =>
-      COUNTRIES.filter(country =>
+      list.filter(country =>
         country.name.toLowerCase().includes(value.toLowerCase())
       ),
-    [value]
+    [list, value]
   );
 
   const handleChooseCountry = useCallback(
-    (country: { flag: string; name: string }) => {
-      setValue(`${country.flag} ${country.name}`);
-      setTemp(`${country.flag} ${country.name}`);
+    (country: { name: string }) => {
+      setValue(`${country.name}`);
+      setTemp(`${country.name}`);
       if (onCallback && register) {
-        onCallback(register.name, `${country.flag} ${country.name}`);
+        onCallback(register.name, `${country.name}`);
       }
     },
     [onCallback, register]
@@ -88,7 +109,7 @@ const CountrySelect = ({
       {...rest}
       ref={ref}
       onBlur={handleFocusOff}
-      variants={variants}
+      variants={$variants.current}
       animate={focus ? "open" : "closed"}
     >
       <S.LeftBorder
@@ -98,7 +119,7 @@ const CountrySelect = ({
       {register && (
         <S.Input
           ref={register.ref}
-          placeholder="Enter your country"
+          placeholder={placeholder}
           onChange={handleChange}
           value={value}
           onFocus={handleFocusOn}
@@ -108,12 +129,11 @@ const CountrySelect = ({
         {filteredCountries.map(elem => (
           <S.Country
             onClick={() => {
-              handleChooseCountry({ name: elem.name, flag: elem.flag });
-              handleFocusOff(null, `${elem.flag} ${elem.name}`);
+              handleChooseCountry({ name: elem.name });
+              handleFocusOff(null, `${elem.name}`);
             }}
             key={elem.id}
           >
-            <S.Flag>{elem.flag}</S.Flag>
             <S.Name>{elem.name}</S.Name>
           </S.Country>
         ))}
@@ -122,4 +142,4 @@ const CountrySelect = ({
   );
 };
 
-export default memo(CountrySelect);
+export default memo(Select);

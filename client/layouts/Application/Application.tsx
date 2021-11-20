@@ -1,16 +1,19 @@
 import React from "react";
 
 import * as S from "./Application.styled";
+import Header from "components/Header";
+import { useUser } from "src/entities/user/selectors";
 
 type Props = {
   children: React.ReactNode;
-  role: string;
 };
 
-const Application = ({ children, role }: Props) => {
+const Application = ({ children }: Props) => {
+  const user = useUser();
+
   return (
     <S.Root>
-      {/* <Sidebar role={role} /> */}
+      {user.id && <Header />}
       <S.Wrapper>{children}</S.Wrapper>
     </S.Root>
   );

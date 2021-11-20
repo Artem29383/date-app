@@ -19,6 +19,11 @@ export const loginAsync = createEffect<
     .then(response => response.data)
 );
 
+loginAsync.done.watch(payload => {
+  RouterPush(ROUTES.DASHBOARD);
+  Cookies.set("token", payload.result.accessToken);
+});
+
 export const currentAsync = root.createEffect<
   GetServerSidePropsContext | undefined,
   IUser | null,
@@ -28,8 +33,3 @@ export const currentAsync = root.createEffect<
     .getCurrentUser()
     .then(response => response)
 );
-
-loginAsync.done.watch(payload => {
-  RouterPush(ROUTES.DASHBOARD);
-  Cookies.set("token", payload.result.accessToken);
-});

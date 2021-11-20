@@ -9,6 +9,7 @@ import Normalize from "styles/normalize";
 import { Provider as EffectorProvider } from "effector-react/ssr";
 import { fork } from "effector";
 import { root } from "src/entities/root";
+import Application from "layouts/Application";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const scope = fork(root, { values: pageProps.store });
@@ -18,7 +19,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <TranslateProvider locales={common}>
         <Normalize />
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
+          <Application>
+            <Component {...pageProps} />
+          </Application>
         </ThemeProvider>
       </TranslateProvider>
     </EffectorProvider>

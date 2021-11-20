@@ -2,8 +2,9 @@ import { createEffect } from "effector";
 import { FormType } from "pages/register/model/types";
 import { IUser } from "src/entities/user/types";
 import { ApiError } from "api/types";
-import { $user, UserInitialState } from "src/entities/user/store";
 import { Api } from "src/api";
+import { RouterPush } from "utils/router/router";
+import { ROUTES } from "@types";
 
 export const registerAsync = createEffect<
   FormType,
@@ -15,7 +16,6 @@ export const registerAsync = createEffect<
     .then(response => response.data)
 );
 
-$user.on(registerAsync.doneData, (_, payload) => ({
-  ...UserInitialState,
-  ...payload
-}));
+registerAsync.done.watch(() => {
+  RouterPush(ROUTES.LOGIN);
+});

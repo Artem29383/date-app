@@ -1,9 +1,11 @@
-import { Roles } from "@types";
+import { GENDER } from "@types";
 
 export interface IUser extends IUserPayload {
   accessToken: string;
   id: string;
   createdAt: string;
+  description?: string;
+  age?: number;
 }
 
 export interface IUserPayload {
@@ -12,5 +14,5 @@ export interface IUserPayload {
   username: string;
   countries: string;
   avatarUrl?: string;
-  role: Roles | null;
+  gender: GENDER;
 }
