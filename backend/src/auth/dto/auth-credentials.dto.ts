@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
-import { Roles } from '../../types';
+import { GENDER } from '../../types';
 import { UserEntity } from '../entities/user.entity';
 import { UniqueOnDatabase } from '../validations/UniqueValidation';
 
@@ -25,6 +25,10 @@ export class AuthCredentialsDto {
 
   @IsString()
   @IsOptional()
-  @IsEnum(Roles)
-  role: string;
+  @Length(0, 255, { message: 'Максимальная длина текста 255 символов' })
+  description?: string;
+
+  @IsString()
+  @IsEnum(GENDER)
+  gender: string;
 }

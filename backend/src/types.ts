@@ -1,6 +1,4 @@
-export enum Roles {
-  customer = 'customer',
-  admin = 'admin',
-  superAdmin = 'superAdmin',
-  premium = 'premium',
+export enum GENDER {
+  male = 'male',
+  female = 'female',
 }

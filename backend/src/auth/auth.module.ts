@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from "./strategies/local.strategy";
+import { LocalStrategy } from './strategies/local.strategy';
 
 export const secretKey = 'topsectersp1';
 

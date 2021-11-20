@@ -4,7 +4,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Roles } from '../../types';
 
 @Entity()
 export class UserEntity {
@@ -21,13 +20,19 @@ export class UserEntity {
   username: string;
 
   @Column()
+  age: number;
+
+  @Column()
   countries: string;
 
   @Column({ nullable: true })
   avatarUrl?: string;
 
-  @Column({ default: Roles.customer })
-  role: string;
+  @Column()
+  gender: string;
+
+  @Column()
+  description?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
