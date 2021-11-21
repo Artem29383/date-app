@@ -2,9 +2,14 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
+  constructor() {
+    super();
+  }
+
   async createUser(
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<UserEntity> {
@@ -12,7 +17,6 @@ export class UsersRepository extends Repository<UserEntity> {
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(authCredentialsDto.password, salt);
-
     await this.save({ ...user, password: hashedPassword });
 
     delete user.password;

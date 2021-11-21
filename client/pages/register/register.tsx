@@ -48,6 +48,10 @@ const Register: NextPage = () => {
     mode: "onSubmit"
   });
 
+  const checkKeyDown = (e: { code: string; preventDefault: () => void }) => {
+    if (e.code === "Enter") e.preventDefault();
+  };
+
   const onSubmit = async (data: FormType) => {
     await registerAsync(data);
   };
@@ -81,7 +85,7 @@ const Register: NextPage = () => {
           svgH={45}
           svgW={45}
         />
-        <S.Form>
+        <S.Form onKeyDown={checkKeyDown}>
           <S.Title>
             <Unlocker fill={Colors.blue} width={100} height={100} />
             <S.Text>

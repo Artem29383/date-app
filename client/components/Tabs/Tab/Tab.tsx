@@ -3,9 +3,10 @@ import Link from "next/link";
 
 import { HeightProps, PositionProps, WidthProps } from "styled-system";
 import * as S from "./Tab.styled";
+import { IconProps } from "styles/icons";
 
 type Props = {
-  Icon: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+  Icon: React.FunctionComponent<React.SVGAttributes<SVGElement> & IconProps>;
   color: string;
   svgW: number;
   svgH: number;

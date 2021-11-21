@@ -21,6 +21,8 @@ const variantsList = {
   closed: { opacity: 0 }
 };
 
+const sizeElementInsideSelect = 35;
+
 type Props = {
   initialValue?: string;
   register?: {
@@ -47,12 +49,16 @@ const Select = ({
   ...rest
 }: Props) => {
   const $variants = useRef(variants);
+  const [selected, setSelected] = useState(0);
+  const selectedRef = useRef(0);
+  const $list = useRef<HTMLDivElement | null>(null);
+  const oldShiftPos = useRef(0);
   const { ref, active: focus, setActive: setFocus } = useClickAway();
   const [value, setValue] = useState(initialValue);
   const [temp, setTemp] = useState("");
 
   useEffect(() => {
-    const heightList = list.length * 35 + 50;
+    const heightList = list.length * sizeElementInsideSelect + 50;
     $variants.current = {
       ...variants,
       open: {
@@ -104,6 +110,46 @@ const Select = ({
     [focus, setFocus, temp]
   );
 
+  const handleChangeSelectedItem = useCallback(
+    e => {
+      const currentScroll = $list.current?.scrollTop || 0;
+      const elemInsideOverflow =
+        selectedRef.current - 1 < 0 ? 0 : selectedRef.current - 1;
+      // when we click on down arrow
+      if (e.keyCode === 40 && selected + 1 < list.length) {
+        setSelected(selected + 1);
+        selectedRef.current = selected + 1;
+        $list.current?.scroll({
+          top:
+            currentScroll <
+            Math.abs(elemInsideOverflow * sizeElementInsideSelect)
+              ? selectedRef.current * sizeElementInsideSelect
+              : oldShiftPos.current
+        });
+      }
+      // when we click on up arrow
+      if (e.keyCode === 38 && selected - 1 >= 0) {
+        setSelected(selected - 1);
+        selectedRef.current = selected - 1;
+        $list.current?.scroll({
+          top:
+            currentScroll >
+            Math.abs(elemInsideOverflow * sizeElementInsideSelect)
+              ? (selectedRef.current - 2) * sizeElementInsideSelect
+              : oldShiftPos.current
+        });
+      }
+      // save old position for shifting
+      oldShiftPos.current = $list.current?.scrollTop || 0;
+
+      if (e.key === "Enter") {
+        handleChooseCountry({ name: list[selectedRef.current].name });
+        handleFocusOff(null, `${list[selectedRef.current].name}`);
+      }
+    },
+    [handleChooseCountry, handleFocusOff, list, selected]
+  );
+
   return (
     <S.Root
       {...rest}
@@ -119,15 +165,23 @@ const Select = ({
       {register && (
         <S.Input
           ref={register.ref}
+          onKeyDown={handleChangeSelectedItem}
           placeholder={placeholder}
           onChange={handleChange}
           value={value}
           onFocus={handleFocusOn}
         />
       )}
-      <S.List variants={variantsList} animate={focus ? "open" : "closed"}>
-        {filteredCountries.map(elem => (
+      <S.List
+        onKeyDown={handleChangeSelectedItem}
+        variants={variantsList}
+        ref={$list}
+        animate={focus ? "open" : "closed"}
+      >
+        {filteredCountries.map((elem, index) => (
           <S.Country
+            heightElem={sizeElementInsideSelect}
+            isFocused={index === selected}
             onClick={() => {
               handleChooseCountry({ name: elem.name });
               handleFocusOff(null, `${elem.name}`);

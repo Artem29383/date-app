@@ -14,8 +14,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  create(createAuthDto: AuthCredentialsDto) {
-    return this.repository.createUser(createAuthDto);
+  async create(createAuthDto: AuthCredentialsDto) {
+    const user = await this.repository.createUser(createAuthDto);
+    const accessToken: string = await this.jwtService.sign(user);
+    return { ...user, accessToken };
   }
 
   async login(loginCredentialsDto: LoginCredentialsDto) {

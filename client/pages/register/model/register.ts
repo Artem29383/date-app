@@ -5,6 +5,7 @@ import { ApiError } from "api/types";
 import { Api } from "src/api";
 import { RouterPush } from "utils/router/router";
 import { ROUTES } from "@types";
+import Cookies from "js-cookie";
 
 export const registerAsync = createEffect<
   FormType,
@@ -16,6 +17,7 @@ export const registerAsync = createEffect<
     .then(response => response.data)
 );
 
-registerAsync.done.watch(() => {
-  RouterPush(ROUTES.LOGIN);
+registerAsync.done.watch(payload => {
+  RouterPush(ROUTES.DASHBOARD);
+  Cookies.set("token", payload.result.accessToken);
 });

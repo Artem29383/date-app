@@ -46,9 +46,11 @@ export const List = styled(motion.div)`
   width: 100%;
 `;
 
-export const Country = styled.div`
+export const Country = styled.li<{ isFocused: boolean; heightElem: number }>`
   width: 100%;
-  height: 35px;
+  height: ${({ heightElem }) => `${heightElem}px`};
+  background-color: ${({ isFocused }) =>
+    isFocused ? "rgba(0,0,0, .12)" : "#fff"};
   cursor: pointer;
   display: flex;
   align-items: center;
