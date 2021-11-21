@@ -4,8 +4,11 @@ import classnames from "classnames";
 import {
   BorderRadiusProps,
   FlexBasisProps,
+  HeightProps,
   MaxHeightProps,
-  OverflowProps
+  MaxWidthProps,
+  OverflowProps,
+  WidthProps
 } from "styled-system";
 
 import { handleImageError } from "utils/imageError";
@@ -17,7 +20,10 @@ type Props = {
 } & FlexBasisProps &
   BorderRadiusProps &
   OverflowProps &
-  MaxHeightProps;
+  MaxHeightProps &
+  MaxWidthProps &
+  HeightProps &
+  WidthProps;
 
 const ImageWrapper = ({ source, ...rest }: Props) => {
   const [isLoaded, setIsLoaded] = useState(false);

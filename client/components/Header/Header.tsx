@@ -4,6 +4,8 @@ import * as S from "./Header.styled";
 import { icons } from "styles/icons";
 import InstaInput from "components/InstaInput";
 import Navigation from "components/Navigation";
+import ImageWrapper from "components/ImageWrapper";
+import { useUser } from "src/entities/user/selectors";
 
 const IconInsta = icons.instagramLogo;
 

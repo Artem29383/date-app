@@ -1,5 +1,13 @@
 import styled from "styled-components";
-import { borderRadius, flexBasis, maxHeight, overflow } from "styled-system";
+import {
+  borderRadius,
+  flexBasis,
+  height,
+  maxHeight,
+  maxWidth,
+  overflow,
+  width
+} from "styled-system";
 import { Colors } from "@types";
 
 export const WrapperImage = styled.div`
@@ -14,6 +22,9 @@ export const WrapperImage = styled.div`
   ${borderRadius};
   ${overflow};
   ${maxHeight};
+  ${maxWidth};
+  ${width};
+  ${height};
 `;
 
 export const Image = styled.img`
