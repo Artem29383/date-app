@@ -25,10 +25,13 @@ export class AuthCredentialsDto {
 
   @IsString()
   @IsOptional()
-  @Length(0, 255, { message: 'Максимальная длина текста 255 символов' })
   description?: string;
 
   @IsString()
   @IsEnum(GENDER)
   gender: string;
+
+  @IsString()
+  @IsOptional()
+  age?: number;
 }

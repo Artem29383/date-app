@@ -19,8 +19,8 @@ export class UserEntity {
   @Column()
   username: string;
 
-  @Column()
-  age: number;
+  @Column({ nullable: true })
+  age?: number;
 
   @Column()
   countries: string;
@@ -31,7 +31,7 @@ export class UserEntity {
   @Column()
   gender: string;
 
-  @Column()
+  @Column({ nullable: true })
   description?: string;
 
   @CreateDateColumn({ type: 'timestamp' })

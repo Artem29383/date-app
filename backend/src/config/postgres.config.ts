@@ -8,7 +8,7 @@ export const pgConfig: TypeOrmModuleOptions = {
   password: '12357713a5',
   database: 'dater-db',
   autoLoadEntities: true,
-  synchronize: false,
+  synchronize: true,
   // migrationsRun: true,
   entities: ['dist/entities/**/*{.js,.ts}'],
   migrations: ['dist/migrations/**/*{.js,.ts}'],
@@ -20,4 +20,6 @@ export const pgConfig: TypeOrmModuleOptions = {
   },
 };
 
-module.exports = pgConfig;
+// TODO decide this shit
+// remove commit before migration
+// module.exports = pgConfig;
