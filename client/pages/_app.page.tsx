@@ -18,7 +18,7 @@ import Settings from "layouts/Settings";
 function MyApp({ Component, pageProps }: AppProps) {
   const scope = fork(root, { values: pageProps.store });
   const { asPath } = useRouter();
-  console.info(asPath);
+
   const auth: string[] = [ROUTES.LOGIN, ROUTES.REGISTRATION];
   const settings: string[] = [
     ROUTES.SETTINGS_PROFILE,

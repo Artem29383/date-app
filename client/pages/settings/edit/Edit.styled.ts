@@ -32,3 +32,27 @@ export const ProfileActions = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+export const Content = styled.div`
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Title = styled.h1`
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  padding: 21px;
+  text-align: center;
+`;
+
+export const ButtonModal = styled.button<{ color: string; fw: string }>`
+  border-top: 1px solid #dbdbdb;
+  padding: 16px;
+  position: relative;
+  text-align: center;
+  color: ${({ color }) => color};
+  font-weight: ${({ fw }) => fw};
+`;

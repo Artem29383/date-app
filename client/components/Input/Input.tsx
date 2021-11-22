@@ -18,7 +18,6 @@ type Props = {
   MarginProps;
 
 const Input = ({ label, register, isError, type, ...rest }: Props) => {
-  console.info(register);
   const [focus, setFocus] = useState(false);
   const [value, setValue] = useState("");
   const handleChange = useCallback(
