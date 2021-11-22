@@ -12,6 +12,7 @@ export const Root = styled.div`
 
 export const Navigation = styled.ul`
   width: 237px;
+  min-width: 237px;
   border-right: 1px solid #dbdbdb;
 `;
 
