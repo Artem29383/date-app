@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { icons } from "styles/icons";
 import * as S from "./Navigation.styled";
 import { ROUTES } from "@types";
@@ -6,6 +6,8 @@ import ActiveLink from "components/ActiveLink";
 import ImageWrapper from "components/ImageWrapper/ImageWrapper";
 import { useUser } from "src/entities/user/selectors";
 import AreaPortal from "components/AreaPortal";
+import Link from "next/link";
+import { useToggle } from "hooks/useToggle";
 
 const Profile = icons.profile;
 const ProfileFill = icons.profileFill;
@@ -18,13 +20,13 @@ const ExploreFill = icons.exploreFill;
 const Heart = icons.heart;
 const HeartFill = icons.heartFill;
 
-const Navigation = () => {
-  const [open, setOpen] = useState(false);
-  const { avatarUrl } = useUser();
+type Props = {
+  logout: () => void;
+};
 
-  const handleOpen = () => {
-    setOpen(!open);
-  };
+const Navigation = ({ logout }: Props) => {
+  const { value: open, handleToggle } = useToggle(false);
+  const { avatarUrl } = useUser();
 
   return (
     <S.Root>
@@ -58,7 +60,7 @@ const Navigation = () => {
         IconActive={HeartFill}
         IconDefault={Heart}
       />
-      <S.RootAvatar open={open} onClick={handleOpen}>
+      <S.RootAvatar open={open} onClick={handleToggle}>
         <ImageWrapper
           overflow="hidden"
           maxWidth="19px"
@@ -68,8 +70,29 @@ const Navigation = () => {
           maxHeight="19px"
           source={avatarUrl || ""}
         />
+        {open && (
+          <AreaPortal minHeightArea={128} left={-76} top={102}>
+            <S.List>
+              <S.Item>
+                <Link href={ROUTES.PROFILE}>
+                  <a href={ROUTES.PROFILE}>Профиль</a>
+                </Link>
+              </S.Item>
+              <S.Item>
+                <Link href={ROUTES.LIKES}>
+                  <a href={ROUTES.LIKES}>Сохранённое</a>
+                </Link>
+              </S.Item>
+              <S.Item>
+                <Link href={ROUTES.SETTINGS_PROFILE}>
+                  <a href={ROUTES.SETTINGS_PROFILE}>Настройки</a>
+                </Link>
+              </S.Item>
+              <S.Item onClick={logout}>Выйти</S.Item>
+            </S.List>
+          </AreaPortal>
+        )}
       </S.RootAvatar>
-      <AreaPortal />
     </S.Root>
   );
 };

@@ -3,6 +3,7 @@ import {
   borderRadius,
   flexBasis,
   height,
+  margin,
   maxHeight,
   maxWidth,
   overflow,
@@ -25,6 +26,7 @@ export const WrapperImage = styled.div`
   ${maxWidth};
   ${width};
   ${height};
+  ${margin};
 `;
 
 export const Image = styled.img`

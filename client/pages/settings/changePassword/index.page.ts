@@ -1,24 +1,11 @@
-import { currentAsync } from "pages/login/model/login";
 import { ROUTES } from "@types";
 import { GetServerSidePropsContext } from "next";
+import { withAuthentication } from "utils/withAuthentication";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   try {
-    const user = await currentAsync(ctx);
-
-    if (!user) {
-      return {
-        props: {},
-        redirect: {
-          permanent: false,
-          destination: ROUTES.LOGIN
-        }
-      };
-    }
     return {
-      props: {
-        user
-      }
+      ...(await withAuthentication(ctx))
     };
   } catch (error) {
     return {
@@ -31,4 +18,4 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 };
 
-export { default } from "./settings";
+export { default } from "./changePassword";

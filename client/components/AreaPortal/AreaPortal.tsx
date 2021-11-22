@@ -1,14 +1,19 @@
-import React from "react";
+import React, { memo } from "react";
 import * as S from "./AreaPortal.styled";
 
-const AreaPortal = () => {
-  return (
-    <S.Main>
-      <S.Root />
-      <S.Triangle />
-      <S.TriangleFake />
-    </S.Main>
-  );
+type Props = {
+  children: React.ReactNode;
+  minHeightArea: number;
+  left: number;
+  top: number;
 };
 
-export default AreaPortal;
+const AreaPortal = ({ children, minHeightArea, left, top }: Props) => (
+  <S.Main minHeightArea={minHeightArea} left={left} top={top}>
+    <S.TriangleFake />
+    <S.Triangle />
+    <S.Root>{children}</S.Root>
+  </S.Main>
+);
+
+export default memo(AreaPortal);

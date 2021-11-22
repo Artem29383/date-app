@@ -5,8 +5,8 @@ import { ROUTES } from "@types";
 const Direct = () => {
   return (
     <div>
-      <Link href={ROUTES.SETTINGS}>
-        <a href={ROUTES.SETTINGS}>SETTINGS</a>
+      <Link href={ROUTES.SETTINGS_PROFILE}>
+        <a href={ROUTES.SETTINGS_PROFILE}>SETTINGS</a>
       </Link>
     </div>
   );

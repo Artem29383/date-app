@@ -56,11 +56,13 @@ export enum ROUTES {
   LOGIN = "/login",
   REGISTRATION = "/register",
   DASHBOARD = "/dashboard",
-  SETTINGS = "/settings",
+  SETTINGS_PROFILE = "/settings/edit",
+  SETTINGS_PASSWORD = "/settings/changePassword",
   DIRECT = "/direct",
   PUBLICATION = "/publication",
   EXPLORE = "/explore",
-  LIKES = "/likes"
+  LIKES = "/likes",
+  PROFILE = "/profile"
 }
 
 export enum ClientVariables {

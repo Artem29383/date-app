@@ -5,6 +5,7 @@ import {
   BorderRadiusProps,
   FlexBasisProps,
   HeightProps,
+  MarginProps,
   MaxHeightProps,
   MaxWidthProps,
   OverflowProps,
@@ -23,7 +24,8 @@ type Props = {
   MaxHeightProps &
   MaxWidthProps &
   HeightProps &
-  WidthProps;
+  WidthProps &
+  MarginProps;
 
 const ImageWrapper = ({ source, ...rest }: Props) => {
   const [isLoaded, setIsLoaded] = useState(false);

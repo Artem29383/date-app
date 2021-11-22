@@ -18,4 +18,4 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 };
 
-export { default } from "./likes";
+export { default } from "./edit";

@@ -8,6 +8,7 @@ import { Api } from "src/api";
 import Cookies from "js-cookie";
 import { GetServerSidePropsContext } from "next";
 import { root } from "src/entities/root";
+import React from "react";
 
 export const loginAsync = createEffect<
   FormTypeLogin,
@@ -33,3 +34,10 @@ export const currentAsync = root.createEffect<
     .getCurrentUser()
     .then(response => response)
 );
+
+export const logout = root.createEvent();
+
+logout.watch(() => {
+  Cookies.remove("token");
+  RouterPush(ROUTES.LOGIN);
+});

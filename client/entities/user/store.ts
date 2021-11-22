@@ -1,7 +1,6 @@
-import React from "react";
 import { IUser } from "src/entities/user/types";
 import { root } from "src/entities/root";
-import { currentAsync } from "pages/login/model/login";
+import { currentAsync, logout } from "pages/login/model/login";
 import { GENDER } from "@types";
 import { registerAsync } from "pages/register/model/register";
 
@@ -17,8 +16,6 @@ export const UserInitialState = {
   description: "",
   gender: GENDER.male
 };
-
-export const logout = root.createEvent<React.MouseEvent>();
 
 export const updateUser = root.createEvent<IUser | null>();
 

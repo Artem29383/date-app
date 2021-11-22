@@ -4,15 +4,19 @@ import * as S from "./Header.styled";
 import { icons } from "styles/icons";
 import InstaInput from "components/InstaInput";
 import Navigation from "components/Navigation";
-import ImageWrapper from "components/ImageWrapper";
-import { useUser } from "src/entities/user/selectors";
 
 const IconInsta = icons.instagramLogo;
 
-const Header = () => {
+type Props = {
+  logout: () => void;
+};
+
+const Header = ({ logout }: Props) => {
   const [value, setValue] = useState("");
 
-  const handleChange = e => {
+  const handleChange = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setValue(e.target.value);
   };
 
@@ -29,7 +33,7 @@ const Header = () => {
           onChange={handleChange}
           value={value}
         />
-        <Navigation />
+        <Navigation logout={logout} />
       </S.InnerRoot>
     </S.Root>
   );
