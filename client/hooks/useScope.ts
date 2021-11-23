@@ -9,7 +9,7 @@ function initializeScope(initialData: ValueMap | undefined) {
     scope ??
     fork({
       values: {
-        ...(scope ? serialize(scope) : {}),
+        ...(scope ? serialize(scope, { onlyChanges: true }) : {}),
         ...initialData
       }
     });

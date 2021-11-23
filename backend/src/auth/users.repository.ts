@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
+import { UpdateUserDto } from '../user/dto/update-user.dto';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
@@ -23,5 +23,14 @@ export class UsersRepository extends Repository<UserEntity> {
     return {
       ...user,
     };
+  }
+
+  //@TODO переделать на multer и обработку картинки на бэке
+  async updateAvatar(updateUserDto: UpdateUserDto): Promise<UserEntity> {
+    const user: UserEntity = await this.findOne({ email: updateUserDto.email });
+    user.avatarUrl = updateUserDto.avatarUrl;
+    delete user.password;
+    await this.save(user);
+    return user;
   }
 }

@@ -1,4 +1,3 @@
-import { createEffect } from "effector";
 import { IUser } from "src/entities/user/types";
 import { ApiError } from "api/types";
 import { FormTypeLogin } from "pages/login/model/types";
@@ -8,9 +7,8 @@ import { Api } from "src/api";
 import Cookies from "js-cookie";
 import { GetServerSidePropsContext } from "next";
 import { root } from "src/entities/root";
-import React from "react";
 
-export const loginAsync = createEffect<
+export const loginAsync = root.createEffect<
   FormTypeLogin,
   IUser,
   ApiError<Record<string, unknown>>

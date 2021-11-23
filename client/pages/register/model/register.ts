@@ -1,4 +1,3 @@
-import { createEffect } from "effector";
 import { FormType } from "pages/register/model/types";
 import { IUser } from "src/entities/user/types";
 import { ApiError } from "api/types";
@@ -6,8 +5,9 @@ import { Api } from "src/api";
 import { RouterPush } from "utils/router/router";
 import { ROUTES } from "@types";
 import Cookies from "js-cookie";
+import { root } from "src/entities/root";
 
-export const registerAsync = createEffect<
+export const registerAsync = root.createEffect<
   FormType,
   IUser,
   ApiError<Record<string, unknown>>

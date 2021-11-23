@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 
 import * as S from "./Edit.styled";
 import ImageWrapper from "components/ImageWrapper";
@@ -8,13 +8,38 @@ import Modal from "components/Modal";
 import { useToggle } from "hooks/useToggle";
 import FileInput from "components/FileInput";
 import { useClientRender } from "hooks/useClientRender";
+import { useFileWork } from "hooks/useFileWork";
+import { uploadImageAsync } from "src/entities/user/async";
+import { updateUser } from "src/entities/user/store";
+import { useEvent } from "effector-react";
 
 const Edit = () => {
   const isClient = useClientRender();
-  const { avatarUrl, username } = useUser();
+  const { changeHandle, objectFile, setObjectFile } = useFileWork("image");
+  const { avatarUrl, username, email } = useUser();
   const { handleOpen, value: open, handleClose } = useToggle(false);
 
-  const changeHandle = () => {};
+  const updateUserEvent = useEvent(updateUser);
+
+  const handleUploadImage = useCallback(
+    (file: File | "destroy") => {
+      if (!file) return;
+      uploadImageAsync({ file, email }).then(resp => {
+        if (resp) {
+          updateUserEvent(resp);
+          setObjectFile(null);
+          handleClose();
+        }
+      });
+    },
+    [email, handleClose, setObjectFile, updateUserEvent]
+  );
+
+  useEffect(() => {
+    if (objectFile) {
+      handleUploadImage(objectFile);
+    }
+  }, [email, handleUploadImage, objectFile, updateUserEvent]);
 
   return (
     <S.Root>
@@ -46,7 +71,14 @@ const Edit = () => {
                 <FileInput onChange={changeHandle} />
                 Загрузить фото
               </S.ButtonModal>
-              <S.ButtonModal color="#ed4956" fw="700">
+              <S.ButtonModal
+                onClick={() => {
+                  handleUploadImage("destroy");
+                  handleClose();
+                }}
+                color="#ed4956"
+                fw="700"
+              >
                 Удалить текущее фото
               </S.ButtonModal>
               <S.ButtonModal onClick={handleClose} color="#000" fw="400">

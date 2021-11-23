@@ -3,6 +3,8 @@ import { root } from "src/entities/root";
 import { currentAsync, logout } from "pages/login/model/login";
 import { GENDER } from "@types";
 import { registerAsync } from "pages/register/model/register";
+import { uploadImageAsync } from "src/entities/user/async";
+import { createEvent } from "effector";
 
 export const UserInitialState = {
   email: "",
@@ -17,13 +19,16 @@ export const UserInitialState = {
   gender: GENDER.male
 };
 
-export const updateUser = root.createEvent<IUser | null>();
+export const updateUser = createEvent<IUser>();
 
 export const $user = root
   .createStore<IUser>(UserInitialState)
   .reset(logout)
-  .on(currentAsync.doneData, (state, user) => ({ ...state, ...user }))
   .on(registerAsync.doneData, (state, payload) => ({
     ...state,
     ...payload
-  }));
+  }))
+  .on(currentAsync.doneData, (state, user) => ({ ...state, ...user }))
+  .on(updateUser, (state, payload) => {
+    return payload;
+  });
