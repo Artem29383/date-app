@@ -34,6 +34,8 @@ import newPublicationFill from "assets/icons/newPublicationFill.svg";
 import exploreFill from "assets/icons/exploreFill.svg";
 import explore from "assets/icons/explore.svg";
 import heart from "assets/icons/heart.svg";
+import imagesvideo from "assets/icons/imagesvideo.svg";
+import backarrow from "assets/icons/backarrow.svg";
 import heartFill from "assets/icons/heartFill.svg";
 
 export type IconProps = LayoutProps &
@@ -68,7 +70,9 @@ export const icons: {
     profileFill,
     newPublicationFill,
     heartFill,
-    directFill
+    directFill,
+    imagesvideo,
+    backarrow
   },
   icon => styled(
     icon as React.FunctionComponent<React.SVGAttributes<SVGElement> & IconProps>

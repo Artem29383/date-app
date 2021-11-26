@@ -16,3 +16,10 @@ export interface IUserPayload {
   avatarUrl?: string;
   gender: GENDER;
 }
+
+export interface IUserUpdate {
+  email: string;
+  age?: number;
+  description?: string;
+  username: string;
+}

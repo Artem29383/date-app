@@ -21,10 +21,10 @@ export const Root = styled(motion.div)`
   justify-content: center;
 `;
 
-export const Background = styled(motion.div)`
+export const Background = styled(motion.div)<{ bgcColor: string }>`
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: ${({ bgcColor }) => bgcColor};
   position: absolute;
   top: 0;
   left: 0;

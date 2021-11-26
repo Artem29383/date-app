@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {
   borderRadius,
   flexBasis,
+  flexShrink,
   height,
   margin,
   maxHeight,
@@ -11,10 +12,11 @@ import {
 } from "styled-system";
 import { Colors } from "@types";
 
-export const WrapperImage = styled.div`
+export const WrapperImage = styled.div<{ onClick: (() => void) | undefined }>`
   width: 100%;
   height: 100%;
   display: flex;
+  cursor: ${({ onClick }) => (onClick ? "pointer" : "default")};
   justify-content: center;
   align-items: center;
   background-color: ${Colors.bombay};
@@ -27,6 +29,7 @@ export const WrapperImage = styled.div`
   ${width};
   ${height};
   ${margin};
+  ${flexShrink};
 `;
 
 export const Image = styled.img`
@@ -49,5 +52,17 @@ export const Image = styled.img`
   &.isLoaded {
     transition: opacity 1s ease-in-out;
     opacity: 1;
+  }
+`;
+
+export const ImageStatic = styled.img`
+  max-width: 100%;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+
+  &.thumb {
+    filter: blur(10px);
+    position: absolute;
   }
 `;

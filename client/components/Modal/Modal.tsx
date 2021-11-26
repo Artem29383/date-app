@@ -14,6 +14,7 @@ type Props = {
   children: React.ReactNode;
   open: boolean;
   onClose: () => void;
+  bgcColor?: string;
 } & MaxWidthProps &
   HeightProps &
   BackgroundProps &
@@ -52,9 +53,16 @@ const variantsBackground = {
   }
 };
 
-const Modal = ({ children, open, onClose, ...rest }: Props) => (
+const Modal = ({
+  children,
+  open,
+  onClose,
+  bgcColor = "rgba(0, 0, 0, 0.2)",
+  ...rest
+}: Props) => (
   <S.Root variants={variantsRoot} animate={open ? "open" : "closed"}>
     <S.Background
+      bgcColor={bgcColor}
       onClick={onClose}
       variants={variantsBackground}
       animate={open ? "open" : "closed"}

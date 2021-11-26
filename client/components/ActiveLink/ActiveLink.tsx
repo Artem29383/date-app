@@ -6,7 +6,7 @@ import { MarginProps } from "styled-system";
 import * as S from "./ActiveLink.styled";
 
 type Props = {
-  href: string;
+  href?: string;
   IconDefault?: React.FunctionComponent<
     React.SVGAttributes<SVGElement> & IconProps
   >;
@@ -15,10 +15,12 @@ type Props = {
   >;
   children?: React.ReactNode;
   activeClassName?: string;
+  onClick?: () => void;
 } & MarginProps;
 
 const ActiveLink = ({
   href,
+  onClick,
   IconDefault,
   IconActive,
   children,
@@ -31,17 +33,28 @@ const ActiveLink = ({
 
   const className = asPath === href ? activeClassName : childClassName;
 
+  if (onClick && !href) {
+    return (
+      <S.Root {...rest}>
+        <span onClick={onClick} style={{ cursor: "pointer" }}>
+          {/* @ts-ignore */}
+          <IconDefault />
+        </span>
+      </S.Root>
+    );
+  }
+
   return (
     <S.Root {...rest}>
       {IconDefault && IconActive && (
-        <Link href={href}>
+        <Link href={href!}>
           <a href={href}>
             {asPath === href ? <IconActive /> : <IconDefault />}
           </a>
         </Link>
       )}
       {children && (
-        <Link href={href}>
+        <Link href={href!}>
           <a href={href}>
             {React.cloneElement(child, {
               className: className || null

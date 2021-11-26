@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { icons } from "styles/icons";
 import * as S from "./Navigation.styled";
 import { ROUTES } from "@types";
@@ -7,12 +7,16 @@ import ImageWrapper from "components/ImageWrapper/ImageWrapper";
 import { useUser } from "src/entities/user/selectors";
 import AreaPortal from "components/AreaPortal";
 import Link from "next/link";
+import useClickAway from "hooks/useClickAway";
+import Portal from "components/Portal/Portal";
+import Modal from "components/Modal";
+import { useClientRender } from "hooks/useClientRender";
 import { useToggle } from "hooks/useToggle";
+import ModalUploadPost from "components/Modal/ModalUploadPost";
 
 const Profile = icons.profile;
 const ProfileFill = icons.profileFill;
 const NewPublic = icons.newPublication;
-const NewPublicFIll = icons.newPublicationFill;
 const Direct = icons.direct;
 const DirectFill = icons.directFill;
 const Explore = icons.explore;
@@ -25,75 +29,84 @@ type Props = {
 };
 
 const Navigation = ({ logout }: Props) => {
-  const { value: open, handleToggle } = useToggle(false);
+  const { toggle, ref, active } = useClickAway();
   const { avatarUrl } = useUser();
+  const isClient = useClientRender();
+  const { handleOpen, value: open, handleClose } = useToggle(false);
 
+  console.info("open", open);
   return (
-    <S.Root>
-      <ActiveLink
-        href={ROUTES.DASHBOARD}
-        IconActive={ProfileFill}
-        IconDefault={Profile}
-      />
-      <ActiveLink
-        marginLeft={23}
-        href={ROUTES.DIRECT}
-        IconActive={DirectFill}
-        IconDefault={Direct}
-      />
-      <ActiveLink
-        marginLeft={23}
-        href={ROUTES.PUBLICATION}
-        IconActive={NewPublicFIll}
-        IconDefault={NewPublic}
-      />
-      <ActiveLink
-        marginLeft={23}
-        href={ROUTES.EXPLORE}
-        IconActive={ExploreFill}
-        IconDefault={Explore}
-      />
-      <ActiveLink
-        marginLeft={23}
-        marginRight={23}
-        href={ROUTES.LIKES}
-        IconActive={HeartFill}
-        IconDefault={Heart}
-      />
-      <S.RootAvatar open={open} onClick={handleToggle}>
-        <ImageWrapper
-          overflow="hidden"
-          maxWidth="19px"
-          width="19px"
-          height="19px"
-          borderRadius="50%"
-          maxHeight="19px"
-          source={avatarUrl || ""}
+    <>
+      <S.Root>
+        <ActiveLink
+          href={ROUTES.DASHBOARD}
+          IconActive={ProfileFill}
+          IconDefault={Profile}
         />
-        {open && (
-          <AreaPortal minHeightArea={128} left={-76} top={102}>
-            <S.List>
-              <S.Item>
-                <Link href={ROUTES.PROFILE}>
-                  <a href={ROUTES.PROFILE}>Профиль</a>
-                </Link>
-              </S.Item>
-              <S.Item>
-                <Link href={ROUTES.LIKES}>
-                  <a href={ROUTES.LIKES}>Сохранённое</a>
-                </Link>
-              </S.Item>
-              <S.Item>
-                <Link href={ROUTES.SETTINGS_PROFILE}>
-                  <a href={ROUTES.SETTINGS_PROFILE}>Настройки</a>
-                </Link>
-              </S.Item>
-              <S.Item onClick={logout}>Выйти</S.Item>
-            </S.List>
-          </AreaPortal>
-        )}
-      </S.RootAvatar>
-    </S.Root>
+        <ActiveLink
+          marginLeft={23}
+          href={ROUTES.DIRECT}
+          IconActive={DirectFill}
+          IconDefault={Direct}
+        />
+        <ActiveLink
+          IconDefault={NewPublic}
+          marginLeft={23}
+          onClick={handleOpen}
+        />
+        <ActiveLink
+          marginLeft={23}
+          href={ROUTES.EXPLORE}
+          IconActive={ExploreFill}
+          IconDefault={Explore}
+        />
+        <ActiveLink
+          marginLeft={23}
+          marginRight={23}
+          href={ROUTES.LIKES}
+          IconActive={HeartFill}
+          IconDefault={Heart}
+        />
+        <S.RootAvatar ref={ref} open={active} onClick={toggle}>
+          <ImageWrapper
+            overflow="hidden"
+            maxWidth="19px"
+            width="19px"
+            height="19px"
+            borderRadius="50%"
+            maxHeight="19px"
+            source={avatarUrl || ""}
+          />
+          {active && (
+            <AreaPortal minHeightArea={128} left={-76} top={102}>
+              <S.List>
+                <S.Item>
+                  <Link href={ROUTES.PROFILE}>
+                    <a href={ROUTES.PROFILE}>Профиль</a>
+                  </Link>
+                </S.Item>
+                <S.Item>
+                  <Link href={ROUTES.LIKES}>
+                    <a href={ROUTES.LIKES}>Сохранённое</a>
+                  </Link>
+                </S.Item>
+                <S.Item>
+                  <Link href={ROUTES.SETTINGS_PROFILE}>
+                    <a href={ROUTES.SETTINGS_PROFILE}>Настройки</a>
+                  </Link>
+                </S.Item>
+                <S.Item onClick={logout}>Выйти</S.Item>
+              </S.List>
+            </AreaPortal>
+          )}
+        </S.RootAvatar>
+      </S.Root>
+      {isClient && (
+        <Portal id="modalUploadPost">
+          <ModalUploadPost open={open} handleClose={handleClose} />
+        </Portal>
+      )}
+    </>
   );
 };
 

@@ -5,6 +5,8 @@ import {
   Get,
   Request,
   UseGuards,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -21,16 +23,17 @@ export class AuthController {
     return this.authService.create(createAuthDto);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   login(@Body() loginCredentialsDto: LoginCredentialsDto) {
     return this.authService.login(loginCredentialsDto);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
   @Get('/current')
   profile(@Request() req) {
-    delete req.user.password;
     return req.user;
   }
 }

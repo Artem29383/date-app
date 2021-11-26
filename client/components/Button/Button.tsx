@@ -13,7 +13,7 @@ type Props = {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
-  typeButton?: "classic" | "ghost" | "google";
+  typeButton?: "classic" | "ghost" | "google" | "facebook";
   link?: string;
   pick?: boolean;
 } & MarginProps &
@@ -44,10 +44,22 @@ const GoogleButton = ({ children, ...props }: Props) => (
   <S.GoogleRoot {...props}>{children}</S.GoogleRoot>
 );
 
+const FacebookButton = ({ children, link, ...props }: Props) =>
+  link ? (
+    <Link href={link}>
+      <S.Link>
+        <S.FacebookLink>{children}</S.FacebookLink>
+      </S.Link>
+    </Link>
+  ) : (
+    <S.Facebook {...props}>{children}</S.Facebook>
+  );
+
 const buttons: { [key: string]: React.FC<Props> } = {
   classic: ClassicButton,
   ghost: GhostButton,
-  google: GoogleButton
+  google: GoogleButton,
+  facebook: FacebookButton
 };
 
 const Button = ({

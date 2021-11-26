@@ -1,5 +1,5 @@
 import { AxiosInstance, AxiosResponse } from "axios";
-import { IUser } from "src/entities/user/types";
+import { IUser, IUserUpdate } from "src/entities/user/types";
 
 export const UserApi = (instance: AxiosInstance) => {
   return {
@@ -38,6 +38,9 @@ export const UserApi = (instance: AxiosInstance) => {
         console.info(e);
       }
       return { data: null };
+    },
+    updateUser: async (data: IUserUpdate) => {
+      return instance.patch("/user/update", data);
     }
   };
 };

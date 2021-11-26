@@ -26,9 +26,13 @@ export class UsersRepository extends Repository<UserEntity> {
   }
 
   //@TODO переделать на multer и обработку картинки на бэке
-  async updateAvatar(updateUserDto: UpdateUserDto): Promise<UserEntity> {
-    const user: UserEntity = await this.findOne({ email: updateUserDto.email });
-    user.avatarUrl = updateUserDto.avatarUrl;
+  async updateUser(updateUserDto: UpdateUserDto): Promise<UserEntity> {
+    const { email, avatarUrl, username, age, description } = updateUserDto;
+    const user: UserEntity = await this.findOne({ email });
+    user.avatarUrl = avatarUrl;
+    user.username = username;
+    user.description = description;
+    user.age = age || 0;
     delete user.password;
     await this.save(user);
     return user;

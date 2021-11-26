@@ -1,6 +1,6 @@
 import { ApiError } from "api/types";
 import { Api } from "src/api";
-import { IUser } from "src/entities/user/types";
+import { IUser, IUserUpdate } from "src/entities/user/types";
 import { root } from "src/entities/root";
 
 export const uploadImageAsync = root.createEffect<
@@ -10,5 +10,15 @@ export const uploadImageAsync = root.createEffect<
 >(data =>
   Api()
     .uploadPhoto(data)
+    .then(response => response.data)
+);
+
+export const updateUserAsync = root.createEffect<
+  IUserUpdate,
+  IUser | null,
+  ApiError<Record<string, unknown>>
+>(data =>
+  Api()
+    .updateUser(data)
     .then(response => response.data)
 );

@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     ROUTES.SETTINGS_PROFILE,
     ROUTES.SETTINGS_PASSWORD
   ];
-  const main: string[] = [ROUTES.DASHBOARD];
+  const main: string[] = [ROUTES.DASHBOARD, ROUTES.PROFILE];
 
   return (
     <EffectorProvider value={scope}>

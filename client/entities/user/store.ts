@@ -3,8 +3,8 @@ import { root } from "src/entities/root";
 import { currentAsync, logout } from "pages/login/model/login";
 import { GENDER } from "@types";
 import { registerAsync } from "pages/register/model/register";
-import { uploadImageAsync } from "src/entities/user/async";
 import { createEvent } from "effector";
+import { updateUserAsync } from "src/entities/user/async";
 
 export const UserInitialState = {
   email: "",
@@ -29,6 +29,5 @@ export const $user = root
     ...payload
   }))
   .on(currentAsync.doneData, (state, user) => ({ ...state, ...user }))
-  .on(updateUser, (state, payload) => {
-    return payload;
-  });
+  .on(updateUser, (state, payload) => payload)
+  .on(updateUserAsync.doneData, (state, user) => ({ ...state, ...user }));

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from '../auth/users.repository';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -10,7 +10,7 @@ export class UserService {
     private readonly repository: UsersRepository,
   ) {}
 
-  async uploadAvatar(updateUserDto: UpdateUserDto) {
-    return this.repository.updateAvatar(updateUserDto);
+  async updateUser(updateUserDto: UpdateUserDto) {
+    return this.repository.updateUser(updateUserDto);
   }
 }

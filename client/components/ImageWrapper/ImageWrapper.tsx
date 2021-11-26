@@ -4,6 +4,7 @@ import classnames from "classnames";
 import {
   BorderRadiusProps,
   FlexBasisProps,
+  FlexShrinkProps,
   HeightProps,
   MarginProps,
   MaxHeightProps,
@@ -18,6 +19,8 @@ import * as S from "./ImageWrapper.styled";
 
 type Props = {
   source: string;
+  isLoad?: boolean;
+  onClick?: () => void;
 } & FlexBasisProps &
   BorderRadiusProps &
   OverflowProps &
@@ -25,11 +28,12 @@ type Props = {
   MaxWidthProps &
   HeightProps &
   WidthProps &
-  MarginProps;
+  MarginProps &
+  FlexShrinkProps;
 
-const ImageWrapper = ({ source, ...rest }: Props) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(false);
+const ImageWrapper = ({ source, onClick, isLoad = false, ...rest }: Props) => {
+  const [isLoaded, setIsLoaded] = useState(isLoad);
+  const [isInView, setIsInView] = useState(isLoad);
   const imgRef = useRef();
   useIntersection(imgRef, () => {
     setIsInView(true);
@@ -39,9 +43,16 @@ const ImageWrapper = ({ source, ...rest }: Props) => {
     setIsLoaded(true);
   };
 
+  if (isLoad)
+    return (
+      // @ts-ignore
+      <S.WrapperImage onClick={onClick} ref={imgRef} {...rest}>
+        <S.ImageStatic src={source} alt={source} onError={handleImageError} />
+      </S.WrapperImage>
+    );
   return (
     // @ts-ignore
-    <S.WrapperImage ref={imgRef} {...rest}>
+    <S.WrapperImage onClick={onClick} ref={imgRef} {...rest}>
       {isInView && (
         <S.Image
           className={classnames("image", {
