@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from "components/Modal/Modal";
 
 import * as S from "./ModalUploadPost.styled";
@@ -6,6 +6,7 @@ import { icons } from "styles/icons";
 import Button from "components/Button";
 import FileInput from "components/FileInput";
 import { useFileWork } from "hooks/useFileWork";
+import Crop from "components/Modal/ModalUploadPost/Crop";
 
 const STEPS_VARIABLES: {
   [key: number]: {
@@ -36,8 +37,15 @@ const BackArrow = icons.backarrow;
 
 const ModalUploadPost = ({ open, handleClose }: Props) => {
   const [step, setStep] = useState(0);
-  const { changeHandle, image, resetImagePreview } = useFileWork("image");
-  console.info("image", image);
+  const [contentHeight, setContentHeight] = useState(0);
+  const { changeHandle, image, resetImagePreview, bounding } = useFileWork(
+    "image"
+  );
+
+  const handleContentHeightSet = (ref: HTMLDivElement) => {
+    if (!ref) return;
+    setContentHeight(ref.getBoundingClientRect().height);
+  };
 
   const handleBack = () => {
     setStep(prevState => prevState - 1);
@@ -65,7 +73,7 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
           {step !== 0 && <BackArrow onClick={handleBack} />}
           <S.Title>{STEPS_VARIABLES[step].title}</S.Title>
         </S.Header>
-        <S.Content>
+        <S.Content ref={handleContentHeightSet}>
           <S.Box>
             {step === 0 && (
               <>
@@ -77,7 +85,13 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
                 </Button>
               </>
             )}
-            {step === 1 && <S.Img src={image as string} />}
+            {step === 1 && (
+              <Crop
+                contentHeight={contentHeight}
+                source={image as string}
+                bounding={bounding}
+              />
+            )}
           </S.Box>
         </S.Content>
       </S.Root>

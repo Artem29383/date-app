@@ -5,6 +5,10 @@ export const useFileWork = (fileType?: "image" | "pdf") => {
   const objectFiles = useRef<File[]>([]);
   const [isDisableBtn, setDisableBtn] = useState(false);
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
+  const [bounding, setBounding] = useState({
+    height: 0,
+    width: 0
+  });
   const [compress, setCompress] = useState<File | null>(null);
   const [compressView, setCompressView] = useState<File | null>(null);
 
@@ -23,7 +27,10 @@ export const useFileWork = (fileType?: "image" | "pdf") => {
       canvas.width = img.width;
       canvas.height = img.height;
       canvas?.getContext("2d")?.drawImage(img, 0, 0);
-
+      setBounding({
+        width: img.width,
+        height: img.height
+      });
       const newImgData = canvas.toDataURL(fileImage.type, 0.5);
       fetch(newImgData)
         .then(res => res.blob())
@@ -95,7 +102,9 @@ export const useFileWork = (fileType?: "image" | "pdf") => {
       const files: FileList | Array<string> | null =
         e.currentTarget.files || fileList;
       setDisableBtn(true);
-      Object.values((files as unknown) as Record<string, unknown>).forEach(
+      // @ts-ignore
+      Object.values(files).forEach(
+        // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         async (file: File): Promise<any> => {
           if (file) {
@@ -140,6 +149,7 @@ export const useFileWork = (fileType?: "image" | "pdf") => {
     compress,
     resetCompress,
     compressView,
-    getCompressFiles
+    getCompressFiles,
+    bounding
   };
 };
