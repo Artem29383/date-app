@@ -12,6 +12,7 @@ export const Header = styled.header`
   display: flex;
   justify-content: center;
   flex-shrink: 0;
+  position: relative;
   margin: 0 20px;
   align-items: center;
   height: 43px;
@@ -60,3 +61,30 @@ export const Img = styled.img`
   width: 100%;
   height: 100%;
 `;
+
+export const Next = styled.button`
+  border: 0;
+  color: #0095f6;
+  display: inline;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: 0 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+  text-transform: inherit;
+  text-overflow: ellipsis;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: auto;
+`;
+
+export const Canvas = styled.canvas``;

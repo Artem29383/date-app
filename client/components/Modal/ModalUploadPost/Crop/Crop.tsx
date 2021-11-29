@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import * as S from "./Crop.styled";
 import { useToggle } from "hooks/useToggle";
@@ -10,10 +10,12 @@ type Props = {
     width: number;
   };
   contentHeight: number;
+  onGetCropImage: (p: string) => void;
 };
 
-const Crop = ({ source, bounding, contentHeight }: Props) => {
-  const $image = useRef<null | HTMLDivElement>(null);
+const Crop = ({ source, bounding, contentHeight, onGetCropImage }: Props) => {
+  const $image = useRef<null | HTMLImageElement>(null);
+  const $container = useRef<null | HTMLDivElement>(null);
   const {
     handleOpen: setDragStart,
     handleClose: setDragEnd,
@@ -22,25 +24,88 @@ const Crop = ({ source, bounding, contentHeight }: Props) => {
   const startDragPosition = useRef(0);
   const oldDragPosition = useRef(0);
   const $y = useRef(0);
+  const $sy = useRef(0);
+  const $sh = useRef(790);
+  const $sw = useRef(790);
   const [y, setY] = useState(0);
+  const limit = useRef({
+    top: 0,
+    bottom: 0
+  });
+
+  useEffect(() => {
+    if (
+      $image.current &&
+      $container.current &&
+      source &&
+      drag &&
+      !limit.current.top &&
+      !limit.current.bottom
+    ) {
+      limit.current = {
+        bottom:
+          $image.current?.getBoundingClientRect().bottom -
+          $container.current?.getBoundingClientRect().bottom,
+        top:
+          Math.abs($image.current?.getBoundingClientRect().top) +
+          $container.current?.getBoundingClientRect().top
+      };
+    }
+  }, [source, drag]);
 
   const handleMove = useCallback(
     (e: { clientY: React.SetStateAction<number> }) => {
-      const limit = Math.abs(contentHeight - bounding.height);
       const shift =
         oldDragPosition.current +
         (Number(e.clientY) - startDragPosition.current);
-
-      $y.current = shift > limit || shift < -limit ? $y.current : shift;
+      $y.current =
+        shift > limit.current.top || shift < -limit.current.bottom
+          ? $y.current
+          : shift;
       setY($y.current);
     },
-    [bounding.height, contentHeight]
+    []
   );
+
+  const cropImage = (img: HTMLImageElement) => {
+    const scaleX = img.naturalWidth / img.width;
+    const scaleY = img.naturalHeight / img.height;
+    const pixelRatio = window.devicePixelRatio;
+    const canvas: HTMLCanvasElement = document.createElement("canvas");
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+    canvas.width = $sw.current * pixelRatio * scaleX;
+    canvas.height = $sh.current * pixelRatio * scaleY;
+
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    ctx.imageSmoothingQuality = "high";
+    console.info("$sh.current * scaleY", $sh.current * scaleY);
+    canvas?.getContext("2d")?.drawImage(
+      img,
+      0,
+      $sy.current * scaleY, // Start at 70/20 pixels from the left and the top of the image (crop),
+      $sw.current * scaleX,
+      $sh.current * scaleY, // "Get" a `50 * 50` (w * h) area from the source image (crop),
+      0,
+      0, // Place the result at 0, 0 in the canvas,
+      $sw.current * scaleX,
+      $sh.current * scaleY
+    );
+
+    onGetCropImage(canvas.toDataURL("image/png", 1));
+  };
 
   const handleDragOff = useCallback(() => {
     setDragEnd();
     oldDragPosition.current = $y.current;
+
+    $sy.current =
+      $y.current <= 0
+        ? limit.current.top + Math.abs($y.current)
+        : limit.current.top - Math.abs($y.current);
+
     document?.removeEventListener("mousemove", handleMove);
+    if ($image.current) cropImage($image.current);
   }, [handleMove, setDragEnd]);
 
   const handleDragOn = useCallback(
@@ -56,15 +121,17 @@ const Crop = ({ source, bounding, contentHeight }: Props) => {
   return (
     <S.Root>
       <S.Presentation>
-        <S.CropperZone contentHeight={contentHeight}>
-          <S.Image
-            posY={y}
-            drag={drag}
-            onMouseDown={handleDragOn}
-            ref={$image}
-            height={bounding.height}
-            url={source}
-          />
+        <S.CropperZone ref={$container} contentHeight={contentHeight}>
+          {source && (
+            <S.Image
+              posY={y}
+              src={source}
+              drag={drag}
+              onMouseDown={handleDragOn}
+              ref={$image}
+              height={bounding.height}
+            />
+          )}
           {drag && (
             <S.Squares>
               {new Array(9).fill(0).map((_, index) => (

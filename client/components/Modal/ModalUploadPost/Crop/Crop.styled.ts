@@ -3,6 +3,14 @@ import styled from "styled-components";
 export const Root = styled.div`
   height: 100%;
   width: 100%;
+
+  & * {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  }
 `;
 
 export const Presentation = styled.div`
@@ -21,20 +29,22 @@ export const CropperZone = styled.div<{ contentHeight: number }>`
   justify-content: center;
 `;
 
-export const Image = styled.div.attrs<{ posY: number }>(({ posY }) => ({
+export const Image = styled.img.attrs<{ posY: number }>(({ posY }) => ({
   style: {
     transform: `translate(0, ${posY}px)`
   }
-}))<{ url: string; height: number; posY: number; drag: boolean }>`
-  background-image: ${({ url }) => `url(${url})`};
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
+}))<{ height: number; posY: number; drag: boolean }>`
   width: 100%;
   flex-shrink: 0;
   cursor: ${({ drag }) => (drag ? "grabbing" : "grab")};
   height: ${({ height }) => `${height}px`};
   overflow: hidden;
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 `;
 
 export const Squares = styled.div`
@@ -50,6 +60,7 @@ export const Squares = styled.div`
 `;
 
 export const Square = styled.div`
+  pointer-events: none;
   border-right: 1px solid darkgray;
   border-bottom: 1px solid darkgray;
 `;

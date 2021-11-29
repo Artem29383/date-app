@@ -31,14 +31,14 @@ export const useFileWork = (fileType?: "image" | "pdf") => {
         width: img.width,
         height: img.height
       });
-      const newImgData = canvas.toDataURL(fileImage.type, 0.5);
+      const newImgData = canvas.toDataURL(fileImage.type, 1);
       fetch(newImgData)
         .then(res => res.blob())
         .then(blob => {
           const file: File = new File([blob], `low${fileImage.name}`, {
             type: fileImage.type
           });
-          const newImageData = canvas.toDataURL(fileImage.type, 0.5);
+          const newImageData = canvas.toDataURL(fileImage.type, 1);
           resolve([newImageData, file]);
         });
     });
