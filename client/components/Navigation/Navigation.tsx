@@ -34,7 +34,6 @@ const Navigation = ({ logout }: Props) => {
   const isClient = useClientRender();
   const { handleOpen, value: open, handleClose } = useToggle(false);
 
-  console.info("open", open);
   return (
     <>
       <S.Root>

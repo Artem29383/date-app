@@ -30,11 +30,11 @@ export const Background = styled(motion.div)<{ bgcColor: string }>`
   left: 0;
 `;
 
-export const Content = styled(motion.div)`
+export const Content = styled(motion.div)<{ isFullWidth: boolean }>`
   z-index: 9999;
   ${height};
   ${maxWidth};
-  width: 100%;
+  width: ${({ isFullWidth }) => (isFullWidth ? "100%" : "auto")};
   overflow: hidden;
   ${padding};
   ${background};

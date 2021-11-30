@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef } from "react";
 
 import * as S from "./Crop.styled";
 import { useToggle } from "hooks/useToggle";
@@ -11,9 +11,18 @@ type Props = {
   };
   contentHeight: number;
   onGetCropImage: (p: string) => void;
+  y: number;
+  setY: (p: number) => void;
 };
 
-const Crop = ({ source, bounding, contentHeight, onGetCropImage }: Props) => {
+const Crop = ({
+  source,
+  bounding,
+  contentHeight,
+  onGetCropImage,
+  y,
+  setY
+}: Props) => {
   const $image = useRef<null | HTMLImageElement>(null);
   const $container = useRef<null | HTMLDivElement>(null);
   const {
@@ -23,15 +32,42 @@ const Crop = ({ source, bounding, contentHeight, onGetCropImage }: Props) => {
   } = useToggle(false);
   const startDragPosition = useRef(0);
   const oldDragPosition = useRef(0);
-  const $y = useRef(0);
+  const $y = useRef(y);
   const $sy = useRef(0);
   const $sh = useRef(790);
   const $sw = useRef(790);
-  const [y, setY] = useState(0);
   const limit = useRef({
     top: 0,
     bottom: 0
   });
+
+  const cropImage = (img: HTMLImageElement) => {
+    const scaleX = img.naturalWidth / img.width;
+    const scaleY = img.naturalHeight / img.height;
+    const pixelRatio = window.devicePixelRatio;
+    const canvas: HTMLCanvasElement = document.createElement("canvas");
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+    canvas.width = $sw.current * pixelRatio * scaleX;
+    canvas.height = $sh.current * pixelRatio * scaleY;
+
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    ctx.imageSmoothingQuality = "high";
+
+    canvas?.getContext("2d")?.drawImage(
+      img,
+      0,
+      $sy.current * scaleY, // Start at 70/20 pixels from the left and the top of the image (crop),
+      $sw.current * scaleX,
+      $sh.current * scaleY, // "Get" a `50 * 50` (w * h) area from the source image (crop),
+      0,
+      0, // Place the result at 0, 0 in the canvas,
+      $sw.current * scaleX,
+      $sh.current * scaleY
+    );
+
+    onGetCropImage(canvas.toDataURL("image/png", 1));
+  };
 
   useEffect(() => {
     if (
@@ -51,6 +87,9 @@ const Crop = ({ source, bounding, contentHeight, onGetCropImage }: Props) => {
           $container.current?.getBoundingClientRect().top
       };
     }
+    // if ($image.current) {
+    //   cropImage($image.current);
+    // }
   }, [source, drag]);
 
   const handleMove = useCallback(
@@ -66,34 +105,6 @@ const Crop = ({ source, bounding, contentHeight, onGetCropImage }: Props) => {
     },
     []
   );
-
-  const cropImage = (img: HTMLImageElement) => {
-    const scaleX = img.naturalWidth / img.width;
-    const scaleY = img.naturalHeight / img.height;
-    const pixelRatio = window.devicePixelRatio;
-    const canvas: HTMLCanvasElement = document.createElement("canvas");
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-
-    canvas.width = $sw.current * pixelRatio * scaleX;
-    canvas.height = $sh.current * pixelRatio * scaleY;
-
-    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    ctx.imageSmoothingQuality = "high";
-    console.info("$sh.current * scaleY", $sh.current * scaleY);
-    canvas?.getContext("2d")?.drawImage(
-      img,
-      0,
-      $sy.current * scaleY, // Start at 70/20 pixels from the left and the top of the image (crop),
-      $sw.current * scaleX,
-      $sh.current * scaleY, // "Get" a `50 * 50` (w * h) area from the source image (crop),
-      0,
-      0, // Place the result at 0, 0 in the canvas,
-      $sw.current * scaleX,
-      $sh.current * scaleY
-    );
-
-    onGetCropImage(canvas.toDataURL("image/png", 1));
-  };
 
   const handleDragOff = useCallback(() => {
     setDragEnd();
@@ -135,7 +146,7 @@ const Crop = ({ source, bounding, contentHeight, onGetCropImage }: Props) => {
           {drag && (
             <S.Squares>
               {new Array(9).fill(0).map((_, index) => (
-                // eslint-disable-next-line react/no-array-index-key
+                // eslint-disable-next-line react/no-array-index-key,@typescript-eslint/restrict-template-expressions
                 <S.Square key={`${index}+${_}`} />
               ))}
             </S.Squares>

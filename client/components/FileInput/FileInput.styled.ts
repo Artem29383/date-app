@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Wrapper = styled.div<{ isOver: boolean }>`
   position: absolute;
@@ -11,7 +11,7 @@ export const Wrapper = styled.div<{ isOver: boolean }>`
   right: 0;
   bottom: 0;
   background-color: ${({ isOver }) =>
-    isOver ? 'rgba(0, 0, 0, 0.2)' : 'transparent'};
+    isOver ? "rgba(0, 0, 0, 0.2)" : "transparent"};
 `;
 
 export const Input = styled.input<any>`

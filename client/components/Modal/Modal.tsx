@@ -15,6 +15,7 @@ type Props = {
   open: boolean;
   onClose: () => void;
   bgcColor?: string;
+  isFullWidth?: boolean;
 } & MaxWidthProps &
   HeightProps &
   BackgroundProps &
@@ -58,6 +59,7 @@ const Modal = ({
   open,
   onClose,
   bgcColor = "rgba(0, 0, 0, 0.2)",
+  isFullWidth = true,
   ...rest
 }: Props) => (
   <S.Root variants={variantsRoot} animate={open ? "open" : "closed"}>
@@ -67,7 +69,12 @@ const Modal = ({
       variants={variantsBackground}
       animate={open ? "open" : "closed"}
     />
-    <S.Content {...rest} variants={variants} animate={open ? "open" : "closed"}>
+    <S.Content
+      isFullWidth={isFullWidth}
+      {...rest}
+      variants={variants}
+      animate={open ? "open" : "closed"}
+    >
       {children}
     </S.Content>
   </S.Root>

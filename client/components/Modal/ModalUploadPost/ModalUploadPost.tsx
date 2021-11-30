@@ -7,6 +7,7 @@ import Button from "components/Button";
 import FileInput from "components/FileInput";
 import { useFileWork } from "hooks/useFileWork";
 import Crop from "components/Modal/ModalUploadPost/Crop";
+import Canvas from "components/Modal/ModalUploadPost/Canvas";
 
 const STEPS_VARIABLES: {
   [key: number]: {
@@ -22,12 +23,12 @@ const STEPS_VARIABLES: {
   },
   1: {
     height: 833,
-    width: 790,
+    width: 1130,
     title: "Обрезать"
   },
   2: {
     height: 833,
-    width: 790,
+    width: 1130,
     title: "Редактировать"
   }
 };
@@ -40,23 +41,25 @@ type Props = {
 const Icon = icons.imagesvideo;
 const BackArrow = icons.backarrow;
 
+const variants = {
+  closed: { width: 790 },
+  open: { width: 1130, transition: { delay: 0.1 } }
+};
+
 const ModalUploadPost = ({ open, handleClose }: Props) => {
   const [step, setStep] = useState(0);
+  const [y, setY] = useState(0);
+  const $content = useRef<HTMLDivElement | null>(null);
   const [contentHeight, setContentHeight] = useState(0);
-  const $canvas = useRef<HTMLCanvasElement | null>(null);
   const [crop, setCrop] = useState("");
   const { changeHandle, image, resetImagePreview, bounding } = useFileWork(
     "image"
   );
 
-  const handleContentHeightSet = useCallback(
-    (ref: HTMLDivElement) => {
-      if (!ref) return;
-      console.info("das");
-      setContentHeight(ref.getBoundingClientRect().height);
-    },
-    [step]
-  );
+  useEffect(() => {
+    if (!$content.current && !image) return;
+    setContentHeight($content.current!.getBoundingClientRect().height);
+  }, [image]);
 
   const handleBack = () => {
     setStep(prevState => prevState - 1);
@@ -67,25 +70,7 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
 
   const handleNext = () => {
     if (!crop) return;
-    const ctx = $canvas.current!.getContext("2d") as CanvasRenderingContext2D;
-    ctx.canvas.width = contentHeight;
-    ctx.canvas.height = contentHeight;
-    const img = new Image();
-    img.onload = () => {
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        img.width,
-        img.height, // source rectangle
-        0,
-        0,
-        ctx.canvas.width,
-        ctx.canvas.height
-      );
-      setStep(prevState => prevState + 1);
-    };
-    img.src = crop;
+    setStep(prevState => prevState + 1);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,6 +86,7 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
       height={STEPS_VARIABLES[step].height}
       open={open}
       onClose={handleClose}
+      isFullWidth={false}
     >
       <S.Root>
         <S.Header>
@@ -108,7 +94,11 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
           <S.Title>{STEPS_VARIABLES[step].title}</S.Title>
           {step === 1 && <S.Next onClick={handleNext}>Далее</S.Next>}
         </S.Header>
-        <S.Content ref={handleContentHeightSet}>
+        <S.Content
+          variants={variants}
+          animate={step === 2 ? "open" : "closed"}
+          ref={$content}
+        >
           <S.Box>
             {step === 0 && (
               <>
@@ -122,13 +112,15 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
             )}
             {step === 1 && (
               <Crop
+                y={y}
+                setY={setY}
                 contentHeight={contentHeight}
                 source={image as string}
                 bounding={bounding}
                 onGetCropImage={setCrop}
               />
             )}
-            <S.Canvas ref={$canvas} />
+            {step === 2 && <Canvas contentHeight={contentHeight} crop={crop} />}
           </S.Box>
         </S.Content>
       </S.Root>
