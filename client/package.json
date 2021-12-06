@@ -23,6 +23,7 @@
     "@types/classnames": "^2.3.1",
     "@types/form-data": "^2.5.0",
     "@types/js-cookie": "^3.0.1",
+    "@types/uuid": "^8.3.3",
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "effector": "^22.1.2",
@@ -38,6 +39,7 @@
     "react-hook-form": "^7.19.5",
     "styled-components": "^5.3.3",
     "styled-system": "^5.1.5",
+    "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

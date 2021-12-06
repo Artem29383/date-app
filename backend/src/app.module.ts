@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { pgConfig } from './config/postgres.config';
 import { UserModule } from './user/user.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
     TypeOrmModule.forRoot(pgConfig),
     UserModule,
     NestjsFormDataModule.config({ storage: MemoryStoredFile }),
+    PostModule,
   ],
   controllers: [],
   providers: [],

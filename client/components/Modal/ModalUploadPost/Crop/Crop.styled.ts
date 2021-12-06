@@ -6,16 +6,37 @@ export const Root = styled.div`
 
   & * {
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
-    -o-user-select: none;
     user-select: none;
+  }
+`;
+
+export const Button = styled.button<{ active: boolean }>`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: ${({ active }) => (!active ? "rgba(59, 59, 59)" : "#fff")};
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  & svg {
+    fill: ${({ active }) => (!active ? "#fff" : "rgba(59, 59, 59)")};
+  }
+
+  &:hover {
+    opacity: 0.8;
   }
 `;
 
 export const Presentation = styled.div`
   width: 100%;
   height: 100%;
+  position: relative;
 `;
 
 export const CropperZone = styled.div<{ contentHeight: number }>`

@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { PostEntity } from '../../post/post.entity';
 
 @Entity()
 export class UserEntity {
@@ -38,6 +40,9 @@ export class UserEntity {
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
+
+  @OneToMany(() => PostEntity, (post) => post.user, { eager: true })
+  posts: PostEntity[];
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

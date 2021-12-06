@@ -2,6 +2,9 @@ import React, { memo, useCallback, useEffect, useRef } from "react";
 
 import * as S from "./Crop.styled";
 import { useToggle } from "hooks/useToggle";
+import { icons } from "styles/icons";
+
+const IconResize = icons.resize;
 
 type Props = {
   source: string;
@@ -23,6 +26,12 @@ const Crop = ({
   y,
   setY
 }: Props) => {
+  const {
+    value: open,
+    handleOpen: openResizeMenu,
+    handleClose: closeResizeMenu,
+    handleToggle: toggleResizeMenu
+  } = useToggle(false);
   const $image = useRef<null | HTMLImageElement>(null);
   const $container = useRef<null | HTMLDivElement>(null);
   const {
@@ -152,6 +161,9 @@ const Crop = ({
             </S.Squares>
           )}
         </S.CropperZone>
+        <S.Button onClick={toggleResizeMenu} active={open}>
+          <IconResize fill="#fff" />
+        </S.Button>
       </S.Presentation>
     </S.Root>
   );

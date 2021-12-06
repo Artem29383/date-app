@@ -1,5 +1,6 @@
 import { AxiosInstance, AxiosResponse } from "axios";
 import { IUser, IUserUpdate } from "src/entities/user/types";
+import { deployImageCloud } from "utils/deployImageClound";
 
 export const UserApi = (instance: AxiosInstance) => {
   return {
@@ -21,17 +22,10 @@ export const UserApi = (instance: AxiosInstance) => {
         formData.append("file", file);
         formData.append("upload_preset", "h8zima02");
 
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/dadjiatxx/image/upload`,
-          {
-            method: "POST",
-            body: formData
-          }
-        );
-        const data = await res.json();
+        const avatarUrl = deployImageCloud(formData);
 
         return await instance.patch("/user/update", {
-          avatarUrl: data.url,
+          avatarUrl,
           email
         });
       } catch (e) {

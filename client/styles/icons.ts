@@ -37,6 +37,8 @@ import heart from "assets/icons/heart.svg";
 import imagesvideo from "assets/icons/imagesvideo.svg";
 import backarrow from "assets/icons/backarrow.svg";
 import heartFill from "assets/icons/heartFill.svg";
+import accordionArrow from "assets/icons/accordion-arrow.svg";
+import resize from "assets/icons/resize.svg";
 
 export type IconProps = LayoutProps &
   StyledSystemPositonProps &
@@ -72,7 +74,9 @@ export const icons: {
     heartFill,
     directFill,
     imagesvideo,
-    backarrow
+    backarrow,
+    accordionArrow,
+    resize
   },
   icon => styled(
     icon as React.FunctionComponent<React.SVGAttributes<SVGElement> & IconProps>

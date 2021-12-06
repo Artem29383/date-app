@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from "components/Modal/Modal";
 
 import * as S from "./ModalUploadPost.styled";
@@ -8,6 +8,8 @@ import FileInput from "components/FileInput";
 import { useFileWork } from "hooks/useFileWork";
 import Crop from "components/Modal/ModalUploadPost/Crop";
 import Canvas from "components/Modal/ModalUploadPost/Canvas";
+import SubmitPost from "components/Modal/ModalUploadPost/SubmitPost";
+import { createPostAsync } from "src/entities/post/async";
 
 const STEPS_VARIABLES: {
   [key: number]: {
@@ -30,6 +32,11 @@ const STEPS_VARIABLES: {
     height: 833,
     width: 1130,
     title: "Редактировать"
+  },
+  3: {
+    height: 833,
+    width: 1130,
+    title: "Создание публикации"
   }
 };
 
@@ -52,6 +59,14 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
   const $content = useRef<HTMLDivElement | null>(null);
   const [contentHeight, setContentHeight] = useState(0);
   const [crop, setCrop] = useState("");
+  const [description, setDescription] = useState("");
+  const [canvasImage, setCanvasImage] = useState<{
+    file: File | null;
+    base64: string;
+  }>({
+    file: null,
+    base64: ""
+  });
   const { changeHandle, image, resetImagePreview, bounding } = useFileWork(
     "image"
   );
@@ -78,6 +93,14 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
     setStep(1);
   };
 
+  const handleSubmit = (): void => {
+    createPostAsync({
+      base64: canvasImage.base64,
+      description,
+      disableComments: true
+    }).then(() => handleClose());
+  };
+
   return (
     <Modal
       bgcColor="rgba(0, 0, 0, 0.8)"
@@ -92,11 +115,14 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
         <S.Header>
           {step !== 0 && <BackArrow onClick={handleBack} />}
           <S.Title>{STEPS_VARIABLES[step].title}</S.Title>
-          {step === 1 && <S.Next onClick={handleNext}>Далее</S.Next>}
+          {(step === 1 || step === 2) && (
+            <S.Next onClick={handleNext}>Далее</S.Next>
+          )}
+          {step === 3 && <S.Next onClick={handleSubmit}>Поделиться</S.Next>}
         </S.Header>
         <S.Content
           variants={variants}
-          animate={step === 2 ? "open" : "closed"}
+          animate={[2, 3].includes(step) ? "open" : "closed"}
           ref={$content}
         >
           <S.Box>
@@ -120,7 +146,21 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
                 onGetCropImage={setCrop}
               />
             )}
-            {step === 2 && <Canvas contentHeight={contentHeight} crop={crop} />}
+            {step === 2 && (
+              <Canvas
+                setCanvasImage={setCanvasImage}
+                contentHeight={contentHeight}
+                crop={crop}
+              />
+            )}
+            {step === 3 && (
+              <SubmitPost
+                contentHeight={contentHeight}
+                base64={canvasImage.base64}
+                description={description}
+                setDescription={setDescription}
+              />
+            )}
           </S.Box>
         </S.Content>
       </S.Root>

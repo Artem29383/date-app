@@ -89,20 +89,19 @@ export const Next = styled.button`
   width: auto;
 `;
 
+export const RootCanvas = styled.div`
+  display: flex;
+`;
+
 export const Canvas = styled.canvas`
-  position: absolute;
   pointer-events: none;
-  top: 0;
-  left: 0;
+  margin-right: auto;
 `;
 
 export const Filters = styled.div`
   flex-shrink: 0;
   width: 340px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  margin-left: auto;
 `;
 
 export const Navigator = styled.div`

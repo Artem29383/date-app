@@ -7,9 +7,10 @@ import DEFAULT_FILTERS, { FilterSetting } from "utils/filters/settings";
 type Props = {
   crop: string;
   contentHeight: number;
+  setCanvasImage: (p: { file: File | null; base64: string }) => void;
 };
 
-const Canvas = ({ crop, contentHeight }: Props) => {
+const Canvas = ({ crop, contentHeight, setCanvasImage }: Props) => {
   const [view, setView] = useState<"filters" | "settings">("filters");
   const [activeFilter, setActiveFilter] = useState<{
     name: string;
@@ -47,25 +48,38 @@ const Canvas = ({ crop, contentHeight }: Props) => {
           );
         };
         img.src = crop;
+
+        const newImgData = $canvas.current.toDataURL("image/png", 1);
+        fetch(newImgData)
+          .then(res => res.blob())
+          .then(blob => {
+            const file: File = new File([blob], `lowimage/png`, {
+              type: "image/png"
+            });
+            const newImageData = $canvas.current!.toDataURL("image/png", 1);
+            setCanvasImage({
+              file,
+              base64: newImageData
+            });
+          });
       }
     },
-    [activeFilter, contentHeight, crop]
+    [activeFilter.setting, contentHeight, crop, setCanvasImage]
   );
 
   return (
-    <>
+    <S.RootCanvas>
       <S.Canvas ref={drawCanvas} />
-      {!$canvas.current && (
-        <img
-          src={crop}
-          style={{
-            margin: "0 auto 0 0",
-            width: `${contentHeight}px`,
-            height: `${contentHeight}px`
-          }}
-          alt=""
-        />
-      )}
+      {/* {!$canvas.current && ( */}
+      {/*  <img */}
+      {/*    src={crop} */}
+      {/*    style={{ */}
+      {/*      margin: "0 auto 0 0", */}
+      {/*      height: `${contentHeight}px` */}
+      {/*    }} */}
+      {/*    alt="" */}
+      {/*  /> */}
+      {/* )} */}
       <S.Filters>
         <S.Navigator>
           <S.ButtonNavigator active={view === "filters"}>
@@ -114,7 +128,7 @@ const Canvas = ({ crop, contentHeight }: Props) => {
           </S.Main>
         )}
       </S.Filters>
-    </>
+    </S.RootCanvas>
   );
 };
 
