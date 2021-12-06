@@ -3,9 +3,6 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import * as S from "./Crop.styled";
 import { useToggle } from "hooks/useToggle";
 import { icons } from "styles/icons";
-import Portal from "components/Portal/Portal";
-import WrapperModalChangeAvatar from "components/Modal/ModalChangeAvatar/WrapperModalChangeAvatar";
-import { useClientRender } from "hooks/useClientRender";
 import AspectControl from "components/AspectControll";
 
 const IconResize = icons.resize;
@@ -37,12 +34,7 @@ const Crop = ({
   y,
   setY
 }: Props) => {
-  const {
-    value: open,
-    handleOpen: openResizeMenu,
-    handleClose: closeResizeMenu,
-    handleToggle: toggleResizeMenu
-  } = useToggle(false);
+  const { value: open, handleToggle: toggleResizeMenu } = useToggle(false);
   const $image = useRef<null | HTMLImageElement>(null);
   const $container = useRef<null | HTMLDivElement>(null);
   const {
@@ -60,7 +52,6 @@ const Crop = ({
     "100%",
     contentHeight
   ]);
-  const [aspect, setAspect] = useState(0);
   const limit = useRef({
     top: 0,
     bottom: 0
@@ -70,14 +61,20 @@ const Crop = ({
     switch (mode) {
       case ASPECT_MODE.fourToFive: {
         setCropAspect([`625px`, contentHeight]);
+        $sw.current = 625;
+        $sh.current = contentHeight;
         break;
       }
       case ASPECT_MODE.oneToOne: {
         setCropAspect([`100%`, contentHeight]);
+        $sw.current = 790;
+        $sh.current = contentHeight;
         break;
       }
       case ASPECT_MODE.sixteenToNine: {
         setCropAspect([`100%`, 444]);
+        $sw.current = 790;
+        $sh.current = 444;
         break;
       }
       default: {
@@ -115,14 +112,7 @@ const Crop = ({
   };
 
   useEffect(() => {
-    if (
-      $image.current &&
-      $container.current &&
-      source &&
-      drag &&
-      !limit.current.top &&
-      !limit.current.bottom
-    ) {
+    if ($image.current && $container.current && source && contentHeight) {
       limit.current = {
         bottom:
           $image.current?.getBoundingClientRect().bottom -
@@ -132,10 +122,10 @@ const Crop = ({
           $container.current?.getBoundingClientRect().top
       };
     }
-    // if ($image.current) {
-    //   cropImage($image.current);
-    // }
-  }, [source, drag]);
+    if ($image.current) {
+      cropImage($image.current);
+    }
+  }, [source, drag, cropAspect, contentHeight, cropImage]);
 
   const handleMove = useCallback(
     (e: { clientY: React.SetStateAction<number> }) => {

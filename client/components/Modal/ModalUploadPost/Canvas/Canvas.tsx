@@ -70,16 +70,6 @@ const Canvas = ({ crop, contentHeight, setCanvasImage }: Props) => {
   return (
     <S.RootCanvas>
       <S.Canvas ref={drawCanvas} />
-      {/* {!$canvas.current && ( */}
-      {/*  <img */}
-      {/*    src={crop} */}
-      {/*    style={{ */}
-      {/*      margin: "0 auto 0 0", */}
-      {/*      height: `${contentHeight}px` */}
-      {/*    }} */}
-      {/*    alt="" */}
-      {/*  /> */}
-      {/* )} */}
       <S.Filters>
         <S.Navigator>
           <S.ButtonNavigator active={view === "filters"}>
