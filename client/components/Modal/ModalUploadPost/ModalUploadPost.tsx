@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Modal from "components/Modal/Modal";
 
 import * as S from "./ModalUploadPost.styled";
@@ -60,6 +60,7 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
   const [contentHeight, setContentHeight] = useState(0);
   const [crop, setCrop] = useState("");
   const [description, setDescription] = useState("");
+  const [disableComments, setDisableComments] = useState(false);
   const [canvasImage, setCanvasImage] = useState<{
     file: File | null;
     base64: string;
@@ -76,30 +77,48 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
     setContentHeight($content.current!.getBoundingClientRect().height);
   }, [image]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setStep(prevState => prevState - 1);
     if (step - 1 === 0) {
       resetImagePreview();
     }
-  };
+  }, [resetImagePreview, step]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (!crop) return;
     setStep(prevState => prevState + 1);
-  };
+  }, [crop]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    changeHandle(e);
-    setStep(1);
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      changeHandle(e);
+      setStep(1);
+    },
+    [changeHandle]
+  );
 
-  const handleSubmit = (): void => {
+  const handleReset = useCallback(() => {
+    setStep(0);
+    setCanvasImage({
+      file: null,
+      base64: ""
+    });
+    $content.current = null;
+    setDescription("");
+    setCrop("");
+    setContentHeight(0);
+    setY(0);
+    resetImagePreview();
+    handleClose();
+  }, [handleClose, resetImagePreview]);
+
+  const handleSubmit = useCallback((): void => {
     createPostAsync({
       base64: canvasImage.base64,
       description,
-      disableComments: true
-    }).then(() => handleClose());
-  };
+      disableComments
+    }).then(() => handleReset());
+  }, [canvasImage.base64, description, disableComments, handleReset]);
 
   return (
     <Modal
@@ -108,7 +127,7 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
       maxWidth={STEPS_VARIABLES[step].width}
       height={STEPS_VARIABLES[step].height}
       open={open}
-      onClose={handleClose}
+      onClose={handleReset}
       isFullWidth={false}
     >
       <S.Root>
@@ -159,6 +178,8 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
                 base64={canvasImage.base64}
                 description={description}
                 setDescription={setDescription}
+                disableComments={disableComments}
+                setDisableComments={setDisableComments}
               />
             )}
           </S.Box>

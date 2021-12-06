@@ -1,8 +1,12 @@
-import React, { memo, useCallback, useEffect, useRef } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import * as S from "./Crop.styled";
 import { useToggle } from "hooks/useToggle";
 import { icons } from "styles/icons";
+import Portal from "components/Portal/Portal";
+import WrapperModalChangeAvatar from "components/Modal/ModalChangeAvatar/WrapperModalChangeAvatar";
+import { useClientRender } from "hooks/useClientRender";
+import AspectControl from "components/AspectControll";
 
 const IconResize = icons.resize;
 
@@ -16,6 +20,13 @@ type Props = {
   onGetCropImage: (p: string) => void;
   y: number;
   setY: (p: number) => void;
+};
+
+export const ASPECT_MODE = {
+  original: "Оригинал",
+  oneToOne: "1:1",
+  fourToFive: "4:5",
+  sixteenToNine: "16:9"
 };
 
 const Crop = ({
@@ -45,10 +56,35 @@ const Crop = ({
   const $sy = useRef(0);
   const $sh = useRef(790);
   const $sw = useRef(790);
+  const [cropAspect, setCropAspect] = useState<Array<string | number>>([
+    "100%",
+    contentHeight
+  ]);
+  const [aspect, setAspect] = useState(0);
   const limit = useRef({
     top: 0,
     bottom: 0
   });
+
+  const handleChangeAspect = (mode: string) => {
+    switch (mode) {
+      case ASPECT_MODE.fourToFive: {
+        setCropAspect([`625px`, contentHeight]);
+        break;
+      }
+      case ASPECT_MODE.oneToOne: {
+        setCropAspect([`100%`, contentHeight]);
+        break;
+      }
+      case ASPECT_MODE.sixteenToNine: {
+        setCropAspect([`100%`, 444]);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  };
 
   const cropImage = (img: HTMLImageElement) => {
     const scaleX = img.naturalWidth / img.width;
@@ -139,33 +175,44 @@ const Crop = ({
   );
 
   return (
-    <S.Root>
-      <S.Presentation>
-        <S.CropperZone ref={$container} contentHeight={contentHeight}>
-          {source && (
-            <S.Image
-              posY={y}
-              src={source}
-              drag={drag}
-              onMouseDown={handleDragOn}
-              ref={$image}
-              height={bounding.height}
-            />
+    <>
+      <S.Root>
+        <S.Presentation>
+          <S.CropperZone
+            ref={$container}
+            width={cropAspect[0] as string}
+            contentHeight={(cropAspect[1] as number) || contentHeight}
+          >
+            {source && (
+              <S.Image
+                posY={y}
+                src={source}
+                drag={drag}
+                onMouseDown={handleDragOn}
+                ref={$image}
+                height={bounding.height}
+              />
+            )}
+            {drag && (
+              <S.Squares>
+                {new Array(9).fill(0).map((_, index) => (
+                  // eslint-disable-next-line react/no-array-index-key,@typescript-eslint/restrict-template-expressions
+                  <S.Square key={`${index}+${_}`} />
+                ))}
+              </S.Squares>
+            )}
+          </S.CropperZone>
+          {contentHeight && (
+            <S.Aspect>
+              <S.Button onClick={toggleResizeMenu} active={open}>
+                <IconResize fill="#fff" />
+              </S.Button>
+              <AspectControl open={open} onChange={handleChangeAspect} />
+            </S.Aspect>
           )}
-          {drag && (
-            <S.Squares>
-              {new Array(9).fill(0).map((_, index) => (
-                // eslint-disable-next-line react/no-array-index-key,@typescript-eslint/restrict-template-expressions
-                <S.Square key={`${index}+${_}`} />
-              ))}
-            </S.Squares>
-          )}
-        </S.CropperZone>
-        <S.Button onClick={toggleResizeMenu} active={open}>
-          <IconResize fill="#fff" />
-        </S.Button>
-      </S.Presentation>
-    </S.Root>
+        </S.Presentation>
+      </S.Root>
+    </>
   );
 };
 

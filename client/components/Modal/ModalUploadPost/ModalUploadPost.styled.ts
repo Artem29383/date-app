@@ -47,6 +47,7 @@ export const Title = styled.h2`
 export const Box = styled.div`
   width: 100%;
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;

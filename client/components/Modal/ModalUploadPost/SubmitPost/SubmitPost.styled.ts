@@ -94,3 +94,14 @@ export const Menu = styled.div`
   width: 100%;
   flex-direction: column;
 `;
+
+export const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const Label = styled.h1`
+  font-size: 16px;
+  line-height: 24px;
+  color: ${Colors.instaDefault};
+`;

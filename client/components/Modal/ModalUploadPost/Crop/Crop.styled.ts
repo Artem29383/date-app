@@ -17,8 +17,8 @@ export const Button = styled.button<{ active: boolean }>`
   border-radius: 50%;
   background-color: ${({ active }) => (!active ? "rgba(59, 59, 59)" : "#fff")};
   position: absolute;
-  bottom: 20px;
-  left: 20px;
+  left: 0;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,16 +33,29 @@ export const Button = styled.button<{ active: boolean }>`
   }
 `;
 
+export const Aspect = styled.div`
+  position: absolute;
+  bottom: 60px;
+  left: 40px;
+  width: 32px;
+  height: 32px;
+`;
+
 export const Presentation = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
-export const CropperZone = styled.div<{ contentHeight: number }>`
+export const CropperZone = styled.div<{ contentHeight: number; width: string }>`
   overflow: hidden;
+  margin: 0 auto;
   height: ${({ contentHeight }) => `${contentHeight}px`};
-  width: 100%;
+  width: ${({ width }) => width};
   flex-direction: column;
   display: flex;
   position: relative;

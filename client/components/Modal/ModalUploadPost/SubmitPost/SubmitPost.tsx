@@ -4,18 +4,23 @@ import * as S from "./SubmitPost.styled";
 import ImageWrapper from "components/ImageWrapper";
 import { useUser } from "src/entities/user/selectors";
 import Accordion from "components/Accordion";
+import Toggle from "components/Toggle";
 
 type Props = {
   base64: string;
   contentHeight: number;
   description: string;
   setDescription: (p: string) => void;
+  disableComments: boolean;
+  setDisableComments: (p: boolean) => void;
 };
 
 const SubmitPost = ({
   base64,
   contentHeight,
   description = "",
+  disableComments,
+  setDisableComments,
   setDescription
 }: Props) => {
   const { username, avatarUrl } = useUser();
@@ -59,7 +64,16 @@ const SubmitPost = ({
           <S.MaxSymbols>{description.length}/2200</S.MaxSymbols>
         </S.PostFieldRow>
         <S.Menu>
-          <Accordion label="Расширенные возможности">CHILDREN</Accordion>
+          <Accordion label="Расширенные возможности">
+            <S.Row>
+              <S.Label>Выключить комментарии</S.Label>
+              <Toggle
+                toggle={setDisableComments}
+                value={disableComments}
+                width={44}
+              />
+            </S.Row>
+          </Accordion>
         </S.Menu>
       </S.Area>
     </S.Root>
