@@ -29,7 +29,7 @@ export class UserEntity {
   @Column({ nullable: true })
   avatarUrl?: string;
 
-  @Column()
+  @Column({ nullable: true })
   gender: string;
 
   @Column({ nullable: true })
