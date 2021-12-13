@@ -55,7 +55,8 @@ export const CropperZone = styled.div<{ contentHeight: number; width: string }>`
   overflow: hidden;
   margin: 0 auto;
   height: ${({ contentHeight }) => `${contentHeight}px`};
-  width: ${({ width }) => width};
+  //width: ${({ width }) => width};
+  width: 100%;
   flex-direction: column;
   display: flex;
   position: relative;
