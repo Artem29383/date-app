@@ -13,4 +13,8 @@ export class UserService {
   async updateUser(updateUserDto: UpdateUserDto) {
     return this.repository.updateUser(updateUserDto);
   }
+
+  async getUserById(id: string) {
+    return this.repository.getUserById(id);
+  }
 }

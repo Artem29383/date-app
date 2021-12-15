@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
 import { GENDER } from '../../types';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import { UniqueOnDatabase } from '../validations/UniqueValidation';
 
 export class AuthCredentialsDto {

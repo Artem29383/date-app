@@ -1,6 +1,10 @@
 import { IUser } from "src/entities/user/types";
 import { root } from "src/entities/root";
-import { currentAsync, logout } from "pages/login/model/login";
+import {
+  currentAsync,
+  getUserByIdAsync,
+  logout
+} from "pages/login/model/login";
 import { GENDER } from "@types";
 import { registerAsync } from "pages/register/model/register";
 import { createEvent } from "effector";
@@ -31,3 +35,8 @@ export const $user = root
   .on(currentAsync.doneData, (state, user) => ({ ...state, ...user }))
   .on(updateUser, (state, payload) => payload)
   .on(updateUserAsync.doneData, (state, user) => ({ ...state, ...user }));
+
+export const $currentUser = root
+  .createStore<IUser>(UserInitialState)
+  .reset(logout)
+  .on(getUserByIdAsync.doneData, (state, user) => ({ ...state, ...user }));

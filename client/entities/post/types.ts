@@ -3,10 +3,19 @@ export interface IPost {
   id: string;
   avatarUrl: string;
   disableComments: boolean;
+  createdAt: Date;
+  favoritesCount: number;
+  isFavorite: boolean;
 }
 
 export type PostData = {
   description: string;
   base64: string;
   disableComments: boolean;
+};
+
+export type PostsQuery = {
+  id: string;
+  limit?: number;
+  offset?: number;
 };

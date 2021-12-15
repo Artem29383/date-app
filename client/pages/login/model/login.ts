@@ -33,6 +33,16 @@ export const currentAsync = root.createEffect<
     .then(response => response)
 );
 
+export const getUserByIdAsync = root.createEffect<
+  { ctx: GetServerSidePropsContext | undefined; id: string },
+  IUser | null,
+  ApiError<Record<string, unknown>>
+>(data =>
+  Api(data.ctx)
+    .getUserById(data.id)
+    .then(response => response)
+);
+
 export const logout = root.createEvent();
 
 logout.watch(() => {

@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { UserEntity } from '../auth/entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
+import { CommentEntity } from '../comment/comment.entity';
 
 @Entity()
 export class PostEntity {
@@ -25,7 +27,13 @@ export class PostEntity {
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
+  @Column({ default: 0 })
+  favoritesCount: number;
+
   @ManyToOne(() => UserEntity, (user) => user.posts, { eager: false })
   @Exclude({ toPlainOnly: true })
   user: UserEntity;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.post, { eager: true })
+  comments: CommentEntity[];
 }

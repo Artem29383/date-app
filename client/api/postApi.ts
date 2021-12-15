@@ -1,8 +1,9 @@
 import { AxiosInstance, AxiosResponse } from "axios";
-import { IPost, PostData } from "src/entities/post/types";
+import { IPost, PostData, PostsQuery } from "src/entities/post/types";
 import { dataUrlToFile } from "utils/base64ToFile";
 import { v4 as uuid } from "uuid";
 import { deployImageCloud } from "utils/deployImageClound";
+import { IPostsState } from "src/entities/post/store";
 
 export const PostApi = (instance: AxiosInstance) => {
   return {
@@ -27,6 +28,50 @@ export const PostApi = (instance: AxiosInstance) => {
       } catch (e) {
         console.info(e);
       }
+      return { data: null };
+    },
+
+    getUserPosts: async (
+      query: PostsQuery
+    ): Promise<
+      | AxiosResponse<IPostsState>
+      | {
+          data: {
+            posts: [];
+            counts: 0;
+          };
+        }
+    > => {
+      try {
+        return await instance.get(`/post/publications?id=${query.id}`);
+      } catch (e) {
+        console.info(e);
+      }
+
+      return { data: { posts: [], counts: 0 } };
+    },
+
+    setLikePost: async (
+      id: string
+    ): Promise<AxiosResponse<IPost> | { data: null }> => {
+      try {
+        return await instance.post(`/post/${id}/favorite`);
+      } catch (e) {
+        console.info(e);
+      }
+
+      return { data: null };
+    },
+
+    setDisLikePost: async (
+      id: string
+    ): Promise<AxiosResponse<IPost> | { data: null }> => {
+      try {
+        return await instance.delete(`/post/${id}/favorite`);
+      } catch (e) {
+        console.info(e);
+      }
+
       return { data: null };
     }
   };

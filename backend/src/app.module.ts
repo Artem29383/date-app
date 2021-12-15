@@ -5,6 +5,7 @@ import { pgConfig } from './config/postgres.config';
 import { UserModule } from './user/user.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 import { PostModule } from './post/post.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -13,8 +14,7 @@ import { PostModule } from './post/post.module';
     UserModule,
     NestjsFormDataModule.config({ storage: MemoryStoredFile }),
     PostModule,
+    CommentModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

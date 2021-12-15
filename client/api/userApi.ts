@@ -22,7 +22,7 @@ export const UserApi = (instance: AxiosInstance) => {
         formData.append("file", file);
         formData.append("upload_preset", "h8zima02");
 
-        const avatarUrl = deployImageCloud(formData);
+        const avatarUrl = await deployImageCloud(formData);
 
         return await instance.patch("/user/update", {
           avatarUrl,
@@ -35,6 +35,14 @@ export const UserApi = (instance: AxiosInstance) => {
     },
     updateUser: async (data: IUserUpdate) => {
       return instance.patch("/user/update", data);
+    },
+    getUserById: async (id: string): Promise<IUser | null> => {
+      try {
+        const response = await instance.get(`/user?id=${id}`);
+        return response.data;
+      } catch (e) {
+        return null;
+      }
     }
   };
 };

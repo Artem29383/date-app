@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     ROUTES.SETTINGS_PROFILE,
     ROUTES.SETTINGS_PASSWORD
   ];
-  const main: string[] = [ROUTES.DASHBOARD, ROUTES.PROFILE];
+  const main: string[] = [ROUTES.DASHBOARD];
 
   return (
     <EffectorProvider value={scope}>
@@ -34,6 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Application>
             <Container>
               {main.includes(asPath) && <Component {...pageProps} />}
+              {/^\/profile\/.+$/.test(asPath) && <Component {...pageProps} />}
               {settings.includes(asPath) && (
                 <Settings>
                   <Component {...pageProps} />

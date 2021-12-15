@@ -30,7 +30,7 @@ type Props = {
 
 const Navigation = ({ logout }: Props) => {
   const { toggle, ref, active } = useClickAway();
-  const { avatarUrl } = useUser();
+  const { avatarUrl, id } = useUser();
   const isClient = useClientRender();
   const { handleOpen, value: open, handleClose } = useToggle(false);
 
@@ -80,8 +80,8 @@ const Navigation = ({ logout }: Props) => {
             <AreaPortal minHeightArea={128} left={-76} top={102}>
               <S.List>
                 <S.Item>
-                  <Link href={ROUTES.PROFILE}>
-                    <a href={ROUTES.PROFILE}>Профиль</a>
+                  <Link href={`${ROUTES.PROFILE}/${id}`}>
+                    <a href={`${ROUTES.PROFILE}/${id}`}>Профиль</a>
                   </Link>
                 </S.Item>
                 <S.Item>

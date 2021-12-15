@@ -98,6 +98,11 @@ export const Facebook = styled(button)`
     Arial, sans-serif;
   font-size: 14px;
   line-height: 18px;
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #75c0f3;
+  }
 `;
 
 export const FacebookLink = styled(button)`

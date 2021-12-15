@@ -1,8 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
@@ -35,6 +36,14 @@ export class UsersRepository extends Repository<UserEntity> {
     user.age = age || 0;
     delete user.password;
     await this.save(user);
+    return user;
+  }
+
+  async getUserById(id: string): Promise<UserEntity> {
+    const user = await this.findOne(id);
+
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
     return user;
   }
 }

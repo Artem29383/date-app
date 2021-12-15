@@ -1,4 +1,4 @@
-import { Controller, Body, Patch } from '@nestjs/common';
+import { Controller, Body, Patch, Get, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -8,5 +8,10 @@ export class UserController {
   @Patch('/update')
   update(@Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(updateUserDto);
+  }
+
+  @Get()
+  getUserById(@Query('id') id: string) {
+    return this.userService.getUserById(id);
   }
 }

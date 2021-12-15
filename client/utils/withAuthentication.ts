@@ -4,7 +4,10 @@ import { currentAsync } from "pages/login/model/login";
 import { ROUTES } from "@types";
 import { GetServerSidePropsContext } from "next";
 
-export const withAuthentication = async (ctx: GetServerSidePropsContext) => {
+export const withAuthentication = async (
+  ctx: GetServerSidePropsContext,
+  isSerialize = true
+) => {
   const scope = fork(root);
   const res = await allSettled(currentAsync, { scope, params: ctx });
   const user = res.value;
@@ -19,9 +22,13 @@ export const withAuthentication = async (ctx: GetServerSidePropsContext) => {
     };
   }
 
+  if (!isSerialize) {
+    return scope;
+  }
+
   return {
     props: {
-      store: serialize(scope)
+      store: isSerialize ? serialize(scope) : scope
     }
   };
 };
