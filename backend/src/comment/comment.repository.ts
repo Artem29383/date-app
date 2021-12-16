@@ -20,19 +20,13 @@ export class CommentRepository extends Repository<CommentEntity> {
     return comment;
   }
 
-  async removeCommentFromPost(
-    removeCommentDto: RemoveCommentDto,
-    post: PostEntity,
-  ): Promise<void> {
+  async removeCommentFromPost(id: string): Promise<void> {
     const response = await this.delete({
-      id: removeCommentDto.commentId,
-      post,
+      id,
     });
 
     if (response.affected === 0) {
-      throw new NotFoundException(
-        `Comment with ID ${removeCommentDto.commentId} not found`,
-      );
+      throw new NotFoundException(`Comment with ID ${id} not found`);
     }
   }
 

@@ -1,5 +1,9 @@
 import { AxiosInstance, AxiosResponse } from "axios";
-import { CommentQuery, IComment } from "src/entities/comment/types";
+import {
+  CommentDataReq,
+  CommentQuery,
+  IComment
+} from "src/entities/comment/types";
 
 export const CommentApi = (instance: AxiosInstance) => {
   return {
@@ -20,6 +24,22 @@ export const CommentApi = (instance: AxiosInstance) => {
       return {
         data: []
       };
+    },
+
+    addCommentToPost: async (
+      data: CommentDataReq
+    ): Promise<AxiosResponse<IComment>> => {
+      const comment = await instance.post(`/comment`, data);
+      return comment;
+    },
+
+    removeCommentFromPost: async (data: {
+      commentId: string;
+    }): Promise<AxiosResponse> => {
+      const response = await instance.delete(`/comment/${data.commentId}`, {
+        data
+      });
+      return response;
     }
   };
 };

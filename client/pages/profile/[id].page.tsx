@@ -24,15 +24,24 @@ import {
 import { getUserByIdAsync } from "pages/login/model/login";
 import { useEvent } from "effector-react";
 import { updatePosts } from "src/entities/post/store";
-import { getPostComments } from "src/entities/comment/async";
+import {
+  addCommentToPostAsync,
+  getPostComments,
+  removeCommentFromPostAsync
+} from "src/entities/comment/async";
+import { useComments } from "src/entities/comment/selectors";
+import { removeComment, updateComments } from "src/entities/comment/store";
 
 const Profile = () => {
   const [view, setView] = useState<"publication" | "saved">("publication");
   const isClient = useClientRender();
   const [post, setPost] = useState<IPost | undefined>(undefined);
+  const comments = useComments();
   const data = (usePosts() as unknown) as { posts: IPost[]; counts: number };
   const updatePostEvent = useEvent(updatePosts);
-  const { id: myId, avatarUrl: myAvatarUrl } = useUser();
+  const updateCommentsEvent = useEvent(updateComments);
+  const removeCommentEvent = useEvent(removeComment);
+  const { id: myId, avatarUrl: myAvatarUrl, username: myUserName } = useUser();
   const { avatarUrl, username, description, email, id } = useUserById();
   const { handleOpen, value: open, handleClose } = useToggle(false);
   const {
@@ -44,8 +53,23 @@ const Profile = () => {
   const handleSetPost = async (postIdParam: string) => {
     setPost(data.posts.find(postId => postId.id === postIdParam));
     openPost();
-    const comments = await getPostComments({ query: { id: postIdParam } });
-    console.info("comments", comments);
+    updateCommentsEvent(await getPostComments({ query: { id: postIdParam } }));
+  };
+
+  const handleAddComment = async (postId: string, comment: string) => {
+    const response = await addCommentToPostAsync({
+      postId,
+      text: comment,
+      userAvatar: myAvatarUrl || "",
+      userId: myId,
+      username: myUserName
+    });
+    updateCommentsEvent([response]);
+  };
+
+  const handleRemoveComment = async (commentId: string) => {
+    await removeCommentFromPostAsync({ commentId });
+    removeCommentEvent(commentId);
   };
 
   const handleLikePost = async (postId: string) => {
@@ -142,8 +166,10 @@ const Profile = () => {
         <Portal id="modalPost">
           <ModalPost
             postId={post.id}
+            myUserId={myId}
             onLike={handleLikePost}
             onDisLike={handleDisLikePost}
+            comments={comments}
             isFavorite={post.isFavorite}
             favoriteCount={post.favoritesCount}
             createdAt={post.createdAt}
@@ -152,6 +178,8 @@ const Profile = () => {
             user={{ avatarUrl, username, id }}
             url={post.avatarUrl}
             onClose={closePost}
+            onAddComment={handleAddComment}
+            onRemoveComment={handleRemoveComment}
             open={show}
           />
         </Portal>

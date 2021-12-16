@@ -3,8 +3,18 @@ export interface IComment {
   id: string;
   userAvatar: string;
   createdAt: Date;
+  userId: string;
+  username: string;
 }
 
 export type CommentQuery = {
   id: string;
+};
+
+export type CommentDataReq = {
+  text: string;
+  postId: string;
+  userId: string;
+  username: string;
+  userAvatar: string;
 };

@@ -88,6 +88,24 @@ export class PostRepository extends Repository<PostEntity> {
     return { post, user };
   }
 
+  async addPostToBookmark(
+    id: string,
+    user: UserEntity,
+  ): Promise<{ post: PostEntity; user: UserEntity }> {
+    const post = await this.findById(id);
+
+    const isNotInBookmark =
+      user.bookmarks.findIndex(
+        (bookmarkPost) => bookmarkPost.id === post.id,
+      ) === -1;
+
+    if (isNotInBookmark) {
+      user.bookmarks.push(post);
+    }
+
+    return { post, user };
+  }
+
   async removePostFromFavorite(
     id: string,
     user: UserEntity,
@@ -101,6 +119,23 @@ export class PostRepository extends Repository<PostEntity> {
     if (indexFavorite >= 0) {
       user.favorites.splice(indexFavorite, 1);
       post.favoritesCount--;
+    }
+
+    return { post, user };
+  }
+
+  async removePostFromBookmark(
+    id: string,
+    user: UserEntity,
+  ): Promise<{ post: PostEntity; user: UserEntity }> {
+    const post = await this.findById(id);
+
+    const indexBookmark = user.bookmarks.findIndex(
+      (bookmarkPost) => bookmarkPost.id === post.id,
+    );
+
+    if (indexBookmark >= 0) {
+      user.favorites.splice(indexBookmark, 1);
     }
 
     return { post, user };

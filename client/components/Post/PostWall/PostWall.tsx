@@ -5,15 +5,13 @@ import ImageWrapper from "components/ImageWrapper";
 import Text from "components/Text/Text";
 import moment from "moment";
 import { icons } from "styles/icons";
-import heartFill from "assets/icons/heartFill.svg";
-import { CommentList } from "./PostWall.styled";
-import InstaInput from "components/InstaInput";
 import Button from "components/Button";
+import { IComment } from "src/entities/comment/types";
+import { Colors } from "@types";
 
 type Props = {
   avatarUrl: string;
   username: string;
-  id: string;
   disableComments: boolean;
   description: string;
   createdAt: Date;
@@ -22,22 +20,32 @@ type Props = {
   postId: string;
   onLike: (id: string) => void;
   onDisLike: (id: string) => void;
+  onAddComment: (postId: string, comment: string) => void;
+  comments: IComment[];
+  myUserId: string;
+  onRemoveComment: (commentId: string) => void;
 };
 
+const Cross = icons.cross;
 const IconHeart = icons.heart;
 const IconHeartFill = icons.heartFill;
+const Mark = icons.mark;
+const MarkFill = icons.markfill;
 
 const PostWall = ({
   avatarUrl,
   username,
-  id,
+  onRemoveComment,
   disableComments,
   createdAt,
   favoriteCount,
   description,
+  myUserId,
   isFavorite,
   postId,
+  comments,
   onLike,
+  onAddComment,
   onDisLike
 }: Props) => {
   const [comment, setComment] = useState("");
@@ -50,8 +58,15 @@ const PostWall = ({
     onDisLike(postId);
   };
 
-  const handleChange = e => {
+  const handleChange = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setComment(e.target.value);
+  };
+
+  const handleCommentAdd = () => {
+    onAddComment(postId, comment);
+    setComment("");
   };
 
   return (
@@ -84,7 +99,43 @@ const PostWall = ({
           <S.Date>{moment(createdAt).format("DD.MM.YYYY")}</S.Date>
         </S.DescriptionContainer>
       </S.DescriptionPost>
-      <S.CommentList />
+      {!disableComments && (
+        <S.CommentList>
+          {comments.map(commentItem => (
+            <S.CommentRow key={commentItem.id}>
+              <ImageWrapper
+                width={32}
+                height={32}
+                marginRight={15}
+                overflow="hidden"
+                borderRadius="50%"
+                source={commentItem.userAvatar}
+              />
+              <S.Comment>
+                <S.CommentContent>
+                  <Text>{commentItem.username}</Text>
+                  <S.Description>{commentItem.text}</S.Description>
+                </S.CommentContent>
+                <S.BottomComment>
+                  <S.Date>
+                    {moment(commentItem.createdAt).format("DD.MM.YYYY")}
+                  </S.Date>
+                  {myUserId === commentItem.userId && (
+                    <Cross
+                      onClick={() => onRemoveComment(commentItem.id)}
+                      cursor="pointer"
+                      marginLeft={5}
+                      height={7}
+                      width={7}
+                      fill={Colors.instaCross}
+                    />
+                  )}
+                </S.BottomComment>
+              </S.Comment>
+            </S.CommentRow>
+          ))}
+        </S.CommentList>
+      )}
       <S.Actions>
         <Text>{favoriteCount}</Text>
         {isFavorite ? (
@@ -96,17 +147,24 @@ const PostWall = ({
         ) : (
           <IconHeart cursor="pointer" onClick={handleLike} marginLeft={10} />
         )}
+        <Mark cursor="pointer" marginLeft="auto" />
       </S.Actions>
-      <S.CommentRow>
-        <S.Input
-          placeholder="Добавьте комментарий..."
-          value={comment}
-          onChange={handleChange}
-        />
-        <Button disabled={!comment.trim()} typeButton="facebook">
-          Опубликовать
-        </Button>
-      </S.CommentRow>
+      {!disableComments && (
+        <S.CommentRowInput>
+          <S.Input
+            placeholder="Добавьте комментарий..."
+            value={comment}
+            onChange={handleChange}
+          />
+          <Button
+            onClick={handleCommentAdd}
+            disabled={!comment.trim()}
+            typeButton="facebook"
+          >
+            Опубликовать
+          </Button>
+        </S.CommentRowInput>
+      )}
     </S.Root>
   );
 };

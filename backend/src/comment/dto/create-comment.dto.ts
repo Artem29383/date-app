@@ -8,5 +8,11 @@ export class CreateCommentDto {
   postId: string;
 
   @IsString()
+  userId: string;
+
+  @IsString()
+  username: string;
+
+  @IsString()
   userAvatar: string;
 }

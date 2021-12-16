@@ -53,4 +53,8 @@ export class UserEntity {
   @ManyToMany(() => PostEntity)
   @JoinTable()
   favorites: PostEntity[];
+
+  @ManyToMany(() => PostEntity)
+  @JoinTable()
+  bookmarks: PostEntity[];
 }

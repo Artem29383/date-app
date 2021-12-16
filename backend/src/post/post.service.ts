@@ -45,6 +45,20 @@ export class PostService {
     return post;
   }
 
+  async addPostToBookmark(id: string, user: UserEntity): Promise<PostEntity> {
+    const currentUser = await this.userRepository.findOne(user.id, {
+      relations: ['bookmarks'],
+    });
+
+    const { user: userChanged, post } =
+      await this.postRepository.addPostToBookmark(id, currentUser);
+
+    await this.userRepository.save(userChanged);
+    await this.postRepository.save(post);
+
+    return post;
+  }
+
   async removePostFromFavorite(
     id: string,
     user: UserEntity,
@@ -55,6 +69,23 @@ export class PostService {
 
     const { user: userChanged, post } =
       await this.postRepository.removePostFromFavorite(id, currentUser);
+
+    await this.userRepository.save(userChanged);
+    await this.postRepository.save(post);
+
+    return post;
+  }
+
+  async removePostFromBookmark(
+    id: string,
+    user: UserEntity,
+  ): Promise<PostEntity> {
+    const currentUser = await this.userRepository.findOne(user.id, {
+      relations: ['bookmarks'],
+    });
+
+    const { user: userChanged, post } =
+      await this.postRepository.removePostFromBookmark(id, currentUser);
 
     await this.userRepository.save(userChanged);
     await this.postRepository.save(post);

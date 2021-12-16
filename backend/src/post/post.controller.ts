@@ -57,12 +57,21 @@ export class PostController {
     return await this.postService.removePostFromFavorite(id, user);
   }
 
-  // @Post(':id/comment')
-  // @UseGuards(JwtAuthGuard)
-  // async addCommentToPost(
-  //   @GetUser() user: UserEntity,
-  //   @Param('id') id: string,
-  // ): Promise<PostEntity> {
-  //   return await this.postService.addCommentToPost(id, user);
-  // }
+  @Post(':id/bookmark')
+  @UseGuards(JwtAuthGuard)
+  async addPostToBookmark(
+    @GetUser() user: UserEntity,
+    @Param('id') id: string,
+  ): Promise<PostEntity> {
+    return await this.postService.addPostToBookmark(id, user);
+  }
+
+  @Delete(':id/bookmark')
+  @UseGuards(JwtAuthGuard)
+  async removePostFromBookmark(
+    @GetUser() user: UserEntity,
+    @Param('id') id: string,
+  ): Promise<PostEntity> {
+    return await this.postService.removePostFromBookmark(id, user);
+  }
 }

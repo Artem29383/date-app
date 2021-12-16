@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Query,
   UseGuards,
@@ -26,11 +27,10 @@ export class CommentController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete()
-  removeCommentFromPost(
-    @Body() removeCommentDto: RemoveCommentDto,
-  ): Promise<void> {
-    return this.commentService.removeCommentFromPost(removeCommentDto);
+  @Delete(':id')
+  removeCommentFromPost(@Param('id') id: string): Promise<void> {
+    console.info('removeCommentDto', id);
+    return this.commentService.removeCommentFromPost(id);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -1,5 +1,6 @@
 import { StoreValue } from "effector";
 import { useStore } from "effector-react/ssr";
-import { $posts } from "src/entities/post/store";
+import { $comments } from "src/entities/comment/store";
 
-export const usePosts = (): StoreValue<typeof $posts> => useStore($posts);
+export const useComments = (): StoreValue<typeof $comments> =>
+  useStore($comments);
