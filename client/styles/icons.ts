@@ -41,6 +41,7 @@ import accordionArrow from "assets/icons/accordion-arrow.svg";
 import resize from "assets/icons/resize.svg";
 import mark from "assets/icons/mark.svg";
 import markfill from "assets/icons/markfill.svg";
+import comment from "assets/icons/comment.svg";
 
 export type IconProps = LayoutProps &
   StyledSystemPositonProps &
@@ -80,7 +81,8 @@ export const icons: {
     accordionArrow,
     resize,
     mark,
-    markfill
+    markfill,
+    comment
   },
   icon => styled(
     icon as React.FunctionComponent<React.SVGAttributes<SVGElement> & IconProps>

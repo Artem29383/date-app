@@ -54,16 +54,12 @@ const Crop = ({
     bottom: 0
   });
 
-  console.info("bounding.height", bounding.height);
   useEffect(() => {
     if (bounding.height < $sh.current && bounding.height) {
       $sh.current = bounding.height;
-      console.info("$sh.", $sh.current);
       setCanDrag(false);
     }
   }, [bounding.height]);
-
-  console.info("limit", limit);
 
   const handleChangeLimit = () => {
     limit.current = {
@@ -102,7 +98,7 @@ const Crop = ({
 
       canvas.width = $sw.current * pixelRatio * scaleX;
       canvas.height = $sh.current * pixelRatio * scaleY;
-      console.info("$sy.current * scaleY", $sy.current * scaleY);
+
       ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       ctx.imageSmoothingQuality = "high";
       canvas?.getContext("2d")?.drawImage(

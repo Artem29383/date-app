@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import * as S from "./Profile.styled";
 import ImageWrapper from "components/ImageWrapper";
@@ -17,38 +17,108 @@ import { GetServerSidePropsContext } from "next";
 import { withAuthentication } from "utils/withAuthentication";
 import { allSettled, Scope, serialize } from "effector";
 import {
+  getUserBookmarks,
   getUserPosts,
+  removePostAsync,
+  setBookmarkPost,
   setDisLikePost,
-  setLikePost
+  setLikePost,
+  setUnBookmarkPost
 } from "src/entities/post/async";
 import { getUserByIdAsync } from "pages/login/model/login";
 import { useEvent } from "effector-react";
-import { updatePosts } from "src/entities/post/store";
+import {
+  removePost,
+  updatePostAll,
+  updatePosts
+} from "src/entities/post/store";
 import {
   addCommentToPostAsync,
   getPostComments,
   removeCommentFromPostAsync
 } from "src/entities/comment/async";
 import { useComments } from "src/entities/comment/selectors";
-import { removeComment, updateComments } from "src/entities/comment/store";
+import {
+  addComments,
+  removeComment,
+  updateComments
+} from "src/entities/comment/store";
+import { useRouter } from "next/router";
+import { followUserAsync, unfollowUserAsync } from "src/entities/user/async";
+import {
+  updateUserByIdFollowing,
+  updateUserByIdFollowingCount
+} from "src/entities/user/store";
 
 const Profile = () => {
+  const { query } = useRouter();
   const [view, setView] = useState<"publication" | "saved">("publication");
   const isClient = useClientRender();
   const [post, setPost] = useState<IPost | undefined>(undefined);
   const comments = useComments();
   const data = (usePosts() as unknown) as { posts: IPost[]; counts: number };
   const updatePostEvent = useEvent(updatePosts);
+  const updatePostsAllEvent = useEvent(updatePostAll);
+  const removePostEvent = useEvent(removePost);
   const updateCommentsEvent = useEvent(updateComments);
+  const addCommentsEvent = useEvent(addComments);
   const removeCommentEvent = useEvent(removeComment);
+  const updateUserByIdEvent = useEvent(updateUserByIdFollowing);
+  const updateUserByIdFollowingCountEvent = useEvent(
+    updateUserByIdFollowingCount
+  );
   const { id: myId, avatarUrl: myAvatarUrl, username: myUserName } = useUser();
-  const { avatarUrl, username, description, email, id } = useUserById();
+  const {
+    avatarUrl,
+    username,
+    description,
+    email,
+    id,
+    isFollow,
+    followersCount,
+    subsCount
+  } = useUserById();
   const { handleOpen, value: open, handleClose } = useToggle(false);
   const {
     handleOpen: openPost,
     value: show,
     handleClose: closePost
   } = useToggle(false);
+
+  const handleFollow = async () => {
+    const response = await followUserAsync({ userFollowingId: id });
+    if (response) {
+      updateUserByIdEvent(true);
+      updateUserByIdFollowingCountEvent(followersCount + 1);
+    }
+  };
+
+  const handleUnFollow = async () => {
+    const response = await unfollowUserAsync({ userFollowingId: id });
+    if (response) {
+      updateUserByIdEvent(false);
+      updateUserByIdFollowingCountEvent(followersCount - 1);
+    }
+  };
+
+  useEffect(() => {
+    if (view === "saved") {
+      (async () => {
+        const response = await getUserBookmarks({
+          query: { id: query.id as string }
+        });
+        updatePostsAllEvent(response.posts);
+      })();
+    }
+    if (view === "publication") {
+      (async () => {
+        const response = await getUserPosts({
+          query: { id: query.id as string }
+        });
+        updatePostsAllEvent(response.posts);
+      })();
+    }
+  }, [query, updatePostEvent, updatePostsAllEvent, view]);
 
   const handleSetPost = async (postIdParam: string) => {
     setPost(data.posts.find(postId => postId.id === postIdParam));
@@ -64,7 +134,20 @@ const Profile = () => {
       userId: myId,
       username: myUserName
     });
-    updateCommentsEvent([response]);
+
+    const postElement = data.posts.find(postElem => postElem.id === postId);
+    addCommentsEvent([response]);
+
+    if (!postElement) return;
+    postElement.commentCount++;
+    updatePostEvent(postElement);
+  };
+
+  const handleRemovePost = async (postId: string) => {
+    await removePostAsync({ id: postId });
+    closePost();
+    setPost(undefined);
+    removePostEvent(postId);
   };
 
   const handleRemoveComment = async (commentId: string) => {
@@ -75,6 +158,20 @@ const Profile = () => {
   const handleLikePost = async (postId: string) => {
     const response = await setLikePost(postId);
     const readyPost = { ...response, isFavorite: true };
+    updatePostEvent(readyPost as IPost);
+    setPost(readyPost as IPost);
+  };
+
+  const handleBookmarkPost = async (postId: string) => {
+    const response = await setBookmarkPost(postId);
+    const readyPost = { ...response, isBookmark: true };
+    updatePostEvent(readyPost as IPost);
+    setPost(readyPost as IPost);
+  };
+
+  const handleRemoveBookmarkPost = async (postId: string) => {
+    const response = await setUnBookmarkPost(postId);
+    const readyPost = { ...response, isBookmark: false };
     updatePostEvent(readyPost as IPost);
     setPost(readyPost as IPost);
   };
@@ -108,6 +205,16 @@ const Profile = () => {
                   Редактировать профиль
                 </Button>
               )}
+              {myId !== id && !isFollow && (
+                <Button onClick={handleFollow} typeButton="facebook">
+                  Подписаться
+                </Button>
+              )}
+              {myId !== id && isFollow && (
+                <Button onClick={handleUnFollow} typeButton="facebook">
+                  Отписаться
+                </Button>
+              )}
             </S.Row>
             <S.Row>
               <S.Text>
@@ -115,11 +222,11 @@ const Profile = () => {
                 публикаций
               </S.Text>
               <S.Text>
-                <S.Bold>83</S.Bold>
+                <S.Bold>{followersCount}</S.Bold>
                 подписчиков
               </S.Text>
               <S.Text>
-                <S.Bold>71</S.Bold>
+                <S.Bold>{subsCount}</S.Bold>
                 подписок
               </S.Text>
             </S.Row>
@@ -149,6 +256,7 @@ const Profile = () => {
               id={postItem.id}
               url={postItem.avatarUrl}
               key={postItem.id}
+              commentCount={postItem.commentCount}
             />
           ))}
         </S.Body>
@@ -171,6 +279,7 @@ const Profile = () => {
             onDisLike={handleDisLikePost}
             comments={comments}
             isFavorite={post.isFavorite}
+            isMark={post.isBookmark}
             favoriteCount={post.favoritesCount}
             createdAt={post.createdAt}
             description={post.description}
@@ -180,6 +289,9 @@ const Profile = () => {
             onClose={closePost}
             onAddComment={handleAddComment}
             onRemoveComment={handleRemoveComment}
+            onMark={handleBookmarkPost}
+            onUnMark={handleRemoveBookmarkPost}
+            onRemovePost={handleRemovePost}
             open={show}
           />
         </Portal>
@@ -197,10 +309,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       params: { ctx, query: (ctx.query as unknown) as PostsQuery }
     });
 
-    await allSettled(getUserByIdAsync, {
+    const user = await allSettled(getUserByIdAsync, {
       scope,
       params: { ctx, id: ctx.query.id as string }
     });
+
+    if (!user.value) {
+      ctx.res.writeHead(404, { Location: ROUTES.DASHBOARD });
+      ctx.res.end();
+    }
 
     return {
       props: {

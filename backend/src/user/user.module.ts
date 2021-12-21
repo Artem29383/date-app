@@ -4,9 +4,13 @@ import { UserController } from './user.controller';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from '../auth/users.repository';
+import { UsersFollowerRepository } from './usersFollow.repository';
 
 @Module({
-  imports: [NestjsFormDataModule, TypeOrmModule.forFeature([UsersRepository])],
+  imports: [
+    NestjsFormDataModule,
+    TypeOrmModule.forFeature([UsersRepository, UsersFollowerRepository]),
+  ],
   controllers: [UserController],
   providers: [UserService],
 })

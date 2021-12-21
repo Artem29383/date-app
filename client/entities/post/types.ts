@@ -6,6 +6,8 @@ export interface IPost {
   createdAt: Date;
   favoritesCount: number;
   isFavorite: boolean;
+  commentCount: number;
+  isBookmark: boolean;
 }
 
 export type PostData = {

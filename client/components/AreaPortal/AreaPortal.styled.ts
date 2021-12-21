@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 export const Main = styled.div<{
   minHeightArea: number;
-  left: number;
-  top: number;
+  left: number | string;
+  top: number | string;
 }>`
   position: absolute;
   max-width: 230px;
   width: 230px;
-  left: ${({ left }) => `${left}px`};
-  top: ${({ top }) => `${top}px`};
+  left: ${({ left }) => (typeof left === "number" ? `${left}px` : left)};
+  top: ${({ top }) => (typeof top === "number" ? `${top}px` : top)};
   transform: translate(-50%, -50%);
   min-height: ${({ minHeightArea }) => `${minHeightArea}px`};
   z-index: 4;
@@ -31,18 +31,18 @@ export const Root = styled.div`
   border-radius: 6px;
 `;
 
-export const Triangle = styled.div`
+export const Triangle = styled.div<{ triangleCenter: boolean }>`
   background: #fff;
   border: 1px solid #fff;
   top: -7px;
-  right: 20px;
+  right: ${({ triangleCenter }) => (triangleCenter ? "50%" : "20px")};
   z-index: 3;
+  transform: ${({ triangleCenter }) =>
+    triangleCenter ? "translateX(50%) rotate(45deg)" : "rotate(45deg)"};
   -webkit-box-shadow: 0 0 5px 1px rgb(0 0 0 / 10%);
   box-shadow: 0 0 5px 1px rgb(0 0 0 / 10%);
   height: 14px;
   position: absolute;
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg);
   width: 14px;
 `;
 

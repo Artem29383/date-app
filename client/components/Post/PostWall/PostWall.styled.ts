@@ -11,6 +11,9 @@ export const Header = styled.header`
   width: 100%;
   padding: 10px;
   border-bottom: 1px solid #efefef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const User = styled.div`
@@ -33,6 +36,8 @@ export const DescriptionContainer = styled.div`
 export const Description = styled.p`
   margin-bottom: 5px;
 `;
+
+export const Danger = styled.div``;
 
 export const Date = styled.time`
   font-size: 12px;

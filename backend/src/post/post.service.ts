@@ -23,12 +23,27 @@ export class PostService {
     return this.postRepository.createPost(createPostDto, user);
   }
 
+  removePost(id: string): Promise<void> {
+    return this.postRepository.removePost(id);
+  }
+
   async getPostsUser(getPostsFilterDto: GetPostsFilterDto, user: UserEntity) {
     const currentUser = await this.userRepository.findOne(user.id, {
-      relations: ['favorites'],
+      relations: ['favorites', 'bookmarks'],
     });
 
     return this.postRepository.getPostsUser(getPostsFilterDto, currentUser);
+  }
+
+  async getBookmarksUser(
+    getPostsFilterDto: GetPostsFilterDto,
+    user: UserEntity,
+  ) {
+    const currentUser = await this.userRepository.findOne(user.id, {
+      relations: ['bookmarks'],
+    });
+
+    return this.postRepository.getBookmarksUser(getPostsFilterDto, currentUser);
   }
 
   async addPostToFavorite(id: string, user: UserEntity): Promise<PostEntity> {

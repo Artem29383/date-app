@@ -7,6 +7,7 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 
 @EntityRepository(PostEntity)
@@ -24,10 +25,20 @@ export class PostRepository extends Repository<PostEntity> {
     return post;
   }
 
+  async removePost(id: string): Promise<void> {
+    const response = await this.delete({
+      id,
+    });
+
+    if (response.affected === 0) {
+      throw new NotFoundException(`Comment with ID ${id} not found`);
+    }
+  }
+
   async getPostsUser(
     getPostsFilterDto: GetPostsFilterDto,
     currentUser: UserEntity,
-  ) {
+  ): Promise<{ counts: number; posts: PostEntity[] }> {
     const { id } = getPostsFilterDto;
     try {
       const query = this.createQueryBuilder('posts');
@@ -44,19 +55,64 @@ export class PostRepository extends Repository<PostEntity> {
         query.offset(getPostsFilterDto.offset);
       }
 
-      const posts: PostEntity[] = (await query.getMany()) as PostEntity[];
+      let posts: PostEntity[] = (await query.getMany()) as PostEntity[];
       const favIds = currentUser.favorites.map((id) => id.id);
+      const bookmarksIds = currentUser.bookmarks.map((id) => id.id);
+
+      posts = posts
+        .reduce((acc, post: PostEntity) => {
+          favIds.includes(post.id)
+            ? acc.push({
+                ...post,
+                isFavorite: true,
+              })
+            : acc.push({
+                ...post,
+                isFavorite: false,
+              });
+          return acc;
+        }, [])
+        .reduce((acc, post: PostEntity) => {
+          bookmarksIds.includes(post.id)
+            ? acc.push({
+                ...post,
+                isBookmark: true,
+              })
+            : acc.push({
+                ...post,
+                isBookmark: false,
+              });
+          return acc;
+        }, []);
 
       return {
-        posts: posts.reduce((acc, post: PostEntity) => {
-          favIds.includes(post.id)
-            ? acc.push({ ...post, isFavorite: true })
-            : acc.push({ ...post, isFavorite: false });
-          return acc;
-        }, []),
+        posts,
         counts,
       };
     } catch (e) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async getBookmarksUser(
+    getPostsFilterDto: GetPostsFilterDto,
+    currentUser: UserEntity,
+  ): Promise<{ counts: number; posts: PostEntity[] }> {
+    try {
+      // const result = await this.createQueryBuilder('bookmarks_posts')
+      //   .innerJoinAndSelect(
+      //     'user_entity_bookmarks_post_entity.*',
+      //     'user_entity_bookmarks_post_entity',
+      //   )
+      //   .getMany();
+      // console.log(result);
+
+      return {
+        posts: currentUser.bookmarks,
+        counts: currentUser.bookmarks.length,
+      };
+    } catch (e) {
+      console.log(e);
       throw new InternalServerErrorException();
     }
   }

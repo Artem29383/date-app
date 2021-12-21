@@ -10,6 +10,10 @@ import Crop from "components/Modal/ModalUploadPost/Crop";
 import Canvas from "components/Modal/ModalUploadPost/Canvas";
 import SubmitPost from "components/Modal/ModalUploadPost/SubmitPost";
 import { createPostAsync } from "src/entities/post/async";
+import { useLoader } from "hooks/useLoader";
+import Spinner from "components/Spinner";
+import { useEvent } from "effector-react";
+import { addPost } from "src/entities/post/store";
 
 const STEPS_VARIABLES: {
   [key: number]: {
@@ -56,6 +60,8 @@ const variants = {
 const ModalUploadPost = ({ open, handleClose }: Props) => {
   const [step, setStep] = useState(0);
   const [y, setY] = useState(0);
+  const addPostEvent = useEvent(addPost);
+  const { load, setLoadOn, setLoadOff } = useLoader(false);
   const $content = useRef<HTMLDivElement | null>(null);
   const [contentHeight, setContentHeight] = useState(0);
   const [crop, setCrop] = useState("");
@@ -110,15 +116,29 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
     setY(0);
     resetImagePreview();
     handleClose();
-  }, [handleClose, resetImagePreview]);
+    setLoadOff();
+  }, [handleClose, resetImagePreview, setLoadOff]);
 
   const handleSubmit = useCallback((): void => {
+    setLoadOn();
     createPostAsync({
       base64: canvasImage.base64,
       description,
       disableComments
-    }).then(() => handleReset());
-  }, [canvasImage.base64, description, disableComments, handleReset]);
+    }).then(response => {
+      if (response) {
+        addPostEvent(response);
+      }
+      handleReset();
+    });
+  }, [
+    canvasImage.base64,
+    description,
+    disableComments,
+    handleReset,
+    setLoadOn,
+    addPostEvent
+  ]);
 
   return (
     <Modal
@@ -137,7 +157,12 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
           {(step === 1 || step === 2) && (
             <S.Next onClick={handleNext}>Далее</S.Next>
           )}
-          {step === 3 && <S.Next onClick={handleSubmit}>Поделиться</S.Next>}
+          {step === 3 &&
+            (load ? (
+              <Spinner width={28} height={28} />
+            ) : (
+              <S.Next onClick={handleSubmit}>Поделиться</S.Next>
+            ))}
         </S.Header>
         <S.Content
           variants={variants}

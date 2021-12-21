@@ -7,11 +7,13 @@ export type ICommentState = IComment[];
 
 export const CommentsInitialState: ICommentState = [];
 
+export const addComments = createEvent<IComment[]>();
 export const updateComments = createEvent<IComment[]>();
 export const removeComment = createEvent<string>();
 
 export const $comments = root
   .createStore<ICommentState>(CommentsInitialState)
   .reset(logout)
-  .on(updateComments, (state, comments) => [...state, ...comments])
+  .on(addComments, (state, comments) => [...state, ...comments])
+  .on(updateComments, (state, comments) => comments)
   .on(removeComment, (state, id) => state.filter(elem => elem.id !== id));

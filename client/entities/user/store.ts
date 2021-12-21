@@ -20,10 +20,14 @@ export const UserInitialState = {
   age: 0,
   username: "",
   description: "",
-  gender: GENDER.male
+  gender: GENDER.male,
+  isFollow: false,
+  followersCount: 0
 };
 
 export const updateUser = createEvent<IUser>();
+export const updateUserByIdFollowing = createEvent<boolean>();
+export const updateUserByIdFollowingCount = createEvent<number>();
 
 export const $user = root
   .createStore<IUser>(UserInitialState)
@@ -39,4 +43,12 @@ export const $user = root
 export const $currentUser = root
   .createStore<IUser>(UserInitialState)
   .reset(logout)
-  .on(getUserByIdAsync.doneData, (state, user) => ({ ...state, ...user }));
+  .on(getUserByIdAsync.doneData, (state, user) => ({ ...state, ...user }))
+  .on(updateUserByIdFollowing, (state, payload) => ({
+    ...state,
+    isFollow: payload
+  }))
+  .on(updateUserByIdFollowingCount, (state, payload) => ({
+    ...state,
+    followersCount: payload
+  }));

@@ -9,21 +9,25 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { PostEntity } from '../../post/post.entity';
+import { UserFollowersEntity } from './user-followers.entity';
 
 @Entity()
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
+
+  @Column({ default: 0 })
+  followersCount: number;
 
   @Column()
   countries: string;
@@ -45,6 +49,11 @@ export class UserEntity {
 
   @OneToMany(() => PostEntity, (post) => post.user, { eager: true })
   posts: PostEntity[];
+
+  @OneToMany(() => UserFollowersEntity, (follower) => follower.user, {
+    eager: true,
+  })
+  followers: UserFollowersEntity[];
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

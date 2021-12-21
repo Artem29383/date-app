@@ -2,7 +2,7 @@ import { GetServerSidePropsContext } from "next";
 import axios from "axios";
 import { AuthApi } from "api/authApi";
 import config from "@config";
-import nookies from "nookies";
+import nookies, { parseCookies } from "nookies";
 import { UserApi } from "api/userApi";
 import { PostApi } from "api/postApi";
 import { CommentApi } from "api/commentApi";
@@ -13,7 +13,7 @@ type ApiReturnType = ReturnType<typeof AuthApi> &
   ReturnType<typeof CommentApi>;
 
 export const Api = (ctx?: GetServerSidePropsContext) => {
-  const cookies = nookies.get(ctx);
+  const cookies = ctx ? nookies.get(ctx) : parseCookies();
   const instance = axios.create({
     baseURL: config.remoteApiUrl,
     headers: {

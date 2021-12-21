@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./InstaInput.styled";
 import { icons } from "styles/icons";
 import { Colors } from "@types";
@@ -10,25 +10,43 @@ type Props = {
   value: string;
   onChange: (e: any) => void;
   onReset: () => void;
+  handleOpen: () => void;
+  handleClose: () => void;
+  valueCount: number;
 };
 
-const InstaInput = ({ value = "", onChange, onReset }: Props) => {
+const InstaInput = ({
+  value = "",
+  onChange,
+  onReset,
+  handleOpen,
+  valueCount,
+  handleClose
+}: Props) => {
   const [focus, setFocus] = useState(false);
 
   const handleFocus = () => {
     setFocus(!focus);
   };
 
+  useEffect(() => {
+    if (Boolean(value) || focus || Boolean(valueCount)) {
+      handleOpen();
+    } else {
+      handleClose();
+    }
+  }, [focus, handleClose, handleOpen, value, valueCount]);
+
   return (
     <S.Root>
-      {!focus && !value && (
+      {!focus && !value && !valueCount && (
         <S.Pos left="12px">
           <Icon width={11} height={11} fill={Colors.instaPlaceholder} />
         </S.Pos>
       )}
       <S.Input
         onChange={onChange}
-        isFocus={Boolean(value) || focus}
+        isFocus={Boolean(value) || focus || Boolean(valueCount)}
         value={value}
         onFocus={handleFocus}
         onBlur={handleFocus}

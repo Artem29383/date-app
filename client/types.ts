@@ -19,6 +19,7 @@ export enum Colors {
   terracotta = "#e37364",
   googleColorText = "#669df6",
   instaPlaceholder = "#8e8e8e",
+  hoverInsta = "#f3f3f3",
   instaCross = "#b6b3b3",
   instaDefault = "#262626"
 }

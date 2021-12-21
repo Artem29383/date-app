@@ -77,7 +77,7 @@ export const GoogleRoot = styled(button)<{ pick?: boolean }>`
   }
 `;
 
-export const Facebook = styled(button)`
+export const Facebook = styled(button)<{ isRemove: boolean }>`
   cursor: pointer;
   display: block;
   font-weight: 600;
@@ -91,7 +91,7 @@ export const Facebook = styled(button)`
   -ms-user-select: none;
   user-select: none;
   width: auto;
-  background-color: #0095f6;
+  background-color: ${({ isRemove }) => (isRemove ? "#e34d33" : "#0095f6")};
   border-radius: 4px;
   color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
@@ -101,7 +101,7 @@ export const Facebook = styled(button)`
 
   &:disabled {
     cursor: not-allowed;
-    background-color: #75c0f3;
+    background-color: ${({ isRemove }) => (isRemove ? "#bb230a" : "#65a8ee")};
   }
 `;
 

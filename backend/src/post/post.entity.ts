@@ -30,6 +30,9 @@ export class PostEntity {
   @Column({ default: 0 })
   favoritesCount: number;
 
+  @Column({ default: 0 })
+  commentCount: number;
+
   @ManyToOne(() => UserEntity, (user) => user.posts, { eager: false })
   @Exclude({ toPlainOnly: true })
   user: UserEntity;

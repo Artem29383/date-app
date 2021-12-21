@@ -24,6 +24,10 @@ type Props = {
   postId: string;
   myUserId: string;
   comments: IComment[];
+  onMark: (id: string) => void;
+  onUnMark: (id: string) => void;
+  isMark: boolean;
+  onRemovePost: (p: string) => void;
 };
 
 const ModalPost = ({
@@ -42,17 +46,24 @@ const ModalPost = ({
   postId,
   myUserId,
   comments,
-  onRemoveComment
+  onRemoveComment,
+  onMark,
+  onUnMark,
+  isMark,
+  onRemovePost
 }: Props) => {
   return (
     <Modal isFullWidth maxWidth={1200} open={open} onClose={onClose}>
       <S.Root>
         <S.Image src={url} onError={handleImageError} />
         <PostWall
+          onMark={onMark}
+          onUnMark={onUnMark}
           postId={postId}
           onLike={onLike}
           myUserId={myUserId}
           onDisLike={onDisLike}
+          onRemovePost={onRemovePost}
           onAddComment={onAddComment}
           createdAt={createdAt}
           favoriteCount={favoriteCount}
@@ -61,8 +72,8 @@ const ModalPost = ({
           avatarUrl={user.avatarUrl || ""}
           username={user.username}
           comments={comments}
-          id={user.id}
           isFavorite={isFavorite}
+          isMark={isMark}
           onRemoveComment={onRemoveComment}
         />
       </S.Root>

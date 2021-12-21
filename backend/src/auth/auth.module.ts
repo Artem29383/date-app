@@ -17,9 +17,7 @@ export const secretKey = 'topsectersp1';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: secretKey,
-      signOptions: {
-        expiresIn: 3600,
-      },
+      signOptions: { expiresIn: '24h' },
     }),
     TypeOrmModule.forFeature([UsersRepository]),
   ],

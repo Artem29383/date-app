@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { ROUTES } from "@types";
 import Container from "layouts/Container";
 import Settings from "layouts/Settings";
+import { withAuthentication } from "utils/withAuthentication";
+import { GetServerSidePropsContext } from "next";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const scope = fork(root, { values: pageProps.store });

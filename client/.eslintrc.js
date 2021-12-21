@@ -21,6 +21,7 @@ module.exports = {
   ],
   plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
   rules: {
+    'no-plusplus': 'off',
     'react/jsx-fragments': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',

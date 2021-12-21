@@ -6,6 +6,9 @@ export interface IUser extends IUserPayload {
   createdAt: string;
   description?: string;
   age?: number;
+  isFollow: boolean;
+  followersCount: number;
+  subsCount: number;
 }
 
 export interface IUserPayload {
@@ -22,4 +25,10 @@ export interface IUserUpdate {
   age?: number;
   description?: string;
   username: string;
+}
+
+export interface ISearchUserDto {
+  username?: string;
+  offset?: number;
+  limit?: number;
 }

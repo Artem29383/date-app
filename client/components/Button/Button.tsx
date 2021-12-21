@@ -16,6 +16,7 @@ type Props = {
   typeButton?: "classic" | "ghost" | "google" | "facebook";
   link?: string;
   pick?: boolean;
+  isRemove?: boolean;
 } & MarginProps &
   BorderRadiusProps &
   WidthProps &
@@ -44,7 +45,12 @@ const GoogleButton = ({ children, ...props }: Props) => (
   <S.GoogleRoot {...props}>{children}</S.GoogleRoot>
 );
 
-const FacebookButton = ({ children, link, ...props }: Props) =>
+const FacebookButton = ({
+  children,
+  link,
+  isRemove = false,
+  ...props
+}: Props) =>
   link ? (
     <Link href={link}>
       <S.Link>
@@ -52,7 +58,9 @@ const FacebookButton = ({ children, link, ...props }: Props) =>
       </S.Link>
     </Link>
   ) : (
-    <S.Facebook {...props}>{children}</S.Facebook>
+    <S.Facebook isRemove={isRemove} {...props}>
+      {children}
+    </S.Facebook>
   );
 
 const buttons: { [key: string]: React.FC<Props> } = {
@@ -67,11 +75,12 @@ const Button = ({
   disabled = false,
   typeButton = "classic",
   pick = false,
+  isRemove = false,
   ...rest
 }: Props) => {
   const Component = buttons[typeButton];
   return (
-    <Component pick={pick} disabled={disabled} {...rest}>
+    <Component isRemove={isRemove} pick={pick} disabled={disabled} {...rest}>
       {children}
     </Component>
   );

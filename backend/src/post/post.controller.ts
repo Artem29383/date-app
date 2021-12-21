@@ -14,7 +14,6 @@ import { GetUser } from '../auth/get-user.decorator';
 import { UserEntity } from '../user/entities/user.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { GetPostsFilterDto } from './dto/get-postsfilter.dto';
-import { UserService } from '../user/user.service';
 import { PostEntity } from './post.entity';
 
 @Controller('post')
@@ -31,12 +30,27 @@ export class PostController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  removePost(@Param('id') id: string) {
+    return this.postService.removePost(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('/publications')
   getPostsUser(
     @GetUser() user: UserEntity,
     @Query() filterDto: GetPostsFilterDto,
   ) {
     return this.postService.getPostsUser(filterDto, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/bookmarks')
+  getBookmarksUser(
+    @GetUser() user: UserEntity,
+    @Query() filterDto: GetPostsFilterDto,
+  ) {
+    return this.postService.getBookmarksUser(filterDto, user);
   }
 
   @Post(':id/favorite')

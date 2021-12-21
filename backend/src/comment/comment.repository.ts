@@ -2,7 +2,6 @@ import { EntityRepository, Repository } from 'typeorm';
 import { CommentEntity } from './comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { PostEntity } from '../post/post.entity';
-import { RemoveCommentDto } from './dto/remove-comment.dto';
 import { NotFoundException } from '@nestjs/common';
 
 @EntityRepository(CommentEntity)
@@ -16,7 +15,8 @@ export class CommentRepository extends Repository<CommentEntity> {
       post,
     });
 
-    await this.save(comment);
+    post.commentCount++;
+
     return comment;
   }
 

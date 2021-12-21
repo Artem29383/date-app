@@ -24,10 +24,24 @@ export class CommentService {
         'You can"t add comment for this post',
         HttpStatus.METHOD_NOT_ALLOWED,
       );
-    return this.commentRepository.createCommentToPost(createCommentDto, post);
+    const comment = await this.commentRepository.createCommentToPost(
+      createCommentDto,
+      post,
+    );
+
+    await this.postRepository.save(post);
+    await this.commentRepository.save(comment);
+
+    return comment;
   }
 
   async removeCommentFromPost(id: string): Promise<void> {
+    const comment = await this.commentRepository.findOne({ id });
+    const post = await this.postRepository.findById(comment.postId);
+
+    post.commentCount--;
+    await this.postRepository.save(post);
+
     return this.commentRepository.removeCommentFromPost(id);
   }
 

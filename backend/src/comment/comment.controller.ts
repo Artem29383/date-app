@@ -29,7 +29,6 @@ export class CommentController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   removeCommentFromPost(@Param('id') id: string): Promise<void> {
-    console.info('removeCommentDto', id);
     return this.commentService.removeCommentFromPost(id);
   }
 

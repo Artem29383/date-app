@@ -24,6 +24,10 @@ type Props = {
   comments: IComment[];
   myUserId: string;
   onRemoveComment: (commentId: string) => void;
+  onMark: (id: string) => void;
+  onUnMark: (id: string) => void;
+  isMark: boolean;
+  onRemovePost: (p: string) => void;
 };
 
 const Cross = icons.cross;
@@ -38,6 +42,7 @@ const PostWall = ({
   onRemoveComment,
   disableComments,
   createdAt,
+  onRemovePost,
   favoriteCount,
   description,
   myUserId,
@@ -46,7 +51,10 @@ const PostWall = ({
   comments,
   onLike,
   onAddComment,
-  onDisLike
+  onDisLike,
+  onMark,
+  onUnMark,
+  isMark
 }: Props) => {
   const [comment, setComment] = useState("");
 
@@ -54,8 +62,20 @@ const PostWall = ({
     onLike(postId);
   };
 
+  const handleMark = () => {
+    onMark(postId);
+  };
+
+  const handleUnMark = () => {
+    onUnMark(postId);
+  };
+
   const handleDisLike = () => {
     onDisLike(postId);
+  };
+
+  const handleRemovePost = () => {
+    onRemovePost(postId);
   };
 
   const handleChange = (e: {
@@ -83,6 +103,11 @@ const PostWall = ({
           />
           <Text>{username}</Text>
         </S.User>
+        <S.Danger>
+          <Button onClick={handleRemovePost} isRemove typeButton="facebook">
+            Удалить
+          </Button>
+        </S.Danger>
       </S.Header>
       <S.DescriptionPost>
         <ImageWrapper
@@ -147,7 +172,11 @@ const PostWall = ({
         ) : (
           <IconHeart cursor="pointer" onClick={handleLike} marginLeft={10} />
         )}
-        <Mark cursor="pointer" marginLeft="auto" />
+        {isMark ? (
+          <MarkFill onClick={handleUnMark} cursor="pointer" marginLeft="auto" />
+        ) : (
+          <Mark onClick={handleMark} cursor="pointer" marginLeft="auto" />
+        )}
       </S.Actions>
       {!disableComments && (
         <S.CommentRowInput>
