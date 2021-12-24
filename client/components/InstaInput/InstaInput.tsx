@@ -11,7 +11,6 @@ type Props = {
   onChange: (e: any) => void;
   onReset: () => void;
   handleOpen: () => void;
-  handleClose: () => void;
   valueCount: number;
 };
 
@@ -20,8 +19,7 @@ const InstaInput = ({
   onChange,
   onReset,
   handleOpen,
-  valueCount,
-  handleClose
+  valueCount
 }: Props) => {
   const [focus, setFocus] = useState(false);
 
@@ -29,16 +27,8 @@ const InstaInput = ({
     setFocus(!focus);
   };
 
-  useEffect(() => {
-    if (Boolean(value) || focus || Boolean(valueCount)) {
-      handleOpen();
-    } else {
-      handleClose();
-    }
-  }, [focus, handleClose, handleOpen, value, valueCount]);
-
   return (
-    <S.Root>
+    <S.Root onClick={handleOpen}>
       {!focus && !value && !valueCount && (
         <S.Pos left="12px">
           <Icon width={11} height={11} fill={Colors.instaPlaceholder} />

@@ -34,7 +34,7 @@ export class PostEntity {
   commentCount: number;
 
   @ManyToOne(() => UserEntity, (user) => user.posts, { eager: false })
-  @Exclude({ toPlainOnly: true })
+  // @Exclude({ toPlainOnly: true })
   user: UserEntity;
 
   @OneToMany(() => CommentEntity, (comment) => comment.post, { eager: true })

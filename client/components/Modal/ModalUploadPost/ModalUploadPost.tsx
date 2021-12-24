@@ -109,7 +109,6 @@ const ModalUploadPost = ({ open, handleClose }: Props) => {
       file: null,
       base64: ""
     });
-    $content.current = null;
     setDescription("");
     setCrop("");
     setContentHeight(0);

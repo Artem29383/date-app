@@ -4,7 +4,8 @@ export const mapValues = <
 >(
   values: T,
   callback: R
-) => Object.keys(values).reduce((acc: Record<string, any>, item) => {
-  acc[item] = callback(values[item], item, values);
-  return acc;
-}, {});
+) =>
+  Object.keys(values).reduce((acc: Record<string, any>, item) => {
+    acc[item] = callback(values[item], item, values);
+    return acc;
+  }, {});

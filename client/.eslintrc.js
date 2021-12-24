@@ -25,6 +25,8 @@ module.exports = {
     'react/jsx-fragments': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
+    'no-return-assign': 'off',
+    'no-param-reassign': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-unsafe-return': 'off',

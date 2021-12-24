@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { IUserUpdate } from "src/entities/user/types";
 import { updateUserAsync } from "src/entities/user/async";
+import { updateUser } from "src/entities/user/store";
+import { useEvent } from "effector-react";
 
 const schema = yup.object().shape({
   username: yup
@@ -30,11 +32,8 @@ type Props = {
 };
 
 const FormSettings = ({ age, description, email, username }: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
+  const updateUserEvent = useEvent(updateUser);
+  const { register, handleSubmit } = useForm({
     resolver: yupResolver(schema),
     mode: "onSubmit",
     defaultValues: {
@@ -45,7 +44,10 @@ const FormSettings = ({ age, description, email, username }: Props) => {
     }
   });
   const onSubmit = async (data: IUserUpdate) => {
-    await updateUserAsync(data);
+    const response = await updateUserAsync(data);
+    if (response) {
+      updateUserEvent(response);
+    }
   };
 
   return (

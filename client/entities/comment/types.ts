@@ -1,10 +1,12 @@
 export interface IComment {
   text: string;
   id: string;
-  userAvatar: string;
   createdAt: Date;
   userId: string;
-  username: string;
+  user: {
+    username: string;
+    userAvatar: string;
+  };
 }
 
 export type CommentQuery = {
@@ -14,7 +16,4 @@ export type CommentQuery = {
 export type CommentDataReq = {
   text: string;
   postId: string;
-  userId: string;
-  username: string;
-  userAvatar: string;
 };

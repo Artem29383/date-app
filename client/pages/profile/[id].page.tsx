@@ -13,7 +13,6 @@ import { usePosts } from "src/entities/post/selectors";
 import { IPost, PostsQuery } from "src/entities/post/types";
 import Post from "components/Post";
 import ModalPost from "components/Modal/ModalPost";
-import { GetServerSidePropsContext } from "next";
 import { withAuthentication } from "utils/withAuthentication";
 import { allSettled, Scope, serialize } from "effector";
 import {
@@ -49,9 +48,12 @@ import {
   updateUserByIdFollowing,
   updateUserByIdFollowingCount
 } from "src/entities/user/store";
+import ModalFollowers from "components/Modal/ModalFollowers";
+import { GetServerSidePropsContext } from "next";
 
 const Profile = () => {
   const { query } = useRouter();
+  const [request, setRequest] = useState<"followers" | "sub">("followers");
   const [view, setView] = useState<"publication" | "saved">("publication");
   const isClient = useClientRender();
   const [post, setPost] = useState<IPost | undefined>(undefined);
@@ -79,6 +81,11 @@ const Profile = () => {
     subsCount
   } = useUserById();
   const { handleOpen, value: open, handleClose } = useToggle(false);
+  const {
+    handleOpen: handleFollowers,
+    value: showModalFollowers,
+    handleClose: handleFollowersClose
+  } = useToggle(false);
   const {
     handleOpen: openPost,
     value: show,
@@ -129,10 +136,7 @@ const Profile = () => {
   const handleAddComment = async (postId: string, comment: string) => {
     const response = await addCommentToPostAsync({
       postId,
-      text: comment,
-      userAvatar: myAvatarUrl || "",
-      userId: myId,
-      username: myUserName
+      text: comment
     });
 
     const postElement = data.posts.find(postElem => postElem.id === postId);
@@ -188,7 +192,7 @@ const Profile = () => {
       <S.Root>
         <S.Header>
           <ImageWrapper
-            onClick={handleOpen}
+            onClick={myId === id ? handleOpen : () => {}}
             flexShrink={0}
             margin="0 90px 0 30px"
             height={150}
@@ -221,11 +225,21 @@ const Profile = () => {
                 <S.Bold>{data.counts}</S.Bold>
                 публикаций
               </S.Text>
-              <S.Text>
+              <S.Text
+                onClick={() => {
+                  setRequest("followers");
+                  handleFollowers();
+                }}
+              >
                 <S.Bold>{followersCount}</S.Bold>
                 подписчиков
               </S.Text>
-              <S.Text>
+              <S.Text
+                onClick={() => {
+                  setRequest("sub");
+                  handleFollowers();
+                }}
+              >
                 <S.Bold>{subsCount}</S.Bold>
                 подписок
               </S.Text>
@@ -242,12 +256,14 @@ const Profile = () => {
           >
             Публикации
           </S.ButtonNavigation>
-          <S.ButtonNavigation
-            active={view === "saved"}
-            onClick={() => setView("saved")}
-          >
-            Сохранённое
-          </S.ButtonNavigation>
+          {myId === id && (
+            <S.ButtonNavigation
+              active={view === "saved"}
+              onClick={() => setView("saved")}
+            >
+              Сохранённое
+            </S.ButtonNavigation>
+          )}
         </S.Navigation>
         <S.Body>
           {data.posts.map(postItem => (
@@ -284,7 +300,11 @@ const Profile = () => {
             createdAt={post.createdAt}
             description={post.description}
             disableComments={post.disableComments}
-            user={{ avatarUrl, username, id }}
+            user={{
+              avatarUrl: post.user.avatarUrl,
+              username: post.user.username,
+              id: post.user.id
+            }}
             url={post.avatarUrl}
             onClose={closePost}
             onAddComment={handleAddComment}
@@ -293,6 +313,17 @@ const Profile = () => {
             onUnMark={handleRemoveBookmarkPost}
             onRemovePost={handleRemovePost}
             open={show}
+          />
+        </Portal>
+      )}
+      {isClient && (
+        <Portal id="followers">
+          <ModalFollowers
+            userId={id}
+            request={request}
+            label={request === "followers" ? "Подписчики" : "Подписки"}
+            open={showModalFollowers}
+            onClose={handleFollowersClose}
           />
         </Portal>
       )}

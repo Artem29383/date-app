@@ -41,7 +41,10 @@ export class PostRepository extends Repository<PostEntity> {
   ): Promise<{ counts: number; posts: PostEntity[] }> {
     const { id } = getPostsFilterDto;
     try {
-      const query = this.createQueryBuilder('posts');
+      const query = this.createQueryBuilder('posts').innerJoinAndSelect(
+        'posts.user',
+        'u',
+      );
       query.where({ user: id });
       query.orderBy('posts.createdAt', 'DESC');
 
@@ -57,6 +60,7 @@ export class PostRepository extends Repository<PostEntity> {
 
       let posts: PostEntity[] = (await query.getMany()) as PostEntity[];
       const favIds = currentUser.favorites.map((id) => id.id);
+
       const bookmarksIds = currentUser.bookmarks.map((id) => id.id);
 
       posts = posts
@@ -99,14 +103,6 @@ export class PostRepository extends Repository<PostEntity> {
     currentUser: UserEntity,
   ): Promise<{ counts: number; posts: PostEntity[] }> {
     try {
-      // const result = await this.createQueryBuilder('bookmarks_posts')
-      //   .innerJoinAndSelect(
-      //     'user_entity_bookmarks_post_entity.*',
-      //     'user_entity_bookmarks_post_entity',
-      //   )
-      //   .getMany();
-      // console.log(result);
-
       return {
         posts: currentUser.bookmarks,
         counts: currentUser.bookmarks.length,
@@ -118,7 +114,7 @@ export class PostRepository extends Repository<PostEntity> {
   }
 
   async findById(id: string): Promise<PostEntity> {
-    const post = await this.findOne({ id });
+    const post = await this.findOne({ id }, { relations: ['user'] });
 
     if (!post) throw new HttpException('Not found post', HttpStatus.NOT_FOUND);
 

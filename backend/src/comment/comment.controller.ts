@@ -13,6 +13,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { RemoveCommentDto } from './dto/remove-comment.dto';
 import { CommentEntity } from './comment.entity';
+import { PostEntity } from '../post/post.entity';
+import { GetUser } from '../auth/get-user.decorator';
+import { UserEntity } from '../user/entities/user.entity';
 
 @Controller('comment')
 export class CommentController {
@@ -21,9 +24,19 @@ export class CommentController {
   @UseGuards(JwtAuthGuard)
   @Post()
   createCommentToPost(
+    @GetUser() user: UserEntity,
     @Body() createCommentDto: CreateCommentDto,
-  ): Promise<CommentEntity> {
-    return this.commentService.createCommentToPost(createCommentDto);
+  ): Promise<{
+    createdAt: Date;
+    post: PostEntity;
+    id: string;
+    text: string;
+    postId: string;
+    userId: string;
+    user: { avatarUrl: string; username: string };
+    updatedAt: Date;
+  }> {
+    return this.commentService.createCommentToPost(createCommentDto, user);
   }
 
   @UseGuards(JwtAuthGuard)

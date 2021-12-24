@@ -1,20 +1,9 @@
 import { AxiosInstance, AxiosResponse } from "axios";
 import { ISearchUserDto, IUser, IUserUpdate } from "src/entities/user/types";
 import { deployImageCloud } from "utils/deployImageClound";
-
-const configureParamsToQuery = (params: any): string => {
-  return params.reduce((acc: string, param: any, index: number) => {
-    const key = Object.keys(param);
-    if (!index) {
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,no-return-assign,no-param-reassign
-      return (acc += `?${key}=${param[key]}`);
-    }
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,no-return-assign,no-param-reassign
-    return (acc += `&${key}=${param[key]}`);
-  }, "");
-};
+import { IPost } from "src/entities/post/types";
+import { IMeta } from "src/entities/root";
+import { configureParamsToQuery } from "utils/configureParamsToQuery";
 
 export const UserApi = (instance: AxiosInstance) => {
   return {
@@ -101,6 +90,50 @@ export const UserApi = (instance: AxiosInstance) => {
         console.info(e);
       }
       return null;
+    },
+
+    getFollowers: async (id: string) => {
+      try {
+        const response = await instance.get(`/user/followers?id=${id}`);
+        return response.data;
+      } catch (e) {
+        console.info(e);
+      }
+      return { followers: [] };
+    },
+
+    getSubs: async (id: string) => {
+      try {
+        const response = await instance.get(`/user/subs?id=${id}`);
+        return response.data;
+      } catch (e) {
+        console.info(e);
+      }
+      return { followers: [] };
+    },
+
+    getFeeds: async (
+      page?: number,
+      limit?: number
+    ): Promise<{ items: IPost[]; meta: IMeta }> => {
+      try {
+        const response = await instance.get(
+          `/user/feeds${configureParamsToQuery([{ page }])}`
+        );
+        return response.data;
+      } catch (e) {
+        console.info(e);
+      }
+      return {
+        items: [],
+        meta: {
+          totalItems: 0,
+          itemCount: 0,
+          itemsPerPage: 10,
+          totalPages: 1,
+          currentPage: 1
+        }
+      };
     }
   };
 };

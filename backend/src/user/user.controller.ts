@@ -14,6 +14,7 @@ import { GetUser } from '../auth/get-user.decorator';
 import { GetUserFilterDto } from './dto/get-user-filter.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FollowUserDto } from './dto/follow-user.dto';
+import { GetFeedsDto } from './dto/get-feeds.dto';
 
 @Controller('user')
 export class UserController {
@@ -57,5 +58,18 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   getFollowers(@Query('id') id: string) {
     return this.userService.getFollowers(id);
+  }
+
+  @Get('/subs')
+  @UseGuards(JwtAuthGuard)
+  getSubs(@Query('id') id: string) {
+    return this.userService.getSubs(id);
+  }
+
+  @Get('/feeds')
+  @UseGuards(JwtAuthGuard)
+  getFeeds(@Query() feedsDto: GetFeedsDto, @GetUser() user: UserEntity) {
+    const { page, limit } = feedsDto;
+    return this.userService.getFeeds(user, page, limit);
   }
 }

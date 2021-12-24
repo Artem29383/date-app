@@ -6,13 +6,4 @@ export class CreateCommentDto {
 
   @IsString()
   postId: string;
-
-  @IsString()
-  userId: string;
-
-  @IsString()
-  username: string;
-
-  @IsString()
-  userAvatar: string;
 }

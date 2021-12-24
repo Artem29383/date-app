@@ -9,14 +9,14 @@ export class CommentRepository extends Repository<CommentEntity> {
   async createCommentToPost(
     createCommentDto: CreateCommentDto,
     post: PostEntity,
+    userId: string,
   ): Promise<CommentEntity> {
     const comment: CommentEntity = this.create({
       ...createCommentDto,
+      userId,
       post,
     });
-
     post.commentCount++;
-
     return comment;
   }
 
@@ -31,6 +31,12 @@ export class CommentRepository extends Repository<CommentEntity> {
   }
 
   async getCommentsFromPost(postId: string): Promise<CommentEntity[]> {
-    return await this.find({ postId });
+    return await this.createQueryBuilder('comments')
+      .leftJoinAndSelect('comments.user', 'u')
+      .leftJoinAndSelect('comments.post', 'p')
+      .where('p.id = :postId', {
+        postId,
+      })
+      .getMany();
   }
 }

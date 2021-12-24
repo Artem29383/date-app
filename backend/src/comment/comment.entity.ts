@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
 import { PostEntity } from '../post/post.entity';
+import { UserEntity } from '../user/entities/user.entity';
 
 @Entity()
 export class CommentEntity {
@@ -23,12 +23,6 @@ export class CommentEntity {
   @Column()
   userId: string;
 
-  @Column({ default: '' })
-  userAvatar: string;
-
-  @Column()
-  username: string;
-
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
@@ -36,6 +30,8 @@ export class CommentEntity {
   updatedAt: Date;
 
   @ManyToOne(() => PostEntity, (post) => post.comments, { eager: false })
-  @Exclude({ toPlainOnly: true })
   post: PostEntity;
+
+  @ManyToOne(() => UserEntity, (user) => user.comments, { eager: false })
+  user: UserEntity;
 }

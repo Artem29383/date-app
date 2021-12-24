@@ -8,6 +8,8 @@ import { icons } from "styles/icons";
 import Button from "components/Button";
 import { IComment } from "src/entities/comment/types";
 import { Colors } from "@types";
+import PostInputComment from "components/Post/PostInputComment";
+import PostCommentList from "components/Post/PostCommentList";
 
 type Props = {
   avatarUrl: string;
@@ -30,7 +32,6 @@ type Props = {
   onRemovePost: (p: string) => void;
 };
 
-const Cross = icons.cross;
 const IconHeart = icons.heart;
 const IconHeartFill = icons.heartFill;
 const Mark = icons.mark;
@@ -124,43 +125,13 @@ const PostWall = ({
           <S.Date>{moment(createdAt).format("DD.MM.YYYY")}</S.Date>
         </S.DescriptionContainer>
       </S.DescriptionPost>
-      {!disableComments && (
-        <S.CommentList>
-          {comments.map(commentItem => (
-            <S.CommentRow key={commentItem.id}>
-              <ImageWrapper
-                width={32}
-                height={32}
-                marginRight={15}
-                overflow="hidden"
-                borderRadius="50%"
-                source={commentItem.userAvatar}
-              />
-              <S.Comment>
-                <S.CommentContent>
-                  <Text>{commentItem.username}</Text>
-                  <S.Description>{commentItem.text}</S.Description>
-                </S.CommentContent>
-                <S.BottomComment>
-                  <S.Date>
-                    {moment(commentItem.createdAt).format("DD.MM.YYYY")}
-                  </S.Date>
-                  {myUserId === commentItem.userId && (
-                    <Cross
-                      onClick={() => onRemoveComment(commentItem.id)}
-                      cursor="pointer"
-                      marginLeft={5}
-                      height={7}
-                      width={7}
-                      fill={Colors.instaCross}
-                    />
-                  )}
-                </S.BottomComment>
-              </S.Comment>
-            </S.CommentRow>
-          ))}
-        </S.CommentList>
-      )}
+      <PostCommentList
+        disableComments={disableComments}
+        comments={comments}
+        myUserId={myUserId}
+        onDeleteComment={onRemoveComment}
+        postId={postId}
+      />
       <S.Actions>
         <Text>{favoriteCount}</Text>
         {isFavorite ? (
@@ -179,20 +150,11 @@ const PostWall = ({
         )}
       </S.Actions>
       {!disableComments && (
-        <S.CommentRowInput>
-          <S.Input
-            placeholder="Добавьте комментарий..."
-            value={comment}
-            onChange={handleChange}
-          />
-          <Button
-            onClick={handleCommentAdd}
-            disabled={!comment.trim()}
-            typeButton="facebook"
-          >
-            Опубликовать
-          </Button>
-        </S.CommentRowInput>
+        <PostInputComment
+          comment={comment}
+          onChange={handleChange}
+          onAdd={handleCommentAdd}
+        />
       )}
     </S.Root>
   );

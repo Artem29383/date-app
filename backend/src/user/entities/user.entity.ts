@@ -10,6 +10,7 @@ import {
 import { Exclude } from 'class-transformer';
 import { PostEntity } from '../../post/post.entity';
 import { UserFollowersEntity } from './user-followers.entity';
+import { CommentEntity } from '../../comment/comment.entity';
 
 @Entity()
 export class UserEntity {
@@ -48,12 +49,17 @@ export class UserEntity {
   createdAt: Date;
 
   @OneToMany(() => PostEntity, (post) => post.user, { eager: true })
+  // @Exclude({ toPlainOnly: true })
   posts: PostEntity[];
 
   @OneToMany(() => UserFollowersEntity, (follower) => follower.user, {
     eager: true,
   })
+  // @Exclude({ toPlainOnly: true })
   followers: UserFollowersEntity[];
+
+  @OneToMany(() => CommentEntity, (comment) => comment.user, { eager: true })
+  comments: CommentEntity[];
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

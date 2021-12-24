@@ -13,6 +13,6 @@ export class UserFollowersEntity {
   @ManyToOne(() => UserEntity, (user) => user.followers, {
     eager: false,
   })
-  @Exclude({ toPlainOnly: true })
+  // @Exclude({ toPlainOnly: true })
   user: UserEntity;
 }

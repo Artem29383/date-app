@@ -8,9 +8,9 @@ import AreaPortal from "components/AreaPortal/AreaPortal";
 import ImageWrapper from "components/ImageWrapper";
 import debounce from "lodash.debounce";
 import { fetchUsersBySearchAsync } from "src/entities/user/async";
-import { useToggle } from "hooks/useToggle";
 import { IUser } from "src/entities/user/types";
 import Link from "next/link";
+import useClickAway from "hooks/useClickAway";
 
 const IconInsta = icons.instagramLogo;
 
@@ -19,11 +19,17 @@ type Props = {
 };
 
 const Header = ({ logout }: Props) => {
-  const { handleOpen, value: open, handleClose, handleToggle } = useToggle(
-    false
-  );
+  const { active: open, ref, setActive } = useClickAway(false);
   const [value, setValue] = useState("");
   const [users, setUsers] = useState<IUser[]>([]);
+
+  const handleOpen = () => {
+    setActive(true);
+  };
+
+  const handleClose = useCallback(() => {
+    setActive(false);
+  }, [setActive]);
 
   const fetchData = useCallback(
     async (search: string) => {
@@ -42,8 +48,9 @@ const Header = ({ logout }: Props) => {
   const debounceLoadData = useCallback(debounce(fetchData, 1000), [open]);
 
   useEffect(() => {
+    if (!open) return;
     debounceLoadData(value);
-  }, [debounceLoadData, value]);
+  }, [debounceLoadData, open, value]);
 
   const handleChange = useCallback(
     (e: { target: { value: React.SetStateAction<string> } }) => {
@@ -52,10 +59,17 @@ const Header = ({ logout }: Props) => {
     []
   );
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setValue("");
     setUsers([]);
-  };
+    handleClose();
+  }, [handleClose]);
+
+  useEffect(() => {
+    if (!open) {
+      handleReset();
+    }
+  }, [handleReset, open]);
 
   return (
     <S.Root style={{ height: `${ClientVariables.HEADER_HEIGHT}px` }}>
@@ -63,7 +77,6 @@ const Header = ({ logout }: Props) => {
         <IconInsta />
         <S.Search>
           <InstaInput
-            handleClose={handleClose}
             handleOpen={handleOpen}
             onReset={handleReset}
             onChange={handleChange}
@@ -72,7 +85,7 @@ const Header = ({ logout }: Props) => {
           />
           {open && (
             <AreaPortal triangleCenter minHeightArea={128} left="50%" top={102}>
-              <S.List>
+              <S.List ref={ref}>
                 {users.map(user => (
                   <Link key={user.id} href={`${ROUTES.PROFILE}/${user.id}`}>
                     <a href={`${ROUTES.PROFILE}/${user.id}`}>

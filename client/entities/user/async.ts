@@ -1,7 +1,8 @@
 import { ApiError } from "api/types";
 import { Api } from "src/api";
 import { ISearchUserDto, IUser, IUserUpdate } from "src/entities/user/types";
-import { root } from "src/entities/root";
+import { IMeta, root } from "src/entities/root";
+import { IPost } from "src/entities/post/types";
 
 export const uploadImageAsync = root.createEffect<
   { file: File | "destroy"; email: string },
@@ -50,5 +51,35 @@ export const unfollowUserAsync = root.createEffect<
 >(data =>
   Api()
     .unfollowUser(data.userFollowingId)
+    .then(response => response)
+);
+
+export const getFollowersAsync = root.createEffect<
+  { id: string },
+  { followers: IUser[] },
+  ApiError<Record<string, unknown>>
+>(data =>
+  Api()
+    .getFollowers(data.id)
+    .then(response => response)
+);
+
+export const getSubsAsync = root.createEffect<
+  { id: string },
+  { followers: IUser[] },
+  ApiError<Record<string, unknown>>
+>(data =>
+  Api()
+    .getSubs(data.id)
+    .then(response => response)
+);
+
+export const getFeedsAsync = root.createEffect<
+  { page?: number; limit?: number },
+  { items: IPost[]; meta: IMeta },
+  ApiError<Record<string, unknown>>
+>(data =>
+  Api()
+    .getFeeds(data.page, data.limit)
     .then(response => response)
 );

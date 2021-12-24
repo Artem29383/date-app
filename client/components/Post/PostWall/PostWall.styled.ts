@@ -48,7 +48,6 @@ export const Actions = styled.div`
   padding: 14px 20px;
   align-items: center;
   display: flex;
-  border-bottom: 1px solid #efefef;
   border-top: 1px solid #efefef;
 `;
 
@@ -67,6 +66,7 @@ export const CommentRow = styled.div`
 `;
 
 export const CommentRowInput = styled.div`
+  border-top: 1px solid #efefef;
   height: 53px;
   padding: 10px 10px 10px 35px;
   display: flex;

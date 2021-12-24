@@ -5,6 +5,9 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { PostRepository } from '../post/post.repository';
 import { CommentEntity } from './comment.entity';
 import { RemoveCommentDto } from './dto/remove-comment.dto';
+import { UsersRepository } from '../auth/users.repository';
+import { PostEntity } from '../post/post.entity';
+import { UserEntity } from '../user/entities/user.entity';
 
 @Injectable()
 export class CommentService {
@@ -13,11 +16,23 @@ export class CommentService {
     private commentRepository: CommentRepository,
     @InjectRepository(PostRepository)
     private postRepository: PostRepository,
+    @InjectRepository(UsersRepository)
+    private userRepository: UsersRepository,
   ) {}
 
   async createCommentToPost(
     createCommentDto: CreateCommentDto,
-  ): Promise<CommentEntity> {
+    user: UserEntity,
+  ): Promise<{
+    createdAt: Date;
+    post: PostEntity;
+    id: string;
+    text: string;
+    postId: string;
+    userId: string;
+    user: { avatarUrl: string; username: string };
+    updatedAt: Date;
+  }> {
     const post = await this.postRepository.findById(createCommentDto.postId);
     if (post.disableComments)
       throw new HttpException(
@@ -27,12 +42,19 @@ export class CommentService {
     const comment = await this.commentRepository.createCommentToPost(
       createCommentDto,
       post,
+      user.id,
     );
 
     await this.postRepository.save(post);
     await this.commentRepository.save(comment);
 
-    return comment;
+    return {
+      ...comment,
+      user: {
+        username: user.username,
+        avatarUrl: user.avatarUrl,
+      },
+    };
   }
 
   async removeCommentFromPost(id: string): Promise<void> {
