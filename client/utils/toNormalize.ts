@@ -1,4 +1,4 @@
-import { normalize, schema } from 'normalizr';
+import { normalize, schema } from "normalizr";
 
 export const toNormalize = <T>(data: T, field: string) => {
   const temp = new schema.Entity(field);

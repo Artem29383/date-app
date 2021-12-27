@@ -88,7 +88,7 @@ export class PostRepository extends Repository<PostEntity> {
               });
           return acc;
         }, []);
-
+      console.info('posts', posts);
       return {
         posts,
         counts,

@@ -6,7 +6,7 @@ export interface IReply {
   userReplayId: string;
   user: {
     username: string;
-    userAvatar: string;
+    avatarUrl: string;
   };
 }
 

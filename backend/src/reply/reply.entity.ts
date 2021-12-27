@@ -31,6 +31,7 @@ export class ReplyEntity {
 
   @ManyToOne(() => CommentEntity, (comment) => comment.replays, {
     eager: false,
+    onDelete: 'CASCADE',
   })
   comment: CommentEntity;
 

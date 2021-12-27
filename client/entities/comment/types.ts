@@ -1,3 +1,5 @@
+import { IReply } from "src/entities/reply/types";
+
 export interface IComment {
   text: string;
   id: string;
@@ -5,8 +7,9 @@ export interface IComment {
   userId: string;
   user: {
     username: string;
-    userAvatar: string;
+    avatarUrl: string;
   };
+  replays: IReply[];
 }
 
 export type CommentQuery = {

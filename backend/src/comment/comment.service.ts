@@ -44,7 +44,7 @@ export class CommentService {
       post,
       user.id,
     );
-
+    console.info('comment', comment);
     await this.postRepository.save(post);
     await this.commentRepository.save(comment);
 

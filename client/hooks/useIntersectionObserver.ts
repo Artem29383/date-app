@@ -2,9 +2,9 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 export const useIntersectionObserver = (
   callback: () => Promise<any>
-): { setRefElement: Dispatch<SetStateAction<Element | undefined>> } => {
+): { setRefElement: Dispatch<SetStateAction<Element | null>> } => {
   const observer = useRef<IntersectionObserver>();
-  const [refElement, setRefElement] = useState<Element>();
+  const [refElement, setRefElement] = useState<Element | null>(null);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(

@@ -115,7 +115,7 @@ const FeedPost = ({
     } else {
       const response = await addReplyToCommentAsync({
         commentId: commentIdForReply,
-        text: comment.replace(isReplyUsername[0], ""),
+        text: comment,
         replyUsername: isReplyUsername[1]
       });
       console.info("response", response);
@@ -175,7 +175,6 @@ const FeedPost = ({
         disableComments={disableComments}
         comments={comments}
         myUserId={myUserId}
-        postId={postId}
         onDeleteComment={handleRemoveComment}
         onReplay={handleReplay}
       />

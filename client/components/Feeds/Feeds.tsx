@@ -59,7 +59,6 @@ const Feeds = () => {
           setPosts={setPosts}
         />
       ))}
-      {/* @ts-ignore */}
       <S.Loader ref={setRefElement} />
     </S.Root>
   );

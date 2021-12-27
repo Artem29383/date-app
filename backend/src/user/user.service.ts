@@ -120,6 +120,8 @@ export class UserService {
       .createQueryBuilder('posts')
       .innerJoinAndSelect('posts.user', 'u')
       .leftJoinAndSelect('posts.comments', 'com')
+      .leftJoinAndSelect('com.replays', 'rep')
+      .leftJoinAndSelect('rep.user', 'userRep')
       .leftJoinAndSelect('com.user', 'user')
       .where('u.id IN (:...followersIds)', { followersIds })
       .orderBy('posts.createdAt', 'ASC');

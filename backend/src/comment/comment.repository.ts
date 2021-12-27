@@ -13,6 +13,7 @@ export class CommentRepository extends Repository<CommentEntity> {
   ): Promise<CommentEntity> {
     const comment: CommentEntity = this.create({
       ...createCommentDto,
+      replays: [],
       userId,
       post,
     });
@@ -35,6 +36,7 @@ export class CommentRepository extends Repository<CommentEntity> {
       .leftJoinAndSelect('comments.user', 'u')
       .leftJoinAndSelect('comments.post', 'p')
       .leftJoinAndSelect('comments.replays', 'rep')
+      .leftJoinAndSelect('rep.user', 'repUser')
       .where('p.id = :postId', {
         postId,
       })

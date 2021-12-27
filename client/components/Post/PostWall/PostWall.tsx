@@ -133,7 +133,6 @@ const PostWall = ({
         comments={comments}
         myUserId={myUserId}
         onDeleteComment={onRemoveComment}
-        postId={postId}
       />
       <S.Actions>
         <Text>{favoriteCount}</Text>

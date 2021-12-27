@@ -1,20 +1,13 @@
 import React, { useState } from "react";
-import Text from "components/Text/Text/Text";
-import moment from "moment";
-import { Colors } from "@types";
-
 import * as S from "./PostCommentList.styled";
-import { icons } from "styles/icons";
 import { IComment } from "src/entities/comment/types";
-
-const Cross = icons.cross;
+import Comment from "components/Post/Comment";
 
 type Props = {
   disableComments: boolean;
   comments: IComment[];
   myUserId: string;
-  postId: string;
-  onDeleteComment: (commentId: string, postId: string) => void;
+  onDeleteComment: (commentId: string) => void;
   onReplay: (commentId: string, usernameReplay: string) => void;
 };
 
@@ -23,7 +16,6 @@ const PostCommentList = ({
   comments,
   onDeleteComment,
   myUserId,
-  postId,
   onReplay
 }: Props) => {
   const [commentsPreview, setPreviewComments] = useState(3);
@@ -37,34 +29,18 @@ const PostCommentList = ({
       {comments.slice(0, commentsPreview).map((commentItem, index) => (
         <div key={commentItem.id}>
           <S.CommentRow>
-            <S.Comment>
-              <S.CommentContent>
-                <Text>{commentItem.user.username}</Text>
-                <S.Description>{commentItem.text}</S.Description>
-              </S.CommentContent>
-              <S.BottomComment>
-                <S.Date>
-                  {moment(commentItem.createdAt).format("DD.MM.YYYY")}
-                </S.Date>
-                <S.Answer
-                  onClick={() =>
-                    onReplay(commentItem.id, commentItem.user.username)
-                  }
-                >
-                  Ответить
-                </S.Answer>
-                {myUserId === commentItem.userId && (
-                  <Cross
-                    onClick={() => onDeleteComment(commentItem.id, postId)}
-                    cursor="pointer"
-                    marginLeft={5}
-                    height={7}
-                    width={7}
-                    fill={Colors.instaCross}
-                  />
-                )}
-              </S.BottomComment>
-            </S.Comment>
+            <Comment
+              userAvatar={commentItem.user.avatarUrl}
+              commentByUserId={commentItem.userId}
+              onDeleteComment={onDeleteComment}
+              myUserId={myUserId}
+              username={commentItem.user.username}
+              createdAt={commentItem.createdAt}
+              text={commentItem.text}
+              onReplay={onReplay}
+              id={commentItem.id}
+              replies={commentItem.replays || []}
+            />
           </S.CommentRow>
           {comments.length > commentsPreview && index === 2 && (
             <S.CommentRowPreview onClick={handlePreviewInfinity}>

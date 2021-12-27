@@ -31,12 +31,17 @@ export class CommentEntity {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToOne(() => PostEntity, (post) => post.comments, { eager: false })
+  @ManyToOne(() => PostEntity, (post) => post.comments, {
+    eager: false,
+  })
   post: PostEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.comments, { eager: false })
   user: UserEntity;
 
-  @OneToMany(() => ReplyEntity, (replay) => replay.comment, { eager: true })
+  @OneToMany(() => ReplyEntity, (replay) => replay.comment, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   replays: ReplyEntity[];
 }
