@@ -11,6 +11,7 @@ import { Exclude } from 'class-transformer';
 import { PostEntity } from '../../post/post.entity';
 import { UserFollowersEntity } from './user-followers.entity';
 import { CommentEntity } from '../../comment/comment.entity';
+import { ReplyEntity } from '../../reply/reply.entity';
 
 @Entity()
 export class UserEntity {
@@ -60,6 +61,9 @@ export class UserEntity {
 
   @OneToMany(() => CommentEntity, (comment) => comment.user, { eager: true })
   comments: CommentEntity[];
+
+  @OneToMany(() => ReplyEntity, (replay) => replay.user, { eager: true })
+  replays: ReplyEntity[];
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

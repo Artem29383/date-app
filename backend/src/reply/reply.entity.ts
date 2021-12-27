@@ -3,16 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostEntity } from '../post/post.entity';
+import { CommentEntity } from '../comment/comment.entity';
 import { UserEntity } from '../user/entities/user.entity';
-import { ReplyEntity } from '../reply/reply.entity';
 
 @Entity()
-export class CommentEntity {
+export class ReplyEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -20,7 +18,7 @@ export class CommentEntity {
   text: string;
 
   @Column()
-  postId: string;
+  replyUsername: string;
 
   @Column()
   userId: string;
@@ -31,12 +29,11 @@ export class CommentEntity {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToOne(() => PostEntity, (post) => post.comments, { eager: false })
-  post: PostEntity;
+  @ManyToOne(() => CommentEntity, (comment) => comment.replays, {
+    eager: false,
+  })
+  comment: CommentEntity;
 
-  @ManyToOne(() => UserEntity, (user) => user.comments, { eager: false })
+  @ManyToOne(() => UserEntity, (user) => user.replays, { eager: false })
   user: UserEntity;
-
-  @OneToMany(() => ReplyEntity, (replay) => replay.comment, { eager: true })
-  replays: ReplyEntity[];
 }

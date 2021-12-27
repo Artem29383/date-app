@@ -4,14 +4,16 @@ import Button from "components/Button/Button";
 
 type Props = {
   comment: string;
+  $postInput: React.RefObject<HTMLInputElement>;
   onChange: (e: { target: { value: React.SetStateAction<string> } }) => void;
   onAdd: () => void;
 };
 
-const PostInputComment = ({ comment, onChange, onAdd }: Props) => {
+const PostInputComment = ({ comment, $postInput, onChange, onAdd }: Props) => {
   return (
     <S.CommentRowInput>
       <S.Input
+        ref={$postInput}
         placeholder="Добавьте комментарий..."
         value={comment}
         onChange={onChange}

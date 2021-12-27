@@ -34,6 +34,7 @@ export class CommentRepository extends Repository<CommentEntity> {
     return await this.createQueryBuilder('comments')
       .leftJoinAndSelect('comments.user', 'u')
       .leftJoinAndSelect('comments.post', 'p')
+      .leftJoinAndSelect('comments.replays', 'rep')
       .where('p.id = :postId', {
         postId,
       })

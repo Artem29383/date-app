@@ -71,6 +71,7 @@ const ModalPost = ({
           description={description}
           avatarUrl={user.avatarUrl || ""}
           username={user.username}
+          userId={user.id}
           comments={comments}
           isFavorite={isFavorite}
           isMark={isMark}

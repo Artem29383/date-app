@@ -74,7 +74,11 @@ const Header = ({ logout }: Props) => {
   return (
     <S.Root style={{ height: `${ClientVariables.HEADER_HEIGHT}px` }}>
       <S.InnerRoot>
-        <IconInsta />
+        <Link href={ROUTES.DASHBOARD}>
+          <a href={ROUTES.DASHBOARD}>
+            <IconInsta />
+          </a>
+        </Link>
         <S.Search>
           <InstaInput
             handleOpen={handleOpen}

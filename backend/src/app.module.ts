@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
+import { ReplyModule } from './reply/reply.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CommentModule } from './comment/comment.module';
     NestjsFormDataModule.config({ storage: MemoryStoredFile }),
     PostModule,
     CommentModule,
+    ReplyModule,
   ],
   controllers: [],
 })

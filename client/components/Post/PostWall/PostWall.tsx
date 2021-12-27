@@ -7,7 +7,6 @@ import moment from "moment";
 import { icons } from "styles/icons";
 import Button from "components/Button";
 import { IComment } from "src/entities/comment/types";
-import { Colors } from "@types";
 import PostInputComment from "components/Post/PostInputComment";
 import PostCommentList from "components/Post/PostCommentList";
 
@@ -30,6 +29,7 @@ type Props = {
   onUnMark: (id: string) => void;
   isMark: boolean;
   onRemovePost: (p: string) => void;
+  userId: string;
 };
 
 const IconHeart = icons.heart;
@@ -39,6 +39,7 @@ const MarkFill = icons.markfill;
 
 const PostWall = ({
   avatarUrl,
+  userId,
   username,
   onRemoveComment,
   disableComments,
@@ -104,11 +105,13 @@ const PostWall = ({
           />
           <Text>{username}</Text>
         </S.User>
-        <S.Danger>
-          <Button onClick={handleRemovePost} isRemove typeButton="facebook">
-            Удалить
-          </Button>
-        </S.Danger>
+        {userId === myUserId && (
+          <S.Danger>
+            <Button onClick={handleRemovePost} isRemove typeButton="facebook">
+              Удалить
+            </Button>
+          </S.Danger>
+        )}
       </S.Header>
       <S.DescriptionPost>
         <ImageWrapper

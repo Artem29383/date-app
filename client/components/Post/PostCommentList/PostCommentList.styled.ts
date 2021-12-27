@@ -41,4 +41,12 @@ export const Description = styled.p`
 export const Date = styled.time`
   font-size: 12px;
   color: #8e8e8e;
+  margin-right: 12px;
+`;
+
+export const Answer = styled.button`
+  color: #8e8e8e;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
 `;

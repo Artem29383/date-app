@@ -13,8 +13,9 @@ type Props = {
   disableComments: boolean;
   comments: IComment[];
   myUserId: string;
-  onDeleteComment: (commentId: string, postId: string) => void;
   postId: string;
+  onDeleteComment: (commentId: string, postId: string) => void;
+  onReplay: (commentId: string, usernameReplay: string) => void;
 };
 
 const PostCommentList = ({
@@ -22,7 +23,8 @@ const PostCommentList = ({
   comments,
   onDeleteComment,
   myUserId,
-  postId
+  postId,
+  onReplay
 }: Props) => {
   const [commentsPreview, setPreviewComments] = useState(3);
 
@@ -44,6 +46,13 @@ const PostCommentList = ({
                 <S.Date>
                   {moment(commentItem.createdAt).format("DD.MM.YYYY")}
                 </S.Date>
+                <S.Answer
+                  onClick={() =>
+                    onReplay(commentItem.id, commentItem.user.username)
+                  }
+                >
+                  Ответить
+                </S.Answer>
                 {myUserId === commentItem.userId && (
                   <Cross
                     onClick={() => onDeleteComment(commentItem.id, postId)}
