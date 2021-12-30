@@ -6,6 +6,8 @@ import { PostRepository } from './post.repository';
 import { UserEntity } from '../user/entities/user.entity';
 import { GetPostsFilterDto } from './dto/get-postsfilter.dto';
 import { UsersRepository } from '../auth/users.repository';
+import { NotifyType, OPERATION } from '../notify/types';
+import { NotifyService } from '../notify/notify.service';
 
 @Injectable()
 export class PostService {
@@ -14,6 +16,7 @@ export class PostService {
     private postRepository: PostRepository,
     @InjectRepository(UsersRepository)
     private userRepository: UsersRepository,
+    private notifyService: NotifyService,
   ) {}
 
   createPost(
@@ -56,6 +59,15 @@ export class PostService {
 
     await this.userRepository.save(userChanged);
     await this.postRepository.save(post);
+    await this.notifyService.createNotify(
+      {
+        userId: currentUser.id,
+        type: NotifyType.LIKE,
+        postId: post.id,
+      },
+      OPERATION.PLUS,
+      user.id,
+    );
 
     return post;
   }
@@ -87,6 +99,15 @@ export class PostService {
 
     await this.userRepository.save(userChanged);
     await this.postRepository.save(post);
+    await this.notifyService.createNotify(
+      {
+        userId: currentUser.id,
+        type: NotifyType.LIKE,
+        postId: post.id,
+      },
+      OPERATION.MINUS,
+      user.id,
+    );
 
     return post;
   }

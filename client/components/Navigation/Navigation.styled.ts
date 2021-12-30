@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { margin, MarginProps } from "styled-system";
 
 export const Root = styled.div`
   display: flex;
@@ -15,6 +16,11 @@ export const RootAvatar = styled.div<{ open: boolean }>`
 export const List = styled.ul`
   width: 100%;
   height: 100%;
+`;
+
+export const LikeNotify = styled.div<MarginProps>`
+  ${margin};
+  cursor: pointer;
 `;
 
 export const Item = styled.li`

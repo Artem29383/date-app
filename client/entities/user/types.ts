@@ -9,6 +9,7 @@ export interface IUser extends IUserPayload {
   isFollow: boolean;
   followersCount: number;
   subsCount: number;
+  badge: BadgeType;
 }
 
 export interface IUserPayload {
@@ -32,3 +33,9 @@ export interface ISearchUserDto {
   offset?: number;
   limit?: number;
 }
+
+export type BadgeType = {
+  like: number;
+  comments: number;
+  subs: number;
+};

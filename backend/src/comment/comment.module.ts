@@ -7,6 +7,9 @@ import { PostRepository } from '../post/post.repository';
 import { UsersRepository } from '../auth/users.repository';
 import { CommentRepository } from './comment.repository';
 import { ReplyRepository } from '../reply/reply.repository';
+import { NotifyRepository } from '../notify/notify.repository';
+import { NotifyService } from '../notify/notify.service';
+import { BadgeRepository } from '../badge/badge.repository';
 
 @Module({
   imports: [
@@ -15,9 +18,11 @@ import { ReplyRepository } from '../reply/reply.repository';
       UsersRepository,
       CommentRepository,
       ReplyRepository,
+      NotifyRepository,
+      BadgeRepository,
     ]),
   ],
-  providers: [CommentService, PostService],
+  providers: [CommentService, PostService, NotifyService],
   controllers: [CommentController],
 })
 export class CommentModule {}

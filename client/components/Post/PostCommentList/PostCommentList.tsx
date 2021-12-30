@@ -7,18 +7,20 @@ type Props = {
   disableComments: boolean;
   comments: IComment[];
   myUserId: string;
-  onDeleteComment: (commentId: string) => void;
+  onDeleteComment: (commentId: string, replyLength: number) => void;
   onReplay: (commentId: string, usernameReplay: string) => void;
+  onDeleteReply: (replyId: string, commentId: string) => void;
 };
 
 const PostCommentList = ({
   disableComments,
   comments,
-  onDeleteComment,
   myUserId,
-  onReplay
+  onReplay,
+  onDeleteComment,
+  onDeleteReply
 }: Props) => {
-  const [commentsPreview, setPreviewComments] = useState(3);
+  const [commentsPreview, setPreviewComments] = useState(1);
 
   const handlePreviewInfinity = () => {
     setPreviewComments(99999);
@@ -32,7 +34,6 @@ const PostCommentList = ({
             <Comment
               userAvatar={commentItem.user.avatarUrl}
               commentByUserId={commentItem.userId}
-              onDeleteComment={onDeleteComment}
               myUserId={myUserId}
               username={commentItem.user.username}
               createdAt={commentItem.createdAt}
@@ -40,13 +41,16 @@ const PostCommentList = ({
               onReplay={onReplay}
               id={commentItem.id}
               replies={commentItem.replays || []}
+              onDeleteComment={onDeleteComment}
+              onDeleteReply={onDeleteReply}
             />
           </S.CommentRow>
-          {comments.length > commentsPreview && index === 2 && (
-            <S.CommentRowPreview onClick={handlePreviewInfinity}>
-              Показать все
-            </S.CommentRowPreview>
-          )}
+          {comments.length > commentsPreview &&
+            index === commentsPreview - 1 && (
+              <S.CommentRowPreview onClick={handlePreviewInfinity}>
+                Показать все
+              </S.CommentRowPreview>
+            )}
         </div>
       ))}
     </S.CommentList>

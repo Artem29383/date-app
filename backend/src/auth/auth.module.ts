@@ -7,6 +7,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
+import { BadgeRepository } from '../badge/badge.repository';
 
 export const secretKey = 'topsectersp1';
 
@@ -19,7 +20,7 @@ export const secretKey = 'topsectersp1';
       secret: secretKey,
       signOptions: { expiresIn: '24h' },
     }),
-    TypeOrmModule.forFeature([UsersRepository]),
+    TypeOrmModule.forFeature([UsersRepository, BadgeRepository]),
   ],
   exports: [JwtStrategy, PassportModule],
 })

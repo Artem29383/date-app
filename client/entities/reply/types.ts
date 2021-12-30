@@ -4,6 +4,7 @@ export interface IReply {
   createdAt: Date;
   userId: string;
   userReplayId: string;
+  replyUsername: string;
   user: {
     username: string;
     avatarUrl: string;

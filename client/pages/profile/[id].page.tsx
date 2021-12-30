@@ -155,34 +155,51 @@ const Profile = () => {
   };
 
   const handleRemoveComment = async (commentId: string) => {
-    await removeCommentFromPostAsync({ commentId });
-    removeCommentEvent(commentId);
+    console.info(comments.find(com => com.id === commentId));
+    // await removeCommentFromPostAsync({ commentId });
+    // removeCommentEvent(commentId);
   };
 
   const handleLikePost = async (postId: string) => {
     const response = await setLikePost(postId);
-    const readyPost = { ...response, isFavorite: true };
+    const readyPost = {
+      ...response,
+      isFavorite: true,
+      isBookmark: post?.isBookmark
+    };
     updatePostEvent(readyPost as IPost);
     setPost(readyPost as IPost);
   };
 
   const handleBookmarkPost = async (postId: string) => {
     const response = await setBookmarkPost(postId);
-    const readyPost = { ...response, isBookmark: true };
+    const readyPost = {
+      ...response,
+      isBookmark: true,
+      isFavorite: post?.isFavorite
+    };
     updatePostEvent(readyPost as IPost);
     setPost(readyPost as IPost);
   };
 
   const handleRemoveBookmarkPost = async (postId: string) => {
     const response = await setUnBookmarkPost(postId);
-    const readyPost = { ...response, isBookmark: false };
+    const readyPost = {
+      ...response,
+      isBookmark: false,
+      isFavorite: post?.isFavorite
+    };
     updatePostEvent(readyPost as IPost);
     setPost(readyPost as IPost);
   };
 
   const handleDisLikePost = async (postId: string) => {
     const response = await setDisLikePost(postId);
-    const readyPost = { ...response, isFavorite: false };
+    const readyPost = {
+      ...response,
+      isFavorite: false,
+      isBookmark: post?.isBookmark
+    };
     updatePostEvent(readyPost as IPost);
     setPost(readyPost as IPost);
   };
@@ -307,8 +324,6 @@ const Profile = () => {
             }}
             url={post.avatarUrl}
             onClose={closePost}
-            onAddComment={handleAddComment}
-            onRemoveComment={handleRemoveComment}
             onMark={handleBookmarkPost}
             onUnMark={handleRemoveBookmarkPost}
             onRemovePost={handleRemovePost}

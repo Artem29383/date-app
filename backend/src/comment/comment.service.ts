@@ -4,10 +4,11 @@ import { CommentRepository } from './comment.repository';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { PostRepository } from '../post/post.repository';
 import { CommentEntity } from './comment.entity';
-import { RemoveCommentDto } from './dto/remove-comment.dto';
 import { UsersRepository } from '../auth/users.repository';
 import { PostEntity } from '../post/post.entity';
 import { UserEntity } from '../user/entities/user.entity';
+import { NotifyType, OPERATION } from '../notify/types';
+import { NotifyService } from '../notify/notify.service';
 
 @Injectable()
 export class CommentService {
@@ -18,6 +19,7 @@ export class CommentService {
     private postRepository: PostRepository,
     @InjectRepository(UsersRepository)
     private userRepository: UsersRepository,
+    private notifyService: NotifyService,
   ) {}
 
   async createCommentToPost(
@@ -44,9 +46,19 @@ export class CommentService {
       post,
       user.id,
     );
-    console.info('comment', comment);
+
     await this.postRepository.save(post);
     await this.commentRepository.save(comment);
+    await this.notifyService.createNotify(
+      {
+        userId: comment.userId,
+        type: NotifyType.COMMENT,
+        postId: post.id,
+        commentId: comment.id,
+      },
+      OPERATION.PLUS,
+      user.id,
+    );
 
     return {
       ...comment,
@@ -57,12 +69,27 @@ export class CommentService {
     };
   }
 
-  async removeCommentFromPost(id: string): Promise<void> {
-    const comment = await this.commentRepository.findOne({ id });
-    const post = await this.postRepository.findById(comment.postId);
+  async removeCommentFromPost(id: string, user: UserEntity): Promise<void> {
+    const comment = await this.commentRepository.findOne(
+      { id },
+      {
+        relations: ['post'],
+      },
+    );
 
-    post.commentCount--;
-    await this.postRepository.save(post);
+    comment.post.commentCount =
+      comment.post.commentCount - 1 - comment.replays.length;
+    await this.postRepository.save(comment.post);
+    await this.notifyService.createNotify(
+      {
+        userId: comment.userId,
+        type: NotifyType.COMMENT,
+        postId: comment.postId,
+        commentId: comment.id,
+      },
+      OPERATION.MINUS,
+      user.id,
+    );
 
     return this.commentRepository.removeCommentFromPost(id);
   }

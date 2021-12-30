@@ -4,3 +4,5 @@ import { margin, MarginProps } from "styled-system";
 export const Root = styled.div<MarginProps>`
   ${margin};
 `;
+
+export const Span = styled.span``;

@@ -8,7 +8,6 @@ import { UsersFollowerRepository } from './usersFollow.repository';
 import { FollowUserDto } from './dto/follow-user.dto';
 import { PostRepository } from '../post/post.repository';
 import { IPaginationMeta, paginate, Pagination } from 'nestjs-typeorm-paginate';
-import { PostEntity } from '../post/post.entity';
 
 @Injectable()
 export class UserService {

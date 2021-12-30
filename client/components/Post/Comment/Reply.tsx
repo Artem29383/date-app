@@ -9,6 +9,11 @@ import ImageWrapper from "components/ImageWrapper/ImageWrapper";
 
 const Cross = icons.cross;
 
+type Props = {
+  onDeleteReply: (replyId: string) => void;
+  replyUser: string;
+};
+
 const Reply = ({
   username,
   userAvatar,
@@ -16,8 +21,14 @@ const Reply = ({
   commentByUserId,
   myUserId,
   text,
-  createdAt
-}: Omit<PropsComment, "replies" | "onReplay" | "onDeleteComment">) => {
+  replyUser,
+  createdAt,
+  onDeleteReply
+}: Omit<PropsComment, "replies" | "onReplay" | "onDeleteComment"> & Props) => {
+  const handleRemoveReply = () => {
+    onDeleteReply(id);
+  };
+
   return (
     <S.CommentReply>
       <S.CommentContent>
@@ -32,13 +43,13 @@ const Reply = ({
           />
           <Text>{username}</Text>
         </S.CommentHeader>
-        <S.Description>{text}</S.Description>
+        <S.Description>{`@${replyUser} ${text}`}</S.Description>
       </S.CommentContent>
       <S.BottomComment>
         <S.Date>{moment(createdAt).format("DD.MM.YYYY")}</S.Date>
         {myUserId === commentByUserId && (
           <Cross
-            onClick={() => {}}
+            onClick={handleRemoveReply}
             cursor="pointer"
             marginLeft={5}
             height={7}

@@ -23,11 +23,11 @@ export class UsersRepository extends Repository<UserEntity> {
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(authCredentialsDto.password, salt);
-    await this.save({ ...user, password: hashedPassword });
+    const saveUser = await this.save({ ...user, password: hashedPassword });
 
-    delete user.password;
+    delete saveUser.password;
     return {
-      ...user,
+      ...saveUser,
     };
   }
 

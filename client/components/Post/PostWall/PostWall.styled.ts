@@ -16,16 +16,6 @@ export const Header = styled.header`
   align-items: center;
 `;
 
-export const User = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-export const DescriptionPost = styled.div`
-  display: flex;
-  padding: 14px 10px;
-`;
-
 export const DescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,29 +23,9 @@ export const DescriptionContainer = styled.div`
   flex-grow: 1;
 `;
 
-export const Description = styled.p`
-  margin-bottom: 5px;
-`;
-
-export const Danger = styled.div``;
-
 export const Date = styled.time`
   font-size: 12px;
   color: #8e8e8e;
-`;
-
-export const Actions = styled.div`
-  padding: 14px 20px;
-  align-items: center;
-  display: flex;
-  border-top: 1px solid #efefef;
-`;
-
-export const CommentList = styled.div`
-  display: flex;
-  border-top: 1px solid #efefef;
-  flex-grow: 1;
-  flex-direction: column;
 `;
 
 export const CommentRow = styled.div`
@@ -82,16 +52,4 @@ export const Input = styled.input`
   &::placeholder {
     color: ${Colors.instaPlaceholder};
   }
-`;
-
-export const Comment = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const CommentContent = styled.div``;
-
-export const BottomComment = styled.div`
-  display: flex;
-  align-items: center;
 `;

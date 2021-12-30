@@ -2,10 +2,9 @@ import React from "react";
 import Modal from "components/Modal";
 
 import * as S from "./ModalPost.styled";
-import { handleImageError } from "utils/imageError";
-import PostWall from "components/Post/PostWall";
 import { IUser } from "src/entities/user/types";
 import { IComment } from "src/entities/comment/types";
+import FeedPost from "components/Feeds/FeedPost";
 
 type Props = {
   onClose: () => void;
@@ -19,8 +18,6 @@ type Props = {
   isFavorite: boolean;
   onLike: (id: string) => void;
   onDisLike: (id: string) => void;
-  onAddComment: (postId: string, comment: string) => void;
-  onRemoveComment: (commentId: string) => void;
   postId: string;
   myUserId: string;
   comments: IComment[];
@@ -42,11 +39,9 @@ const ModalPost = ({
   isFavorite,
   onLike,
   onDisLike,
-  onAddComment,
   postId,
   myUserId,
   comments,
-  onRemoveComment,
   onMark,
   onUnMark,
   isMark,
@@ -55,27 +50,24 @@ const ModalPost = ({
   return (
     <Modal isFullWidth maxWidth={1200} open={open} onClose={onClose}>
       <S.Root>
-        <S.Image src={url} onError={handleImageError} />
-        <PostWall
-          onMark={onMark}
-          onUnMark={onUnMark}
-          postId={postId}
-          onLike={onLike}
-          myUserId={myUserId}
-          onDisLike={onDisLike}
-          onRemovePost={onRemovePost}
-          onAddComment={onAddComment}
-          createdAt={createdAt}
-          favoriteCount={favoriteCount}
-          disableComments={disableComments}
-          description={description}
-          avatarUrl={user.avatarUrl || ""}
+        <FeedPost
+          isProfilePost
+          userAvatar={user.avatarUrl || ""}
           username={user.username}
           userId={user.id}
-          comments={comments}
+          image={url}
+          favoriteCount={favoriteCount}
           isFavorite={isFavorite}
           isMark={isMark}
-          onRemoveComment={onRemoveComment}
+          comments={comments}
+          disableComments={disableComments}
+          myUserId={myUserId}
+          postId={postId}
+          onRemovePost={onRemovePost}
+          onDislikePost={onDisLike}
+          onLikePost={onLike}
+          onMark={onMark}
+          onUnMark={onUnMark}
         />
       </S.Root>
     </Modal>

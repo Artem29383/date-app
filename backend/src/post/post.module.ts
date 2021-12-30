@@ -6,6 +6,9 @@ import { PostRepository } from './post.repository';
 import { UserService } from '../user/user.service';
 import { UsersRepository } from '../auth/users.repository';
 import { UsersFollowerRepository } from '../user/usersFollow.repository';
+import { NotifyService } from '../notify/notify.service';
+import { NotifyRepository } from '../notify/notify.repository';
+import { BadgeRepository } from '../badge/badge.repository';
 
 @Module({
   imports: [
@@ -13,9 +16,11 @@ import { UsersFollowerRepository } from '../user/usersFollow.repository';
       PostRepository,
       UsersRepository,
       UsersFollowerRepository,
+      NotifyRepository,
+      BadgeRepository,
     ]),
   ],
-  providers: [PostService, UserService],
+  providers: [PostService, UserService, NotifyService],
   controllers: [PostController],
 })
 export class PostModule {}

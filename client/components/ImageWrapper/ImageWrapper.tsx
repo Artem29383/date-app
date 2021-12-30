@@ -21,6 +21,7 @@ type Props = {
   source: string;
   isLoad?: boolean;
   onClick?: () => void;
+  onDBClick?: () => void;
 } & FlexBasisProps &
   BorderRadiusProps &
   OverflowProps &
@@ -31,7 +32,13 @@ type Props = {
   MarginProps &
   FlexShrinkProps;
 
-const ImageWrapper = ({ source, onClick, isLoad = false, ...rest }: Props) => {
+const ImageWrapper = ({
+  source,
+  onClick,
+  onDBClick,
+  isLoad = false,
+  ...rest
+}: Props) => {
   const [isLoaded, setIsLoaded] = useState(isLoad);
   const [isInView, setIsInView] = useState(isLoad);
   const imgRef = useRef();
@@ -45,14 +52,24 @@ const ImageWrapper = ({ source, onClick, isLoad = false, ...rest }: Props) => {
 
   if (isLoad)
     return (
-      // @ts-ignore
-      <S.WrapperImage onClick={onClick} ref={imgRef} {...rest}>
+      <S.WrapperImage
+        onDoubleClick={onDBClick}
+        onClick={onClick}
+        // @ts-ignore
+        ref={imgRef}
+        {...rest}
+      >
         <S.ImageStatic src={source} alt={source} onError={handleImageError} />
       </S.WrapperImage>
     );
   return (
-    // @ts-ignore
-    <S.WrapperImage onClick={onClick} ref={imgRef} {...rest}>
+    <S.WrapperImage
+      onDoubleClick={onDBClick}
+      onClick={onClick}
+      // @ts-ignore
+      ref={imgRef}
+      {...rest}
+    >
       {isInView && (
         <S.Image
           className={classnames("image", {

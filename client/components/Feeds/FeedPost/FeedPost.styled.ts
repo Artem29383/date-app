@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Colors } from "@types";
 
-export const Root = styled.div`
-  width: 616px;
+export const Root = styled.div<{ isProfilePost: boolean }>`
+  width: ${({ isProfilePost }) => (isProfilePost ? "100%" : "616px")};
   background-color: #fff;
   border-radius: 3px;
   border: 1px solid #dbdbdb;
   margin-bottom: 24px;
+  height: ${({ isProfilePost }) => (isProfilePost ? "100%" : "auto")};
 `;
 
 export const Header = styled.header`
@@ -14,6 +15,16 @@ export const Header = styled.header`
   height: 60px;
   display: flex;
   align-items: center;
+`;
+
+export const User = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const Danger = styled.div`
+  margin-left: auto;
+  margin-right: 20px;
 `;
 
 export const ContainerImage = styled.div`
@@ -28,6 +39,19 @@ export const Username = styled.p`
   &:hover {
     border-bottom: 1px solid ${Colors.instaDefault};
   }
+`;
+
+export const ContainerPost = styled.div<{ isProfilePost: boolean }>`
+  display: ${({ isProfilePost }) => (isProfilePost ? "flex" : "block")};
+  max-height: ${({ isProfilePost }) =>
+    isProfilePost ? "calc(100% - 60px)" : "auto"};
+`;
+
+export const Wall = styled.div<{ isProfilePost: boolean }>`
+  display: flex;
+  flex-direction: column;
+  max-width: ${({ isProfilePost }) => (isProfilePost ? "500px" : "auto")};
+  min-width: ${({ isProfilePost }) => (isProfilePost ? "400px" : "auto")};
 `;
 
 export const Actions = styled.div`

@@ -15,6 +15,7 @@ import { UserEntity } from '../user/entities/user.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { GetPostsFilterDto } from './dto/get-postsfilter.dto';
 import { PostEntity } from './post.entity';
+import { NotifyService } from '../notify/notify.service';
 
 @Controller('post')
 export class PostController {

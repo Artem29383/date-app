@@ -13,6 +13,7 @@ import Modal from "components/Modal";
 import { useClientRender } from "hooks/useClientRender";
 import { useToggle } from "hooks/useToggle";
 import ModalUploadPost from "components/Modal/ModalUploadPost";
+import { LikeNotify } from "./Navigation.styled";
 
 const Profile = icons.profile;
 const ProfileFill = icons.profileFill;
@@ -29,6 +30,7 @@ type Props = {
 };
 
 const Navigation = ({ logout }: Props) => {
+  const { value: showLike, handleToggle } = useToggle(false);
   const { toggle, ref, active } = useClickAway();
   const { avatarUrl, id } = useUser();
   const isClient = useClientRender();
@@ -59,13 +61,9 @@ const Navigation = ({ logout }: Props) => {
           IconActive={ExploreFill}
           IconDefault={Explore}
         />
-        <ActiveLink
-          marginLeft={23}
-          marginRight={23}
-          href={ROUTES.LIKES}
-          IconActive={HeartFill}
-          IconDefault={Heart}
-        />
+        <S.LikeNotify onClick={handleToggle} marginLeft={23} marginRight={23}>
+          {showLike ? <HeartFill /> : <Heart />}
+        </S.LikeNotify>
         <S.RootAvatar ref={ref} open={active} onClick={toggle}>
           <ImageWrapper
             overflow="hidden"

@@ -2,6 +2,7 @@ import { ApiError } from "api/types";
 import { Api } from "src/api";
 import { root } from "src/entities/root";
 import { IReply, ReplyQuery } from "src/entities/reply/types";
+import { AxiosResponse } from "axios";
 
 export const getCommentReplays = root.createEffect<
   { query: ReplyQuery },
@@ -21,4 +22,14 @@ export const addReplyToCommentAsync = root.createEffect<
   Api()
     .addReplyToComment(data)
     .then(response => response.data)
+);
+
+export const removeReplyFromCommentAsync = root.createEffect<
+  { replyId: string; commentId: string },
+  AxiosResponse,
+  ApiError<Record<string, unknown>>
+>(data =>
+  Api()
+    .removeReplyFromComment(data)
+    .then(response => response)
 );

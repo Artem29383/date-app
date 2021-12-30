@@ -18,9 +18,10 @@ export type PropsComment = {
   id: string;
   commentByUserId: string;
   myUserId: string;
-  onDeleteComment: (id: string) => void;
-  onReplay: (id: string, username: string) => void;
   replies: IReply[];
+  onDeleteComment: (id: string, replyLength: number) => void;
+  onReplay: (id: string, username: string) => void;
+  onDeleteReply: (replyId: string, commentId: string) => void;
 };
 
 const Comment = ({
@@ -33,8 +34,13 @@ const Comment = ({
   text,
   replies,
   onDeleteComment,
-  onReplay
+  onReplay,
+  onDeleteReply
 }: PropsComment) => {
+  const handleRemoveReply = (replyId: string) => {
+    onDeleteReply(replyId, id);
+  };
+
   return (
     <S.Comment>
       <S.CommentContent>
@@ -56,7 +62,7 @@ const Comment = ({
         <S.Answer onClick={() => onReplay(id, username)}>Ответить</S.Answer>
         {myUserId === commentByUserId && (
           <Cross
-            onClick={() => onDeleteComment(id)}
+            onClick={() => onDeleteComment(id, replies.length)}
             cursor="pointer"
             marginLeft={5}
             height={7}
@@ -68,6 +74,8 @@ const Comment = ({
       <S.CommentReplyList>
         {replies.map(rep => (
           <Reply
+            replyUser={rep.replyUsername}
+            key={rep.id}
             userAvatar={rep.user.avatarUrl || ""}
             id={rep.id}
             username={rep.user.username}
@@ -75,6 +83,7 @@ const Comment = ({
             text={rep.text}
             commentByUserId={rep.userId}
             createdAt={rep.createdAt}
+            onDeleteReply={handleRemoveReply}
           />
         ))}
       </S.CommentReplyList>

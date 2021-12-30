@@ -36,11 +36,10 @@ const ActiveLink = ({
   if (onClick && !href) {
     return (
       <S.Root {...rest}>
-        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-        <span onClick={onClick} style={{ cursor: "pointer" }}>
+        <S.Span onClick={onClick} style={{ cursor: "pointer" }}>
           {/* @ts-ignore */}
           <IconDefault />
-        </span>
+        </S.Span>
       </S.Root>
     );
   }

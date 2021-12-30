@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
@@ -12,6 +14,8 @@ import { PostEntity } from '../../post/post.entity';
 import { UserFollowersEntity } from './user-followers.entity';
 import { CommentEntity } from '../../comment/comment.entity';
 import { ReplyEntity } from '../../reply/reply.entity';
+import { NotifyEntity } from '../../notify/notify.entity';
+import { BadgeEntity } from '../../badge/badge.entity';
 
 @Entity()
 export class UserEntity {
@@ -50,8 +54,17 @@ export class UserEntity {
   createdAt: Date;
 
   @OneToMany(() => PostEntity, (post) => post.user, { eager: true })
-  // @Exclude({ toPlainOnly: true })
   posts: PostEntity[];
+
+  @OneToMany(() => NotifyEntity, (notify) => notify.user, { eager: true })
+  notifications: NotifyEntity[];
+
+  @OneToOne(() => BadgeEntity, (badge) => badge.user, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  badge: BadgeEntity;
 
   @OneToMany(() => UserFollowersEntity, (follower) => follower.user, {
     eager: true,

@@ -14,6 +14,7 @@ import { ReplyEntity } from './reply.entity';
 import { GetUser } from '../auth/get-user.decorator';
 import { UserEntity } from '../user/entities/user.entity';
 import { CreateReplyDto } from './dto/create-reply.dto';
+import { RemoveReplyDto } from './dto/remove-reply.dto';
 
 @Controller('reply')
 export class ReplyController {
@@ -37,8 +38,11 @@ export class ReplyController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':replyId')
-  removeReplayFromComment(@Param('replyId') replayId: string) {
-    return this.replayService.removeReplayFromComment(replayId);
+  @Delete('/remove')
+  removeReplayFromComment(@Body() removeReplyDto: RemoveReplyDto) {
+    return this.replayService.removeReplayFromComment(
+      removeReplyDto.replyId,
+      removeReplyDto.commentId,
+    );
   }
 }

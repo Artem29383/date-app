@@ -12,11 +12,15 @@ import {
 } from "styled-system";
 import { Colors } from "@types";
 
-export const WrapperImage = styled.div<{ onClick: (() => void) | undefined }>`
+export const WrapperImage = styled.div<{
+  onClick: (() => void) | undefined;
+  onDoubleClick: (() => void) | undefined;
+}>`
   width: 100%;
   height: 100%;
   display: flex;
-  cursor: ${({ onClick }) => (onClick ? "pointer" : "default")};
+  cursor: ${({ onClick, onDoubleClick }) =>
+    onClick || onDoubleClick ? "pointer" : "default"};
   justify-content: center;
   align-items: center;
   background-color: ${Colors.bombay};

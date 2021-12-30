@@ -11,7 +11,6 @@ import {
 import { CommentService } from './comment.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { RemoveCommentDto } from './dto/remove-comment.dto';
 import { CommentEntity } from './comment.entity';
 import { PostEntity } from '../post/post.entity';
 import { GetUser } from '../auth/get-user.decorator';
@@ -41,8 +40,11 @@ export class CommentController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  removeCommentFromPost(@Param('id') id: string): Promise<void> {
-    return this.commentService.removeCommentFromPost(id);
+  removeCommentFromPost(
+    @GetUser() user: UserEntity,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.commentService.removeCommentFromPost(id, user);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -6,6 +6,7 @@ export const CommentList = styled.div`
   border-top: 1px solid #efefef;
   flex-grow: 1;
   flex-direction: column;
+  overflow-y: auto;
 `;
 
 export const CommentRow = styled.div`

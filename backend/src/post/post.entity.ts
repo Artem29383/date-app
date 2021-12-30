@@ -6,7 +6,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
 import { UserEntity } from '../user/entities/user.entity';
 import { CommentEntity } from '../comment/comment.entity';
 

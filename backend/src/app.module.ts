@@ -7,6 +7,8 @@ import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 import { PostModule } from './post/post.module';
 import { CommentModule } from './comment/comment.module';
 import { ReplyModule } from './reply/reply.module';
+import { NotifyModule } from './notify/notify.module';
+import { BadgeModule } from './badge/badge.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { ReplyModule } from './reply/reply.module';
     PostModule,
     CommentModule,
     ReplyModule,
+    NotifyModule,
+    BadgeModule,
   ],
   controllers: [],
 })

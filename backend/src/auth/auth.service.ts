@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
+import { BadgeRepository } from '../badge/badge.repository';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     @InjectRepository(UsersRepository)
     private readonly repository: UsersRepository,
     private jwtService: JwtService,
+    private badgeRepository: BadgeRepository,
   ) {}
 
   async create(createAuthDto: AuthCredentialsDto) {
@@ -28,6 +30,7 @@ export class AuthService {
       const payload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
       delete user.password;
+      await this.badgeRepository.createBadge(user);
       return { ...user, accessToken };
     }
 
