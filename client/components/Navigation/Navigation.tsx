@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { icons } from "styles/icons";
 import * as S from "./Navigation.styled";
-import { ROUTES } from "@types";
+import { Colors, ROUTES } from "@types";
 import ActiveLink from "components/ActiveLink";
 import ImageWrapper from "components/ImageWrapper/ImageWrapper";
 import { useUser } from "src/entities/user/selectors";
@@ -13,7 +13,8 @@ import Modal from "components/Modal";
 import { useClientRender } from "hooks/useClientRender";
 import { useToggle } from "hooks/useToggle";
 import ModalUploadPost from "components/Modal/ModalUploadPost";
-import { LikeNotify } from "./Navigation.styled";
+import { LikeNotify, Triangle } from "./Navigation.styled";
+import { checkNotify } from "utils/checkNotify";
 
 const Profile = icons.profile;
 const ProfileFill = icons.profileFill;
@@ -24,6 +25,8 @@ const Explore = icons.explore;
 const ExploreFill = icons.exploreFill;
 const Heart = icons.heart;
 const HeartFill = icons.heartFill;
+const Comment = icons.comment;
+const User = icons.user;
 
 type Props = {
   logout: () => void;
@@ -32,7 +35,8 @@ type Props = {
 const Navigation = ({ logout }: Props) => {
   const { value: showLike, handleToggle } = useToggle(false);
   const { toggle, ref, active } = useClickAway();
-  const { avatarUrl, id } = useUser();
+  const { avatarUrl, id, badge } = useUser();
+  const isNotify = checkNotify(badge);
   const isClient = useClientRender();
   const { handleOpen, value: open, handleClose } = useToggle(false);
 
@@ -63,6 +67,29 @@ const Navigation = ({ logout }: Props) => {
         />
         <S.LikeNotify onClick={handleToggle} marginLeft={23} marginRight={23}>
           {showLike ? <HeartFill /> : <Heart />}
+          {isNotify && <S.Dot />}
+          {isNotify && (
+            <S.Notify>
+              <S.Triangle />
+              <S.ListNotify>
+                {badge.like && (
+                  <S.NotifyItem>
+                    {badge.like} <HeartFill fill={Colors.white} />
+                  </S.NotifyItem>
+                )}
+                {badge.comments && (
+                  <S.NotifyItem>
+                    {badge.comments} <Comment fill={Colors.white} />
+                  </S.NotifyItem>
+                )}
+                {badge.subs && (
+                  <S.NotifyItem>
+                    {badge.subs} <User fill={Colors.white} />
+                  </S.NotifyItem>
+                )}
+              </S.ListNotify>
+            </S.Notify>
+          )}
         </S.LikeNotify>
         <S.RootAvatar ref={ref} open={active} onClick={toggle}>
           <ImageWrapper

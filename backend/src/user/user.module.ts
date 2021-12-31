@@ -6,6 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from '../auth/users.repository';
 import { UsersFollowerRepository } from './usersFollow.repository';
 import { PostRepository } from '../post/post.repository';
+import { NotifyRepository } from '../notify/notify.repository';
+import { NotifyService } from '../notify/notify.service';
+import { BadgeRepository } from '../badge/badge.repository';
 
 @Module({
   imports: [
@@ -14,9 +17,11 @@ import { PostRepository } from '../post/post.repository';
       UsersRepository,
       UsersFollowerRepository,
       PostRepository,
+      NotifyRepository,
+      BadgeRepository,
     ]),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, NotifyService],
 })
 export class UserModule {}

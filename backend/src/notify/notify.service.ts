@@ -22,8 +22,9 @@ export class NotifyService {
     operation: OPERATION,
     myUserId: string,
   ) {
-    console.info(createNotifyDto);
-    console.info(myUserId);
+    console.info('cre', createNotifyDto);
+    console.info('my', myUserId);
+    if (createNotifyDto.userId === myUserId) return;
     const user = await this.usersRepository.findOne(createNotifyDto.userId);
     const { notify, user: currentUser } =
       await this.notifyRepository.createNotify(

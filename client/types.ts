@@ -10,7 +10,7 @@ export enum Colors {
   primary = "#1b3a57",
   bombay = "#acafb5",
   iconColor = "#8595A8",
-  red = "#f11414",
+  red = "#ed4956",
   gray = "#CACCCF",
   bluebutton = "#1a73e8",
   white = "#fff",

@@ -61,7 +61,7 @@ export class PostService {
     await this.postRepository.save(post);
     await this.notifyService.createNotify(
       {
-        userId: currentUser.id,
+        userId: post.user.id,
         type: NotifyType.LIKE,
         postId: post.id,
       },
@@ -101,7 +101,7 @@ export class PostService {
     await this.postRepository.save(post);
     await this.notifyService.createNotify(
       {
-        userId: currentUser.id,
+        userId: post.user.id,
         type: NotifyType.LIKE,
         postId: post.id,
       },

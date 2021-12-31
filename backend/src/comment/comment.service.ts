@@ -51,7 +51,7 @@ export class CommentService {
     await this.commentRepository.save(comment);
     await this.notifyService.createNotify(
       {
-        userId: comment.userId,
+        userId: comment.post.user.id,
         type: NotifyType.COMMENT,
         postId: post.id,
         commentId: comment.id,
@@ -70,19 +70,20 @@ export class CommentService {
   }
 
   async removeCommentFromPost(id: string, user: UserEntity): Promise<void> {
-    const comment = await this.commentRepository.findOne(
-      { id },
-      {
-        relations: ['post'],
-      },
-    );
+    const comment = await this.commentRepository
+      .createQueryBuilder('comment')
+      .innerJoinAndSelect('comment.post', 'p')
+      .innerJoinAndSelect('p.user', 'u')
+      .leftJoinAndSelect('comment.replays', 'replays')
+      .getOne();
 
     comment.post.commentCount =
       comment.post.commentCount - 1 - comment.replays.length;
+
     await this.postRepository.save(comment.post);
     await this.notifyService.createNotify(
       {
-        userId: comment.userId,
+        userId: comment.post.user.id,
         type: NotifyType.COMMENT,
         postId: comment.postId,
         commentId: comment.id,

@@ -8,6 +8,8 @@ import { UsersFollowerRepository } from './usersFollow.repository';
 import { FollowUserDto } from './dto/follow-user.dto';
 import { PostRepository } from '../post/post.repository';
 import { IPaginationMeta, paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { NotifyType, OPERATION } from '../notify/types';
+import { NotifyService } from '../notify/notify.service';
 
 @Injectable()
 export class UserService {
@@ -18,6 +20,7 @@ export class UserService {
     private readonly followRepository: UsersFollowerRepository,
     @InjectRepository(PostRepository)
     private readonly postRepository: PostRepository,
+    private readonly notifyService: NotifyService,
   ) {}
 
   async updateUser(updateUserDto: UpdateUserDto) {
@@ -62,6 +65,14 @@ export class UserService {
     currentUser.followersCount = currentUser.followersCount + 1;
 
     await this.repository.save(currentUser);
+    await this.notifyService.createNotify(
+      {
+        userId: followUserDto.userFollowingId,
+        type: NotifyType.SUBSCRIBE,
+      },
+      OPERATION.PLUS,
+      user.id,
+    );
 
     return this.followRepository.follow(followUserDto, user);
   }
@@ -73,6 +84,14 @@ export class UserService {
     currentUser.followersCount = currentUser.followersCount - 1;
 
     await this.repository.save(currentUser);
+    await this.notifyService.createNotify(
+      {
+        userId: unfollowUserDto.userFollowingId,
+        type: NotifyType.SUBSCRIBE,
+      },
+      OPERATION.MINUS,
+      user.id,
+    );
 
     return this.followRepository.unfollow(unfollowUserDto, user);
   }

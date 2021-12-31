@@ -16,7 +16,8 @@ export class CreateNotifyDto {
   commentId?: string;
 
   @Column()
-  postId: string;
+  @IsOptional()
+  postId?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt?: Date;

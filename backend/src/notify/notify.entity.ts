@@ -27,7 +27,7 @@ export class NotifyEntity {
   @Column({ default: null })
   commentId: string;
 
-  @Column()
+  @Column({ default: null })
   postId: string;
 
   @CreateDateColumn({ type: 'timestamp' })

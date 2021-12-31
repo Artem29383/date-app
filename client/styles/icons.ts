@@ -42,6 +42,7 @@ import resize from "assets/icons/resize.svg";
 import mark from "assets/icons/mark.svg";
 import markfill from "assets/icons/markfill.svg";
 import comment from "assets/icons/comment.svg";
+import user from "assets/icons/user.svg";
 
 export type IconProps = LayoutProps &
   StyledSystemPositonProps &
@@ -82,7 +83,8 @@ export const icons: {
     resize,
     mark,
     markfill,
-    comment
+    comment,
+    user
   },
   icon => styled(
     icon as React.FunctionComponent<React.SVGAttributes<SVGElement> & IconProps>

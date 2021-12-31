@@ -35,9 +35,10 @@ export class NotifyRepository extends Repository<NotifyEntity> {
     operation === OPERATION.MINUS
       ? await this.delete({
           myUserId,
-          postId: createNotifyDto.postId,
+          postId: createNotifyDto.postId || null,
           userId: createNotifyDto.userId,
           commentId: createNotifyDto.commentId || null,
+          type: createNotifyDto.type,
         })
       : await this.save(notify);
 

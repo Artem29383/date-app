@@ -1,7 +1,7 @@
 export enum NotifyType {
   COMMENT = 'COMMENTS',
   LIKE = 'LIKE',
-  SUBSCRIBE = 'SUBSCRIBE',
+  SUBSCRIBE = 'SUBS',
 }
 
 export enum OPERATION {
