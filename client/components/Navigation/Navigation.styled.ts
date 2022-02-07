@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { margin, MarginProps } from "styled-system";
 import { Colors } from "@types";
+import { motion } from "framer-motion";
 
 export const Root = styled.div`
   display: flex;
@@ -25,17 +26,19 @@ export const LikeNotify = styled.div<MarginProps>`
   position: relative;
 `;
 
-export const Dot = styled.div`
+export const Dot = styled(motion.div)`
   background: ${Colors.red};
   width: 4px;
+  opacity: 0;
   height: 4px;
   margin: 0 auto;
   border-radius: 50%;
 `;
 
-export const Notify = styled.div`
+export const Notify = styled(motion.div)`
   width: auto;
   height: 40px;
+  opacity: 0;
   position: absolute;
   background-color: ${Colors.red};
   border-radius: 8px;

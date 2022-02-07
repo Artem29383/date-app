@@ -5,6 +5,8 @@ import { NotifyRepository } from './notify.repository';
 import { UsersRepository } from '../auth/users.repository';
 import { BadgeRepository } from '../badge/badge.repository';
 import { OPERATION } from './types';
+import { UserEntity } from '../user/entities/user.entity';
+import { NotifyType } from '../badge/types';
 
 @Injectable()
 export class NotifyService {
@@ -16,6 +18,24 @@ export class NotifyService {
     @InjectRepository(BadgeRepository)
     private badgeRepository: BadgeRepository,
   ) {}
+
+  async getNotify(user: UserEntity) {
+    const queryObjects = {};
+    const query = await this.notifyRepository
+      .createQueryBuilder('notify')
+      .where('notify.userId = :userId', { userId: user.id })
+      .getMany();
+
+    queryObjects[NotifyType.LIKE] = query.filter(
+      (q) => q.type === NotifyType.LIKE,
+    );
+    queryObjects[NotifyType.SUBSCRIBE] = query.filter((q) => q.type === 'SUBS');
+    queryObjects[NotifyType.COMMENT] = query.filter(
+      (q) => q.type === 'COMMENTS',
+    );
+
+    return queryObjects;
+  }
 
   async createNotify(
     createNotifyDto: CreateNotifyDto,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { icons } from "styles/icons";
 import * as S from "./Navigation.styled";
 import { Colors, ROUTES } from "@types";
@@ -32,13 +32,37 @@ type Props = {
   logout: () => void;
 };
 
+const variants = {
+  open: {
+    opacity: 1,
+    transition: { delay: 0.1 }
+  },
+  closed: {
+    opacity: 0
+  }
+};
+
 const Navigation = ({ logout }: Props) => {
   const { value: showLike, handleToggle } = useToggle(false);
   const { toggle, ref, active } = useClickAway();
+  const {
+    toggle: toggleClick,
+    setActive,
+    ref: reference,
+    active: activeModal
+  } = useClickAway();
   const { avatarUrl, id, badge } = useUser();
-  const isNotify = checkNotify(badge);
+  const [isNotify, setIsNotify] = useState(false);
   const isClient = useClientRender();
   const { handleOpen, value: open, handleClose } = useToggle(false);
+
+  console.info("badge", badge);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsNotify(checkNotify(badge));
+    }, 1000);
+  }, [badge]);
 
   return (
     <>
@@ -66,29 +90,43 @@ const Navigation = ({ logout }: Props) => {
           IconDefault={Explore}
         />
         <S.LikeNotify onClick={handleToggle} marginLeft={23} marginRight={23}>
-          {showLike ? <HeartFill /> : <Heart />}
-          {isNotify && <S.Dot />}
-          {isNotify && (
-            <S.Notify>
+          {activeModal ? (
+            <HeartFill onClick={() => setActive(false)} />
+          ) : (
+            <Heart onClick={() => setActive(true)} />
+          )}
+          {!activeModal && (
+            <S.Dot variants={variants} animate={isNotify ? "open" : "closed"} />
+          )}
+          {!activeModal && (
+            <S.Notify
+              variants={variants}
+              animate={isNotify ? "open" : "closed"}
+            >
               <S.Triangle />
               <S.ListNotify>
-                {badge.like && (
+                {badge.like ? (
                   <S.NotifyItem>
                     {badge.like} <HeartFill fill={Colors.white} />
                   </S.NotifyItem>
-                )}
-                {badge.comments && (
+                ) : null}
+                {badge.comments ? (
                   <S.NotifyItem>
                     {badge.comments} <Comment fill={Colors.white} />
                   </S.NotifyItem>
-                )}
-                {badge.subs && (
+                ) : null}
+                {badge.subs ? (
                   <S.NotifyItem>
                     {badge.subs} <User fill={Colors.white} />
                   </S.NotifyItem>
-                )}
+                ) : null}
               </S.ListNotify>
             </S.Notify>
+          )}
+          {activeModal && (
+            <AreaPortal minHeightArea={128} left="-77px" top={110}>
+              <S.List ref={reference}>123</S.List>
+            </AreaPortal>
           )}
         </S.LikeNotify>
         <S.RootAvatar ref={ref} open={active} onClick={toggle}>
